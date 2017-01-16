@@ -1,0 +1,19 @@
+.nav a, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.disabled {
+	pointer-events: none;
+}
+
+.ace-open-seadragon {
+	width: 100%;
+	height: calc(100vh - 20rem);
+
+	.openseadragon-container > div:not(.openseadragon-canvas) {
+		display: none;
+	}
+}
+
+/* Fix Chrome bug https://bugs.chromium.org/p/chromium/issues/detail?id=605119 */
+[draggable] {
+  transform: translateZ(0);
+}

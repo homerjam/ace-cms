@@ -1,0 +1,66 @@
+field-rich-text {
+  position: relative;
+
+  .md-input {
+    height: auto;
+  }
+
+  textarea {
+    height: auto !important;
+    min-height: 10rem !important;
+    resize: vertical;
+    overflow: auto;
+
+    font-family: monospace;
+  }
+}
+
+.medium-editor-action {
+  padding: 8px !important;
+}
+
+.medium-editor-toolbar li button {
+  min-width: 45px;
+  height: 45px;
+}
+
+.medium-editor-toolbar-input {
+  height: 45px !important;
+}
+
+.medium-toolbar-arrow-under:after {
+  top: 100%;
+}
+
+.medium-editor-placeholder:after {
+  font-style: normal;
+  color: rgb(187, 187, 187);
+}
+
+.medium-editor-toolbar-save,
+.medium-editor-toolbar-close {
+  width: 20px;
+  height: 100%;
+  color: transparent !important;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    line-height: 45px;
+    color: white;
+    font-family: "Material Design Icons";
+    font-weight: normal;
+    font-size: 24px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.medium-editor-toolbar-save:before {
+  content: "\F12C";
+}
+
+.medium-editor-toolbar-close:before {
+  content: "\F156";
+}

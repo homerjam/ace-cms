@@ -1,0 +1,25 @@
+tools {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+
+  [flex] {
+    position: relative;
+  }
+
+  form {
+    margin: 0 !important;
+  }
+
+  label[for] {
+    margin: 0;
+
+    button {
+      pointer-events: none;
+    }
+
+    + input[type="file"] {
+      display: none;
+    }
+  }
+}

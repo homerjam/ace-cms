@@ -1,0 +1,182 @@
+.ui-grid {
+  border: none;
+	width: 100%;
+  height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+
+	* {
+		box-sizing: border-box;
+    outline: 0;
+	}
+}
+
+.ui-grid-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.ui-grid-header {
+	position: relative;
+	z-index: 1;
+	border: none;
+	box-shadow: 0 2px 4px rgba(0,0,0,.15), 0 6px 10px rgba(0,0,0,.05);
+}
+
+.ui-grid-top-panel, .ui-grid-footer-panel {
+	background: white;
+  font-weight: normal;
+}
+
+.ui-grid-header-cell {
+	border: 0;
+}
+
+.ui-grid-top-panel {
+	.ui-grid-cell-contents {
+		padding: 15px;
+	}
+}
+
+.ui-grid-canvas {
+	.ui-grid-cell-contents {
+		padding: 15px;
+	}
+}
+
+.ui-grid-col0 {
+	.ui-grid-cell-contents {
+		padding: 5px;
+	}
+}
+
+.ui-grid-cell {
+	background: transparent !important;
+	border: none;
+}
+
+.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+	background: steelblue !important;
+
+	&:not(.ui-grid-col0) {
+		color: white;
+	}
+
+	button {
+		color: white;
+	}
+}
+
+.ui-grid-cell--image {
+	padding: 5px 15px;
+
+	img {
+		max-width: 100%;
+		max-height: 100%;
+	}
+}
+
+.ui-grid-cell--actions {
+	padding: 8px 10px;
+}
+
+.ui-grid-draggable-row {
+    height: 70px;
+}
+
+.ui-grid-draggable-row-over {
+	position: relative;
+
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        border-bottom: 1px dotted lightgrey;
+    }
+
+    &--above:before {
+    	top: 0;
+    }
+
+    &--below:before {
+    	bottom: 0;
+    }
+}
+
+.ui-grid-menu-button {
+	background: white;
+	border: none;
+	width: auto;
+	height: auto;
+	border-radius: 100%;
+	top: 8px;
+  right: 8px;
+	outline: none;
+	transition: all 200ms;
+
+	&:hover {
+		background: lightgrey;
+	}
+}
+
+.ui-grid-icon-container {
+	margin: 0 !important;
+	padding: 10px;
+	outline: 0;
+	text-align: center;
+}
+
+.ui-grid-icon-menu {
+	display: block;
+	width: 20px;
+	height: 20px;
+}
+
+.ui-grid-icon-menu:before {
+	margin: 0;
+	width: 20px;
+	height: 20px;
+}
+
+.ui-grid-menu {
+	.ui-grid-menu-mid {
+		max-height: inherit;
+		overflow: auto;
+		border: none;
+		// @include depth(4);
+	}
+
+	.ui-grid-menu-inner {
+		background: white;
+		border: 0;
+		box-shadow: none;
+
+		ul li {
+			outline: none;
+			padding: 0;
+			border: none;
+			box-shadow: none;
+		}
+	}
+
+	.ui-grid-menu-close-button {
+		display: none;
+	}
+
+	.ui-grid-menu-item {
+		// Hacky override
+		&:first-child, &:first-child:hover {
+			background: none;
+			background-image: none;
+		}
+
+		[class*="ui-grid-icon"] {
+			display: inline-block;
+			width: 15px;
+			margin-right: 5px;
+		}
+	}
+}

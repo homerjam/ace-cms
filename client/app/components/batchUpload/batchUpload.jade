@@ -1,0 +1,28 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 Batch Upload
+    span(flex)
+    md-button(ng-click='vm.cancel()', ng-disabled="vm.uploadComplete || !vm.isUploading") Cancel
+
+md-content
+
+  md-table-container
+    table(md-table)
+
+      thead(md-head)
+        tr(md-row)
+          th(md-column) Name
+          th(md-column) Size
+          th(md-column) Type
+          th(md-column) Progress
+          th(md-column) Status
+
+      tbody(md-body)
+        tr(md-row, ng-repeat="file in vm.files")
+          td(md-cell) {{file.name}}
+          td(md-cell) {{file.size | fileSize}}
+          td(md-cell) {{file.file.type}}
+          td(md-cell) {{file.progress() * 100 | toFixed: 0}}%
+          td(md-cell) {{file._status}}

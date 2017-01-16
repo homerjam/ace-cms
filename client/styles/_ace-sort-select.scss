@@ -1,0 +1,38 @@
+ul.ace-sort-select-container {
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+li.ace-sort-select-item {
+    position: relative;
+    float: left;
+}
+tbody.ace-sort-select-container {
+    position: relative;
+}
+.ace-sort-select-container {
+    .handle {
+        cursor: pointer;
+    }
+}
+.ace-sort-select-item {
+    user-select: none;
+}
+.ace-sort-select-helper > * {
+	position: absolute !important;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	display: block !important;
+    $i: 0;
+    @while $i < 5 {
+        &:nth-child(#{$i + 1}) {
+        	top: 5px * $i;
+            left: 5px * $i;
+            z-index: 100 - $i;
+        }
+        $i: $i + 1;
+    }
+}

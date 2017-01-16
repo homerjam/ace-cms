@@ -1,0 +1,25 @@
+div(layout="column", style="position: absolute; width: 100%; height: 100%")
+
+  md-toolbar
+    .md-toolbar-tools
+      md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+        md-icon(md-icon-set="material-icons") menu
+      h3 Orders {{vm.ecommerceSettings.testMode ? '(Test mode)' : ''}}
+      span(flex)
+      md-button.md-icon-button(ng-click="vm.editOrder(vm.selected[0])", ng-disabled="vm.selected.length !== 1", aria-label="Edit")
+        md-icon(md-font-set="material-icons") create
+      md-button.md-fab.md-mini(aria-label="Search", ng-click="vm.showSearch = !vm.showSearch")
+        md-icon(md-font-set="material-icons") search
+
+  md-list(flex="nogrow", ng-show="vm.showSearch")
+    md-list-item.search(layout="row", layout-padding, style="align-items: flex-start;")
+      md-input-container(flex, md-no-float)
+        input(type="text", placeholder="Search", ng-model="vm.searchTerm", ng-keypress="vm.search($event, vm.searchTerm)")
+      md-button.md-icon-button(aria-label="Search", ng-click="vm.search($event, vm.searchTerm)")
+        md-icon(style="display: inline-block", md-font-set="material-icons") search
+
+  div(flex)
+    .ui-grid-wrapper
+      div(ui-grid="vm.grid", ui-grid-selection, ui-grid-infinite-scroll, ng-class="{disabled: vm.searching}")
+
+// TODO: show selected count in a toast (vm.selected.length)

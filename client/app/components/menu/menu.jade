@@ -1,0 +1,126 @@
+md-toolbar(title="{{$root.slug}}")
+  .md-toolbar-tools
+    h3(title="{{$root.slug}}") {{$root.$settings.settings().client.name || 'Fokus'}}
+
+md-content
+
+  md-list
+
+    md-list-item(ui-sref="dashboard", ui-sref-active="active")
+      md-icon(md-font-set="material-icons") dashboard
+      p Dashboard
+
+    md-menu(md-offset="220 0", ng-show="vm.schemas.length")
+      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('new|entity|view', $root.$state.current.name)}")
+        md-icon(md-font-set="material-icons") create
+        p Content
+      md-menu-content(width="4")
+        md-menu-item(ng-repeat="item in vm.dropdownContent")
+          md-button(ng-if="item.schema.singular" ui-sref="singularEntity({id: item.schema.slug})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span {{ item.text }}
+          md-button(ng-if="!item.schema.singular" ui-sref="entityGrid({schemaSlug: item.schema.slug})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span {{ item.text }}
+
+    md-menu(md-offset="220 0", ng-show="vm.taxonomies.length")
+      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('taxonomy', $root.$state.current.name)}")
+        md-icon(md-font-set="material-icons") format_list_bulleted
+        p Taxonomy
+      md-menu-content(width="4")
+        md-menu-item(ng-repeat="item in vm.dropdownTaxonomy")
+          md-button(ui-sref="taxonomy({taxonomySlug: item.taxonomy.slug})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span {{ item.text }}
+
+    md-menu(md-offset="220 0", ng-show="($root.user.permissions.ecommerce || $root.user.superUser) && $root.$settings.settings().ecommerce.enabled")
+      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('ecommerce', $root.$state.current.name)}")
+        md-icon(md-font-set="material-icons") shopping_cart
+        p E-commerce
+      md-menu-content(width="4")
+        md-menu-item
+          md-button(ui-sref="ecommerce.orders")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Orders
+        md-menu-item
+          md-button(ui-sref="ecommerce.discounts")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Discounts
+        md-menu-item
+          md-button(ui-sref="ecommerce.settings")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Settings
+
+    md-menu(md-offset="220 0", ng-show="vm.batchUploadSchemas.length > 1")
+      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('batchUpload', $root.$state.current.name)}")
+        md-icon(md-font-set="material-icons") file_upload
+        p Upload
+      md-menu-content(width="4")
+        md-menu-item(ng-repeat="item in vm.batchUploadSchemas")
+          md-button(ui-sref="batchUploadEntity({schemaSlug: item.slug})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span {{ item.name }}
+
+    md-list-item(ng-show="vm.batchUploadSchemas.length === 1", ui-sref="batchUploadEntity({schemaSlug: vm.batchUploadSchemas[0].slug})", ui-sref-active="active")
+      md-icon(md-font-set="material-icons") file_upload
+      p Upload
+
+    hr
+
+    md-list-item(ui-sref="trash", ui-sref-active="active")
+      md-icon(md-font-set="material-icons") delete
+      p Trash
+
+    md-list-item(ui-sref="file", ui-sref-active="active")
+      md-icon(md-font-set="material-icons") folder
+      p Files
+
+    md-list-item(ui-sref="admin({adminType: 'user'})", ui-sref-active="active", ng-show="$root.user.permissions.user || $root.user.superUser")
+      md-icon(md-font-set="material-icons") people
+      p Users
+
+    md-list-item(ui-sref="settings", ui-sref-active="active", ng-show="$root.user.permissions.settings || $root.user.superUser")
+      md-icon(md-font-set="material-icons") settings
+      p Settings
+
+    hr
+
+    md-list-item(ng-click="vm.preview()")
+      md-icon(md-font-set="material-icons") launch
+      p Preview
+
+    md-list-item(ui-sref="logout")
+      md-icon(md-font-set="material-icons") exit_to_app
+      p Logout
+
+    hr
+
+    md-menu(md-offset="220 0", ng-if="::$root.user.superUser")
+      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
+        md-icon(md-font-set="material-icons") settings_applications
+        p Admin
+      md-menu-content(width="4")
+        md-menu-item
+          md-button(ui-sref="admin({adminType: 'field'})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Fields
+        md-menu-item
+          md-button(ui-sref="admin({adminType: 'schema'})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Schemas
+        md-menu-item
+          md-button(ui-sref="admin({adminType: 'taxonomy'})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Taxonomy
+        md-menu-item
+          md-button(ui-sref="admin({adminType: 'action'})")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Actions
+        md-menu-item
+          md-button(ui-sref="tools")
+            // md-icon(md-font-set="material-icons") dashboard
+            span Tools
+
+    md-list-item(ui-sref="switch", ng-if="::$root.user.superUser")
+      md-icon(md-font-set="material-icons") swap_horiz
+      p Switch

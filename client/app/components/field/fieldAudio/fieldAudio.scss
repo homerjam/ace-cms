@@ -1,0 +1,16 @@
+field-audio {
+  position: relative;
+
+  td:last-child {
+    position: relative;
+    width: 100%;
+
+    span {
+      position: absolute;
+      top: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

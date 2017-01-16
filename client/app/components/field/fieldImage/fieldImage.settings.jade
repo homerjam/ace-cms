@@ -1,0 +1,56 @@
+div(layout="column", layout-margin)
+
+  md-input-container
+    md-checkbox(ng-model="vm.item.settings.required", aria-label="Required?") Required
+
+  br
+
+  md-input-container
+    label Min. Width
+    input(type="number", ng-model="vm.item.settings.minWidth", ng-init="vm.item.settings.minWidth = vm.item.settings.minWidth || 0")
+
+  md-input-container
+    label Min. Height
+    input(type="number", ng-model="vm.item.settings.minHeight", ng-init="vm.item.settings.minHeight = vm.item.settings.minHeight || 0")
+
+  md-input-container
+    label Max. Width
+    input(type="number", required, ng-model="vm.item.settings.maxWidth", ng-init="vm.item.settings.maxWidth = vm.item.settings.maxWidth || 3000")
+
+  md-input-container
+    label Max. Height
+    input(type="number", required, ng-model="vm.item.settings.maxHeight", ng-init="vm.item.settings.maxHeight = vm.item.settings.maxHeight || 2000")
+
+  md-input-container
+    md-checkbox(ng-model="vm.item.settings.dzi", aria-label="Deep Zoom Image?") Deep Zoom Image
+
+  br
+
+md-toolbar.md-table-toolbar.md-primary
+  .md-toolbar-tools Crops
+    span(flex)
+    md-button(ng-click="vm.fieldSettingsAdd('crops')") Add Crop
+
+md-table-container(ng-show="vm.item.settings.crops.length")
+  table(md-table)
+
+    thead(md-head)
+      tr(md-row)
+        th(md-column) Name
+        th(md-column) Slug
+        th(md-column) Min. Size
+        th(md-column) Ratio
+        th(md-column) Gravity
+
+    tbody(md-body)
+      tr(md-row, ng-repeat="crop in vm.item.settings.crops")
+        td(md-cell) {{crop.name}}
+        td(md-cell) {{crop.slug}}
+        td(md-cell) {{crop.minWidth}}×{{crop.minHeight}}
+        td(md-cell) {{crop.ratio}}
+        td(md-cell) {{crop.gravity}}
+        td(md-cell)
+          md-button.md-icon-button(ng-click="vm.fieldSettingsEdit('crops', crop)")
+            md-icon(md-font-set="material-icons") edit
+          md-button.md-icon-button(ng-click="vm.fieldSettingsDelete('crops', crop)")
+            md-icon(md-font-set="material-icons") close

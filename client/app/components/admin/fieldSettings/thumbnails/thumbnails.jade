@@ -1,0 +1,41 @@
+.modal-backdrop(ng-click="$modal.dismiss()")
+.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+
+        md-toolbar
+          .md-toolbar-tools
+            h2 Thumbnail
+            span(flex)
+            md-button.md-icon-button(ng-click="$modal.dismiss()")
+              md-icon(md-font-set="material-icons") close
+
+      .modal-body(style="padding: 16px 0")
+
+        form(name="vm.itemForm", role="form", novalidate)
+
+          div(layout="column", layout-margin)
+
+            md-input-container
+              label Name
+              input(ng-model="vm.thumbnail.name", required, ng-minlength="2", ng-maxlength="50", ng-pattern="/^(?!.*?(_thumb|\")).*$/i")
+
+            md-input-container
+              label Slug
+              input(ng-model="vm.thumbnail.slug", required, disabled, ng-pattern="/^(?!.*?(_thumb|\")).*$/i")
+
+            md-input-container
+              label Format
+              md-select(ng-model="vm.thumbnail.format")
+                md-option(ng-repeat="option in vm.thumbnailFormatOptions", value="{{option.value}}") {{option.name}}
+
+            md-input-container
+              label Number
+              input(type="number", ng-model="vm.thumbnail.number", min='1')
+
+      .modal-footer(layout="row")
+
+        span(flex)
+        md-button.md-accent(ng-click="$modal.close(vm.thumbnail)", ng-disabled="vm.itemForm.$invalid") Save
+        md-button.md-warn(ng-click="$modal.dismiss()") Cancel

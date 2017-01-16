@@ -1,0 +1,27 @@
+.mdi {
+  font-size: 24px;
+}
+
+.md-datepicker-calendar-pane {
+  width: 340px;
+}
+
+md-input-container > md-select {
+  margin-bottom: 16px;
+}
+
+.md-autocomplete-suggestions-container {
+  min-width: 340px !important;
+}
+
+.md-autocomplete-suggestions {
+  .md-caption {
+    height: 22px;
+    line-height: 28px;
+    font-style: italic;
+  }
+}
+
+md-chip [ace-sortable] * {
+  pointer-events: none;
+}

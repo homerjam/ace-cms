@@ -1,0 +1,28 @@
+field-image {
+  position: relative;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: bottom;
+  }
+
+  td:last-child {
+    position: relative;
+    width: 100%;
+
+    span {
+      position: absolute;
+      top: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.hj-cropify {
+  img {
+    pointer-events: none;
+  }
+}

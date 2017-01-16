@@ -1,0 +1,75 @@
+field-entity-tile {
+  position: relative;
+
+  .tile {
+    flex-basis: 240px;
+    max-width: 270px;
+
+    @media (max-width: 600px) {
+      flex-basis: 50%;
+    }
+  }
+
+  md-card {
+    position: relative;
+    outline: 0;
+  }
+
+  md-card-content {
+    overflow: hidden;
+  }
+
+  .md-card-image {
+    height: 150px;
+    background-repeat: no-repeat;
+    background-position: 50% 10%;
+    background-size: cover;
+
+    &:hover {
+      background-size: contain;
+    }
+  }
+
+  md-card-actions {
+    align-self: center;
+  }
+
+  .md-selected-theme {
+    color: white;
+  }
+
+  md-card .md-icon-button {
+    margin: 0 !important;
+  }
+
+  .group {
+    position: absolute;
+    top: 55px;
+
+    &:not(.active) {
+      display: none;
+    }
+
+    &--left {
+      left: 0;
+    }
+
+    &--right {
+      right: 0;
+    }
+  }
+
+  md-card:hover .group {
+    display: block;
+  }
+
+  /* Firefox fix - drag handle cannot be a button */
+  [ace-sortable-handle] {
+    cursor: pointer;
+
+    * {
+      pointer-events: none;
+    }
+  }
+
+}

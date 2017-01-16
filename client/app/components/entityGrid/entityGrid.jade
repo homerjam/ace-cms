@@ -1,0 +1,70 @@
+div(layout="column", style="position: absolute; width: 100%; height: 100%")
+
+  md-toolbar
+    .md-toolbar-tools
+      span(ng-show="::vm.mode !== 'modal'")
+        md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+          md-icon(md-icon-set="material-icons") menu
+      h3 {{vm.heading}}&nbsp;
+        span(ng-show="vm.selected.length === 0") ({{vm.totalItems}})
+        span(ng-show="vm.selected.length > 0") ({{vm.selected.length}}/{{vm.totalItems}})
+      span(flex)
+
+      span(ng-show="::vm.mode !== 'trash' && vm.mode !== 'modal'")
+        md-button.md-icon-button(ng-click="vm.editSelected(vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Edit")
+          md-icon(md-font-set="material-icons") create
+        md-button.md-icon-button(ng-click="vm.deleteSelected(vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Delete")
+          md-icon(md-font-set="material-icons") delete
+
+      span(ng-show="::vm.mode === 'trash'")
+        md-button.md-icon-button(ng-click="vm.restoreSelected(vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Restore")
+          md-icon(md-font-set="material-icons") settings_backup_restore
+        md-button.md-icon-button(ng-click="vm.deleteSelected(vm.selected, true)", ng-disabled="vm.selected.length < 1", aria-label="Delete Forever")
+          md-icon(md-font-set="material-icons") delete_forever
+        md-button.md-icon-button(ng-click="vm.emptyTrash()", aria-label="Empty Trash")
+          md-icon(md-font-set="material-icons") delete_sweep
+
+      md-button.md-icon-button(ng-click="vm.selectAll()", aria-label="Select all")
+        md-icon(md-font-set="mdi", md-font-icon="mdi-select")
+      md-button.md-icon-button(ng-click="vm.selectNone()", aria-label="Select none")
+        md-icon(md-font-set="mdi", md-font-icon="mdi-select-off")
+
+      md-menu(ng-show="::vm.filterFields.length")
+        md-button.md-icon-button(ng-click="$mdOpenMenu()", aria-label="Filter")
+          md-icon(md-font-set="material-icons") filter_list
+        md-menu-content(width="4")
+          md-menu-item(ng-repeat="field in vm.filterFields")
+            md-button(ng-click="vm.addFilter(field)")
+              span {{ field.name }}
+
+      span(ng-show="::vm.mode !== 'trash' && vm.mode !== 'modal'")
+        md-button.md-icon-button(aria-label="Search", ng-click="vm.showSearch = !vm.showSearch; vm.searchTerm = ''; vm.search()")
+          md-icon(md-font-set="material-icons") search
+
+      span(ng-show="::vm.mode !== 'trash' && vm.mode !== 'modal'")
+        md-button.md-fab.md-mini(ng-click="vm.newEntity()", aria-label="New entity")
+          md-icon(md-font-set="material-icons") add
+
+      span(ng-show="::vm.mode === 'trash' || vm.mode === 'modal'")
+        md-button.md-fab.md-mini(ng-click="vm.showSearch = !vm.showSearch; vm.searchTerm = ''; vm.search()", aria-label="Search")
+          md-icon(md-font-set="material-icons") search
+
+  div(flex="nogrow", ng-show="vm.showSearch")
+    div.search(layout="row", layout-padding)
+      md-input-container(flex, md-no-float)
+        input(type="text", placeholder="Search", ng-model="vm.searchTerm", ng-keypress="vm.search($event, vm.searchTerm)")
+      md-button.md-icon-button(aria-label="Search", ng-click="vm.search($event, vm.searchTerm)")
+        md-icon(md-font-set="material-icons") search
+
+  div(flex="nogrow", ng-show="vm.filters.length > 0")
+    div.filter(layout="row", layout-padding, ng-repeat="filter in vm.filters track by $index")
+      md-autocomplete(flex, md-selected-item-change="vm.selectFilter()", md-selected-item="filter.value", md-search-text="searchText", md-items="item in vm.filterOptions(filter, searchText)", md-item-text="item.title", md-floating-label="{{filter.name}}", md-input-name="{{filter.fieldSlug}}")
+        md-item-template
+          span(md-highlight-text="searchText", md-highlight-flags="^i") {{item.title}}
+        md-not-found No matches found.
+      md-button.md-icon-button(aria-label="Remove filter", ng-click="vm.removeFilter($index)")
+        md-icon(md-font-set="material-icons") close
+
+  div(flex)
+    .ui-grid-wrapper
+      div(ui-grid="vm.grid", ui-grid-selection, ui-grid-infinite-scroll, ui-grid-cellNav, ui-grid-save-state, ng-class="{disabled: vm.searching}")

@@ -1,0 +1,68 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 E-commerce Settings
+    span(flex)
+    md-button(ng-click='vm.saveSettings()', ng-disabled='vm.settingsForm.$invalid') Save
+
+md-content
+
+  form(name='vm.settingsForm', role='form', novalidate)
+
+
+    span(ng-if='::$root.user.superUser')
+
+      md-subheader.md-no-sticky.field-toolbar
+        md-toolbar.md-menu-toolbar
+          .md-toolbar-tools
+            h3 Super User
+
+      div(flex, layout="column", layout-margin)
+
+        md-input-container
+          md-checkbox(ng-model='vm.ecommerceSettings.testMode', aria-label='Test mode?') Test Mode
+
+    md-subheader.md-no-sticky.field-toolbar
+      md-toolbar.md-menu-toolbar
+        .md-toolbar-tools
+          h3 General
+
+    div(flex, layout="column", layout-margin)
+
+      br
+
+      md-input-container
+        label Store Name
+        input(ng-model='vm.ecommerceSettings.storeName', aria-label="Store Name")
+
+      md-input-container
+        label Email Sender Name
+        input(ng-model='vm.ecommerceSettings.emailSenderName', aria-label="Email Sender Name")
+
+      md-input-container
+        label Email Sender Address
+        input(ng-model='vm.ecommerceSettings.emailSenderAddress', aria-label="Email Sender Address")
+
+      md-input-container
+        label Currency
+        md-select(ng-model="vm.ecommerceSettings.currencySymbol")
+          md-option(ng-repeat="option in ['£']", value="{{option}}") {{option}}
+
+    md-subheader.md-no-sticky.field-toolbar
+      md-toolbar.md-menu-toolbar
+        .md-toolbar-tools
+          h3 Stripe
+          span(flex)
+          md-button(ng-click="vm.authenticateWithProvider('stripe')") {{ vm.ecommerceSettings.stripe.access_token ? 'Reconnect' : 'Connect' }}
+          span(ng-show="vm.ecommerceSettings.stripe.access_token")
+            md-button(ng-click="vm.ecommerceSettings.stripe.access_token = null") Disconnect
+
+    div(flex, layout="row", layout-margin)
+
+      .md-subhead(ng-show="!vm.ecommerceSettings.stripe.access_token") Connect your Stripe account
+
+      md-list-item(ng-show="vm.ecommerceSettings.stripe.account")
+        img.md-avatar(gravatar-src="vm.ecommerceSettings.stripe.account.email", gravatar-size="100")
+        .md-list-item-text
+          a(href="https://dashboard.stripe.com", target="_blank") {{vm.ecommerceSettings.stripe.account.display_name}}

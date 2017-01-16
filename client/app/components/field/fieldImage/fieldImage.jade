@@ -1,0 +1,43 @@
+ace-flow(options="vm.flowOptions")
+  md-subheader.md-no-sticky.field-toolbar
+    md-toolbar.md-menu-toolbar
+      .md-toolbar-tools
+        md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
+        h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
+        span(flex)
+        md-button.md-icon-button(aria-label="Upload", ace-flow-browse)
+          md-icon(md-font-set="material-icons") file_upload
+        md-button.md-icon-button(aria-label="Preview", ng-click="vm.preview($event)", ng-disabled="!vm.fieldModel.fileName")
+          md-icon(md-font-set="material-icons") zoom_in
+        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel.fileName")
+          md-icon(md-font-set="material-icons") file_download
+        md-button.md-icon-button(ng-show="vm.fieldOptions.settings.crops", aria-label="Crop", ng-click="vm.crop($event)", ng-disabled="!vm.fieldModel.fileName")
+          md-icon(md-font-set="material-icons") crop
+        md-button.md-icon-button(ng-show="vm.fieldModel.dzi", aria-label="Deep Zoom", ng-click="vm.dzi($event)", ng-disabled="!vm.fieldModel.fileName")
+          md-icon(md-font-set="material-icons") zoom_out_map
+
+div(flex, layout="row", layout-margin)
+
+  div(flex, ng-show="vm.uploading")
+    div(ng-show="vm.uploading") Uploading {{ vm.progress || 0 }}%
+
+  div(flex, ng-show="!vm.uploading && vm.fieldModel")
+    img(ng-src="{{vm.getThumbnail('h:500;q:60')}}")
+
+  div(flex, ng-show="!vm.uploading && vm.fieldModel")
+    table
+      tr
+        td Type
+        td {{vm.fieldModel.mimeType}}
+      tr
+        td Dimensions
+        td {{vm.fieldModel.metadata ? vm.fieldModel.metadata.width + '&times;' + vm.fieldModel.metadata.height : ''}}
+      tr
+        td Filename
+        td(title='{{vm.fieldModel.original.fileName}}') {{vm.fieldModel.original.fileName}}
+      tr
+        td Filesize
+        td {{vm.fieldModel.fileSize | fileSize}}
+      tr
+        td DZI
+        td {{vm.fieldModel.dzi.fileSize | fileSize}}

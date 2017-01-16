@@ -1,0 +1,8 @@
+.env
+.vscode
+.couch
+.cloudant
+!.gitkeep
+node_modules
+typings
+report

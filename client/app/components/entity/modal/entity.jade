@@ -1,0 +1,21 @@
+.modal-backdrop(ng-click="$modal.dismiss()")
+.modal
+  .modal-dialog
+    .modal-content
+      // .modal-header
+      //   md-toolbar
+      //     .md-toolbar-tools
+      //       h2 Entity
+      //       span(flex)
+      //       md-button.md-icon-button(ng-click="$modal.dismiss()")
+      //         md-icon(md-font-set="material-icons") close
+
+      .modal-body
+
+        entity(mode="{{vm.mode}}", entity="vm.entity", entities="vm.entities", entity-form="vm.entityForm", is-modal="true")
+
+      .modal-footer(layout="row")
+
+        span(flex)
+        md-button.md-accent(ng-disabled="vm.entityForm.$invalid || vm.entity.trashed", ng-click="$modal.close(vm.entity)") Save
+        md-button.md-warn(ng-click="$modal.dismiss()") Cancel

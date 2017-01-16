@@ -1,0 +1,116 @@
+<% include header %>
+
+<style type="text/css">
+
+body {
+	background: #ededed;
+}
+
+.auth0-lock * {
+  font-family: "Roboto" !important;
+	border-radius: 0 !important;
+}
+
+.auth0-lock-name {
+	position: relative;
+	text-indent: -9999px;
+}
+
+.auth0-lock-name:before {
+	content: "Welcome";
+	position: absolute;
+	top: -5px;
+	left: 0;
+	right: 0;
+	text-indent: 0;
+	font-size: 18px;
+}
+
+.hide {
+  display: none;
+}
+
+a {
+  color: currentColor;
+}
+
+.wrapper {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	width: 300px;
+	height: 540px;
+	text-align: center;
+}
+
+.login {
+  display: none;
+}
+
+.message {
+  padding: 30px;
+  margin-bottom: 60px;
+}
+
+.message.error {
+  background-color: orangered;
+  color: white;
+}
+
+.message.success {
+  background-color: lightgreen;
+}
+
+</style>
+
+<div class="wrapper">
+	<% if (locals.errorMessage) { %>
+		<div class="message error md-whiteframe-1dp">
+			<span><%= locals.errorMessage %></span>
+		</div>
+	<% } %>
+
+	<% if (locals.successMessage) { %>
+		<div class="message success md-whiteframe-1dp">
+			<span><%= locals.successMessage %></span>
+		</div>
+	<% } %>
+
+  <div class="message error md-whiteframe-1dp hide">
+    <p class="text"></p>
+    <p><a href="/">Retry</a></p>
+  </div>
+
+  <div id="login-form" class="md-whiteframe-1dp"></div>
+</div>
+
+<script type="text/javascript" src="https://cdn.auth0.com/js/lock/10.6/lock.min.js"></script>
+
+<script type="text/javascript">
+
+  var AUTH0_CLIENT_ID = '<%= locals.auth0.clientId %>';
+  var AUTH0_DOMAIN = '<%= locals.auth0.domain %>';
+
+  var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+		theme: {
+			logo: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+		},
+    container: 'login-form',
+    socialButtonStyle: 'big',
+		auth: {
+			responseType: 'code',
+			redirectUrl: window.location.protocol + '//' + window.location.host + '<%= locals.basePath %>login',
+			params: {
+				scope: 'openid email',
+			},
+		},
+  });
+
+	lock.show();
+
+</script>
+
+<% include footer %>

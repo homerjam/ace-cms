@@ -1,0 +1,23 @@
+.modal-backdrop(ng-click="$modal.dismiss()")
+.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+
+        md-toolbar
+          .md-toolbar-tools
+            h2 Deep Zoom
+            span(flex)
+            md-button.md-icon-button(ng-click="$modal.dismiss()")
+              md-icon(md-font-set="material-icons") close
+
+      .modal-body
+
+        div(layout="row", layout-margin)
+
+          ace-open-seadragon(src="{{vm.image}}", prefix-url="/img/openseadragon/images/")
+
+      .modal-footer(layout="row")
+
+        span(flex)
+        md-button(ng-click="$modal.dismiss()") Close

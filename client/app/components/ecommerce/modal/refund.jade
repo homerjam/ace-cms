@@ -1,0 +1,27 @@
+.modal-backdrop(ng-click="$modal.dismiss()")
+.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        md-toolbar
+          .md-toolbar-tools
+            h2 Refund
+            span(flex)
+            md-button.md-icon-button(ng-click="$modal.dismiss()")
+              md-icon(md-font-set="material-icons") close
+
+      .modal-body(style="padding: 16px 0")
+
+        form(name='vm.refundForm', novalidate)
+
+          div(flex, layout="row", layout-margin)
+
+            md-input-container(flex)
+              label Amount ({{$ecom.currencySymbol}})
+              input(type="number", aria-label="Amount" ng-model="vm.amount" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/", required, min="0", max="{{vm.maxAmount}}", step="0.01", ace-smart-float)
+
+      .modal-footer(layout="row")
+
+        span(flex)
+        md-button.md-accent(ng-click="$modal.close(vm.amount)", ng-disabled="vm.refundForm.$invalid") Refund
+        md-button.md-warn(ng-click="$modal.dismiss()") Cancel

@@ -1,0 +1,19 @@
+div(layout="column", layout-margin)
+
+  div(layout="row")
+    md-chips(flex, ng-model="vm.item.settings.schemas", ng-init="vm.item.settings.schemas = vm.item.settings.schemas || []", md-autocomplete-snap, md-require-match="true")
+      md-autocomplete(md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="item in $admin.get('schema', true)", md-item-text="item.name", placeholder="Schema(s)", md-min-length="0")
+        span(md-highlight-text="vm.searchText") {{item.name}}
+      md-chip-template
+        span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
+
+    md-button.md-icon-button(aria-label="New schema", ng-click="vm.newItem('schema', vm.item.settings.schemas)")
+      md-icon(md-font-set="material-icons") add
+
+  br
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.multiple', aria-label='Multiple?') Multiple
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.required', aria-label='Required?') Required

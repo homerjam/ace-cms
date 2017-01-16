@@ -1,0 +1,35 @@
+.modal-backdrop(ng-click="$modal.dismiss()")
+.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+
+        md-toolbar
+          .md-toolbar-tools
+            h2 Crop
+            span(flex)
+            md-button.md-icon-button(ng-click="$modal.dismiss()")
+              md-icon(md-font-set="material-icons") close
+
+      .modal-body
+
+        div(layout="row", layout-margin)
+
+          md-input-container(flex)
+            label Crop
+            md-select(ng-model="vm.activeCrop")
+              md-option(ng-repeat="crop in vm.availableCrops" ng-value="$index") {{crop.name}}
+
+          md-button(ng-click="vm.coords = {}", aria-label="Clear") Clear
+
+        div(layout="row", layout-margin)
+
+          hj-cropify(coords="vm.coords", aspect-ratio="vm.cropSettings.ratio")
+            img(ng-style="vm.cropSize()", ng-src="{{vm.getThumbnail()}}")
+
+      .modal-footer(layout="row")
+
+        span(flex)
+        md-button(ng-click="$modal.dismiss()") Cancel
+        md-button.md-primary.md-raised(ng-click="$modal.close(vm.crops)") Done
+

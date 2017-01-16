@@ -1,0 +1,40 @@
+div(layout="column", style="position: absolute; width: 100%; height: 100%")
+
+  md-toolbar
+    .md-toolbar-tools
+      md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+        md-icon(md-icon-set="material-icons") menu
+      h3 Files&nbsp;
+        span(ng-show="vm.selected.length === 0") ({{vm.totalItems}})
+        span(ng-show="vm.selected.length > 0") ({{vm.selected.length}}/{{vm.totalItems}})
+      span(flex)
+
+      md-radio-group(ng-show="$root.user.superUser", ng-model="vm.status", ng-change="vm.changeStatus()")
+        md-radio-button.md-hue-1(value="active", aria-label="Active")
+          .md-subhead Active
+        md-radio-button.md-hue-1.md-warn(value="trashed", aria-label="Trashed")
+          .md-subhead Trashed
+
+      span(flex="5")
+
+      md-button.md-icon-button(ng-show="$root.user.superUser", ng-disabled="vm.status !== 'trashed'", ng-click="vm.emptyTrash()")
+        md-icon(md-font-set="material-icons") delete_sweep
+
+      md-button.md-icon-button(ng-click="vm.selectAll()", aria-label="Select all")
+        md-icon(md-font-set="mdi", md-font-icon="mdi-select")
+      md-button.md-icon-button(ng-click="vm.selectNone()", aria-label="Select none")
+        md-icon(md-font-set="mdi", md-font-icon="mdi-select-off")
+      span(ng-show="vm.status === 'active'")
+        md-button.md-icon-button(ng-click="vm.viewSelected(vm.selected[0])", ng-disabled="vm.selected.length !== 1 || vm.selected[0].trashed === 'true'")
+          md-icon(md-font-set="material-icons") launch
+      span(ng-show="vm.status === 'trashed'")
+        md-button.md-icon-button(ng-click="vm.deleteSelected(vm.selected)", ng-disabled="vm.selected.length < 1 || !vm.isTrashed(vm.selected)")
+          md-icon(md-font-set="material-icons") delete_forever
+      md-button.md-fab.md-mini(ng-click="vm.downloadSelected(vm.selected[0])", ng-disabled="vm.selected.length !== 1")
+        md-icon(md-font-set="material-icons") file_download
+
+  div(flex)
+    .ui-grid-wrapper
+      div(ui-grid="vm.grid", ui-grid-selection, ui-grid-infinite-scroll, ng-class="{disabled: vm.searching}")
+
+// TODO: show selected count in a toast (vm.selected.length)

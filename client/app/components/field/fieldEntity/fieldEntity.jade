@@ -1,0 +1,32 @@
+md-subheader.md-no-sticky.field-toolbar
+  md-toolbar.md-menu-toolbar
+    .md-toolbar-tools
+      md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
+      h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
+      span(flex)
+      md-button(ng-show="::vm.schemas.length === 1", ng-click="vm.newEntity(vm.schemas[0].slug)", aria-label="New entity") New
+      md-menu(ng-if="::vm.schemas.length > 1")
+        md-button(aria-label="New entity", ng-click="$mdOpenMenu()") New
+        md-menu-content(width="4")
+          md-menu-item(ng-repeat="schema in vm.schemas")
+            md-button(ng-click="vm.newEntity(schema.slug)")
+              // md-icon(md-font-set="material-icons") dashboard
+              span {{ schema.name }}
+      md-button(ng-if="!vm.fieldOptions.settings.multiple && vm.searchText", ng-click='vm.searchText = vm.fieldModel = null', aria-label="Clear") Clear
+
+div(flex, layout="row", layout-margin)
+
+  div(flex, layout="row")
+
+    div(flex, ng-if="::!vm.fieldOptions.settings.multiple")
+      md-autocomplete(flex, md-no-cache="true", md-selected-item="vm.fieldModel", md-search-text="vm.searchText", md-items="item in vm.search(vm.searchText)", md-item-text="item.title", md-floating-label="{{vm.fieldOptions.name}}", md-min-length="0")
+        md-item-template
+          span(md-highlight-text="vm.searchText", md-highlight-flags="^i") {{item.title}}
+        md-not-found No matches found.
+
+    div(flex, ng-if="::vm.fieldOptions.settings.multiple")
+      md-chips(ng-model="vm.fieldModel", md-autocomplete-snap, md-require-match="true")
+        md-autocomplete(md-no-cache="true", md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="item in vm.search(vm.searchText)", md-item-text="item.title", placeholder="{{vm.fieldOptions.name}}", md-min-length="0")
+          span(md-highlight-text="vm.searchText") {{item.title}}
+        md-chip-template
+          span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.title}}

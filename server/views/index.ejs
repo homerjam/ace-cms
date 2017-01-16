@@ -1,0 +1,27 @@
+<% include header %>
+
+<app layout="row">
+	Loading...
+</app>
+
+<script type="text/javascript">
+	var appConfig = {
+		slug: '<%= session.slug %>',
+		basePath: '<%= basePath %>',
+		assistUrl: '<%= assistUrl %>',
+		assistCredentials: '<%= assistCredentials %>',
+		apiPrefix: '<%= apiPrefix %>',
+	};
+</script>
+
+<% if (environment === 'development') { %>
+
+	<script type="text/javascript" src="/dev/js/bundle.js?v=<%= version %>"></script>
+
+<% } else { %>
+
+	<script type="text/javascript" src="<%= basePath %>build/js/bundle.js?v=<%= version %>"></script>
+
+<% } %>
+
+<% include footer %>

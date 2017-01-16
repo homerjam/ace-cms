@@ -1,0 +1,26 @@
+entity-grid {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+
+  [flex] {
+    position: relative;
+  }
+
+  [ui-grid] {
+    height: 100% !important;
+  }
+
+  &[mode="modal"] {
+    height: calc(100vh - 128px);
+  }
+
+  .search,
+  .filter {
+    md-input-container {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+}

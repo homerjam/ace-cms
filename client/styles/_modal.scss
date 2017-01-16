@@ -1,0 +1,40 @@
+.modal-backdrop {
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 80;
+}
+
+.modal {
+	display: block;
+	overflow: auto;
+	overflow-y: scroll;
+	z-index: 80;
+  pointer-events: none;
+
+  .modal-dialog {
+    min-width: 856px;
+    pointer-events: auto;
+  }
+
+	.modal-header {
+		padding: 0;
+    border: none;
+	}
+
+	.modal-body {
+		padding: 0;
+    max-height: calc(100vh - 128px);
+    overflow: auto;
+	}
+
+  .modal-header + .modal-body {
+    max-height: calc(100vh - 224px);
+  }
+
+	.modal-content {
+		border-radius: 0;
+	}
+
+	.modal-footer {
+    padding: 8px 0;
+	}
+}

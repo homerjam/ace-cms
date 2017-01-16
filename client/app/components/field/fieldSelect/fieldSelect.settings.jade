@@ -1,0 +1,12 @@
+div(layout="column", layout-margin)
+
+  md-chips(ng-model="vm.item.settings.options", ng-init="vm.item.settings.options = vm.item.settings.options || []", placeholder="Options", secondary-placeholder="+Option")
+    md-chip-template
+      span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip}}
+  br
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.multiple', aria-label='Multiple?') Multiple
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.required', aria-label='Required?') Required

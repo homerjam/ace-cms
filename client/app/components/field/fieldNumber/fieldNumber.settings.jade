@@ -1,0 +1,9 @@
+div(layout="column", layout-margin)
+
+  md-input-container
+    label Format
+    md-select(ng-model='vm.item.settings.format', placeholder="Format")
+      md-option(ng-repeat="format in $field.field(vm.item.fieldType).formats", ng-value='format.value') {{format.name}}
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.required', aria-label='Required?') Required

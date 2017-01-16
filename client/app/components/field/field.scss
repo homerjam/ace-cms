@@ -1,0 +1,9 @@
+field {
+
+  md-toolbar h3.required:after {
+    content: "*";
+    vertical-align: super;
+    font-size: 60%;
+  }
+
+}

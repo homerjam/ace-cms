@@ -1,0 +1,15 @@
+div(layout="column", layout-margin)
+
+  md-input-container
+    label Taxonomy
+    md-select(ng-model='vm.item.settings.taxonomy', placeholder="Taxonomy")
+      md-option(ng-repeat="item in $admin.get('taxonomy', true)", ng-value='item') {{item.name}}
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.multiple', aria-label='Multiple?') Multiple
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.existingOnly', aria-label='Existing terms only?') Existing terms only
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.required', aria-label='Required?') Required

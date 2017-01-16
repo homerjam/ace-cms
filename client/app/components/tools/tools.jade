@@ -1,0 +1,18 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 Tools
+
+md-content
+
+  div(flex, layout="row", layout-margin)
+
+    md-button.md-raised.md-primary(href="{{::$root.apiPrefix}}/tools/export-db", target="_blank") Export Database
+
+  div(flex, layout="row", layout-margin)
+
+    form(action="{{::$root.apiPrefix}}/tools/import-db", method="post", enctype="multipart/form-data")
+      label(for="import-db")
+        md-button.md-raised.md-primary Import Database
+      input(id="import-db", name="payload", type="file", ace-file-change="vm.importDbSelected($event, files)")

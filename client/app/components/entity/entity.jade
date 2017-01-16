@@ -1,0 +1,71 @@
+md-toolbar(ng-if="::!vm.entity.trashed")
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2
+      span(ng-show="::vm.modeBreadcrumb", hide-xs, hide-sm) {{::vm.modeBreadcrumb}}
+      a(ng-if=":: !vm.schema.singular && vm.mode !== 'new'" ui-sref="entityGrid({schemaSlug: vm.schema.slug})", hide-xs, hide-sm) {{::vm.schema.name | pluralize}}
+      span(ng-if=":: vm.schema.singular || vm.mode === 'new'") {{::vm.schema.name}}
+      span(ng-if="vm.title", ng-bind-html="vm.title")
+    span(flex)
+
+    md-button(ng-show="::vm.mode !== 'batchUpload' && !vm.isModal", ng-click="vm.saveEntity()", ng-disabled="vm.entityForm.$invalid") Save
+
+    md-button.md-icon-button(ng-show="::vm.mode === 'normal' && !vm.isModal", ng-click="vm.deleteEntity()", aria-label="Delete")
+      md-icon(md-font-set="material-icons") delete
+
+    md-button.md-icon-button(ng-show="::vm.mode === 'normal' && vm.prevEntityId", ng-click="vm.prevEntity()", aria-label="Previous Entity")
+      md-icon(md-font-set="material-icons") navigate_before
+
+    md-button.md-icon-button(ng-show="::vm.mode === 'normal' && vm.nextEntityId", ng-click="vm.nextEntity()", aria-label="Next Entity")
+      md-icon(md-font-set="material-icons") navigate_next
+
+    md-menu(ng-show="::(vm.mode === 'normal' || vm.mode === 'singular') && !vm.isModal")
+      md-button.md-icon-button(ng-click="$mdOpenMenu()", aria-label="More")
+        md-icon(md-font-set="material-icons") more_vert
+      md-menu-content(width="4")
+        md-menu-item(ng-repeat="item in vm.dropdownMore")
+          md-button(ng-click="item.click()")
+            span {{ item.text }}
+
+md-toolbar(ng-if="::vm.entity.trashed")
+  .md-toolbar-tools
+    h2
+      a(ui-sref="trash") Trash
+      span(ng-bind-html="vm.title")
+    span(flex)
+    md-button(ng-click="vm.restoreEntity()") Restore
+    md-button(ng-click="vm.deleteEntity(true)") Delete Forever
+
+md-content(mode="{{vm.mode}}")
+
+  section(ng-show="vm.revisions.length")
+    md-content(style="max-height: 20rem")
+      md-subheader.md-no-sticky.field-toolbar
+        md-toolbar.md-menu-toolbar
+          .md-toolbar-tools
+            h3 Revisions
+      md-list
+        md-list-item.secondary-button-padding(ng-repeat="revision in vm.revisions", md-colors="{background: '{{revision._rev === vm.currentRevId ? 'default-primary' : 'default-background-50'}}'}")
+          .md-body-1 {{revision.modified | date: 'short'}} by {{revision.modifiedBy}}
+          md-button.md-secondary(ng-click="vm.restoreRevision(revision)", ng-disabled="revision._rev === vm.currentRevId") {{revision._rev === vm.currentRevId ? 'Current' : 'Restore'}}
+
+  section(ng-class="::{disabled: vm.entity.trashed}")
+
+    md-subheader.md-no-sticky.field-toolbar
+      md-toolbar.md-menu-toolbar
+        .md-toolbar-tools
+          md-checkbox.md-primary.field-apply(ng-if="::vm.mode === 'batchEdit'", ng-model="vm.batchPublish", aria-label="Apply to all?")
+          h3 Published
+
+    div(flex, layout="row", layout-margin, style="height: 112px")
+
+      div(flex)
+        md-checkbox(ng-model="vm.entity.published", ng-change="vm.batchPublish = true", aria-label="Published?") Published on ...
+        md-datepicker(ng-model="vm.entity.publishedAt", md-placeholder="Choose date", ng-disabled="!vm.entity.published", ng-change="vm.batchPublish = true")
+
+  form(name="vm.entityForm", novalidate, role="form")
+
+    section(ng-repeat="field in vm.schema.fields", ng-class="{disabled: field.disabled || vm.fieldDisabled(field)}")
+
+      field(field-type="field.fieldType", field-options="vm.fieldOptions(field.slug)", field-model="vm.entity.fields[field.slug].value", field-apply="field.apply", field-disabled="field.disabled")

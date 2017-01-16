@@ -1,0 +1,25 @@
+div(layout="column", style="position: absolute; width: 100%; height: 100%")
+
+  md-toolbar
+    .md-toolbar-tools
+      md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+        md-icon(md-icon-set="material-icons") menu
+      h3 {{::vm.info.heading}}
+      span(flex)
+      md-button.md-icon-button(ng-click="vm.editItems(vm.selected)", ng-disabled="vm.selected.length !== 1", aria-label="Edit")
+        md-icon(md-font-set="material-icons") create
+      span(ng-show="vm.adminType !== 'user'")
+        md-button.md-icon-button(ng-click="vm.cloneItem(vm.selected)", ng-disabled="vm.selected.length !== 1", aria-label="Clone")
+          md-icon(md-font-set="material-icons") content_copy
+      md-button.md-icon-button(ng-click="vm.deleteItems(vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Delete")
+        md-icon(md-font-set="material-icons") delete
+      md-button.md-icon-button(ng-click="vm.selectAll()", aria-label="Select all")
+        md-icon(md-font-set="mdi", md-font-icon="mdi-select")
+      md-button.md-icon-button(ng-click="vm.selectNone()", aria-label="Select none")
+        md-icon(md-font-set="mdi", md-font-icon="mdi-select-off")
+      md-button.md-fab.md-mini(ng-click="vm.newItem()")
+        md-icon(md-font-set="material-icons") add
+
+  div(flex)
+    .ui-grid-wrapper
+      div(ui-grid="vm.grid", ui-grid-selection, ui-grid-infinite-scroll, ng-class="{disabled: vm.searching}")

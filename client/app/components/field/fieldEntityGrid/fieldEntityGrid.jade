@@ -1,0 +1,26 @@
+md-subheader.md-no-sticky.field-toolbar
+  md-toolbar.md-menu-toolbar
+    .md-toolbar-tools
+      md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
+      h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
+      span(flex)
+      md-button(ng-show="::vm.schemas.length === 1", ng-click="vm.newEntity(vm.schemas[0].slug)", aria-label="New entity") New
+      md-menu(ng-show="::vm.schemas.length > 1")
+        md-button(aria-label="New entity", ng-click="$mdOpenMenu()") New
+        md-menu-content(width="4")
+          md-menu-item(ng-repeat="schema in vm.schemas")
+            md-button(ng-click="vm.newEntity(schema.slug)")
+              // md-icon(md-font-set="material-icons") dashboard
+              span {{ schema.name }}
+      md-button.md-icon-button(ng-show="::vm.schemas.length === 1", ng-click="vm.insertEntity(vm.schemas[0].slug)", aria-label="Insert entity")
+        md-icon(md-font-set="material-icons") add
+      md-menu(ng-show="::vm.schemas.length > 1")
+        md-button.md-icon-button(aria-label="Insert entity", ng-click="$mdOpenMenu()")
+          md-icon(md-font-set="material-icons") add
+        md-menu-content(width="4")
+          md-menu-item(ng-repeat="schema in vm.schemas")
+            md-button(ng-click="vm.insertEntity(schema.slug)")
+              // md-icon(md-font-set="material-icons") dashboard
+              span {{ schema.name }}
+
+div(ui-grid="vm.getGrid()", ui-grid-draggable-rows)

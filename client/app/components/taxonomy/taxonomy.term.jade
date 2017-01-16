@@ -1,0 +1,34 @@
+.tree-node(ng-class="{leaf: !node.terms || node.terms.length === 0, active: $handleScope.$active}")
+
+  .tree-node-contents
+
+    md-button.md-icon-button.tree-node-toggle(ng-show="node.terms.length > 0", aria-label="Toggle collapse", ng-click="vm.toggleNode($event, this)")
+      md-icon(ng-show="collapsed", md-font-set="material-icons") keyboard_arrow_right
+      md-icon(ng-show="!collapsed", md-font-set="material-icons") keyboard_arrow_down
+
+    md-input-container(flex, md-no-float)
+      input.tree-node-title(
+        ng-class="{edit: $handleScope.$editTitle}",
+        ng-model="node.title",
+        ace-sync-focus="$handleScope.$editTitle",
+        placeholder="Type here, press enter to save",
+        ng-blur="vm.revertNode($event, this)",
+        ng-focus="vm.editNode($event, this)",
+        ng-keypress="vm.saveNode($event, this)")
+
+    .tree-node-controls
+      .tree-node-handle(ui-tree-handle)
+        md-button.md-icon-button
+          md-icon(md-font-set="material-icons") drag_handle
+      md-button.md-icon-button.save-node(ng-click="vm.saveNode($event, this)", ng-blur="$handleScope.$active = false", ng-focus="$handleScope.$active = true")
+        md-icon(md-font-set="material-icons") save
+      md-button.md-icon-button.remove-node(ng-click="vm.removeNode($event, this)", ng-blur="$handleScope.$active = false", ng-focus="$handleScope.$active = true")
+        md-icon(md-font-set="material-icons") delete
+      md-button.md-icon-button.edit-node(ng-click="vm.editNode($event, this)", ng-blur="$handleScope.$active = false", ng-focus="$handleScope.$active = true")
+        md-icon(md-font-set="material-icons") edit
+      md-button.md-icon-button.new-node(ng-click="vm.newNode($event, this)", ng-blur="$handleScope.$active = false", ng-focus="$handleScope.$active = true")
+        md-icon(md-font-set="material-icons") add
+
+
+ol(ui-tree-nodes, ng-if="!collapsed", ng-model="node.terms")
+  li(ng-repeat="node in node.terms", ui-tree-node, data-expand-on-hover="500", ace-bind-html="vm.termTemplate")

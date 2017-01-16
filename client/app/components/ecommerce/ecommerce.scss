@@ -1,0 +1,21 @@
+ecommerce {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+
+  [flex] {
+    position: relative;
+  }
+
+  [ui-grid] {
+    height: 100% !important;
+  }
+
+  md-toolbar.md-menu-toolbar {
+    background-color: rgba(158,158,158,0.2);
+  }
+
+  .md-subheader-inner {
+    padding: 0 !important;
+  }
+}

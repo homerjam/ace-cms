@@ -1,0 +1,19 @@
+md-subheader.md-no-sticky.field-toolbar
+  md-toolbar.md-menu-toolbar
+    .md-toolbar-tools
+      md-checkbox.md-primary.field-apply(ng-if="vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
+      h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
+      span(flex)
+      md-button.md-icon-button(aria-label="Toggle HTML", ng-click="vm.showHtml = !vm.showHtml")
+        md-icon(md-font-set="material-icons") code
+
+div(flex, layout="row", layout-margin)
+  md-input-container(flex)
+    textarea.md-input(
+      ace-rich-text,
+      options="vm.options",
+      show-html="vm.showHtml",
+      ng-model="vm.fieldModel.html",
+      ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined",
+      aria-label="{{vm.fieldOptions.name}}"
+      )

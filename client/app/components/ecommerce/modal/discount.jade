@@ -1,0 +1,62 @@
+.modal-backdrop(ng-click="$modal.dismiss()")
+.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        md-toolbar
+          .md-toolbar-tools
+            h2 Discount
+            span(flex)
+            md-button.md-icon-button(ng-click="$modal.dismiss()")
+              md-icon(md-font-set="material-icons") close
+
+      .modal-body(style="padding: 16px 0")
+
+        form(name='vm.discountForm', novalidate)
+
+          div(flex, layout="row", layout-margin)
+
+            md-input-container(flex)
+              label Name
+              input(aria-label='Name', ng-model='vm.discount.name', required, ng-minlength='2', ng-maxlength='50', ng-pattern='/^[^\"]*$/')
+
+            md-input-container(flex)
+              label Code
+              input(aria-label='Code', ng-model='vm.discount.code', required, ng-minlength='2', ng-maxlength='50', ng-pattern='/^[^\"]*$/')
+
+          div(flex, layout="row", layout-margin)
+
+            div(flex)
+              .md-caption Start Date
+              md-datepicker(ng-model="vm.discount.dateStart", md-placeholder="Start Date")
+
+            div(flex)
+              .md-caption End Date
+              md-datepicker(ng-model="vm.discount.dateEnd", md-placeholder="End Date")
+
+          br
+
+          div(flex, layout="row", layout-margin)
+
+            md-input-container(flex="50")
+              label Type
+              md-select(ng-model='vm.discount.discountType')
+                md-option(value='percentage') Percentage
+                md-option(value='fixed') Fixed Amount
+                md-option(value='shipping') Free Shipping
+
+            md-input-container(flex, ng-show="vm.discount.discountType !== 'shipping'")
+              label Amount
+              input(type='number', aria-label='Amount', ng-model='vm.discount.amount', ng-required="vm.discount.discountType !== 'shipping'", min='0', max="{{vm.discount.discountType === 'percentage' ? 100 : 99999}}")
+
+          // div(flex, layout="row", layout-margin)
+
+          //   md-input-container(flex)
+          //     label Usage Limit
+          //     input(type='number', aria-label='Usage Limit', ng-model='vm.discount.usageLimit', required, min='0')
+
+      .modal-footer(layout="row")
+
+        span(flex)
+        md-button.md-accent(ng-click="$modal.close(vm.discount)", ng-disabled="vm.discountForm.$invalid") Save
+        md-button.md-warn(ng-click="$modal.dismiss()") Cancel

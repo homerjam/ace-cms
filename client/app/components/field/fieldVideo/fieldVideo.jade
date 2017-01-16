@@ -1,0 +1,36 @@
+span(ace-flow options="vm.flowOptions")
+  md-subheader.md-no-sticky.field-toolbar
+    md-toolbar.md-menu-toolbar
+      .md-toolbar-tools
+        md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
+        h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
+        span(flex)
+        md-button.md-icon-button(aria-label="Upload", ace-flow-browse)
+          md-icon(md-font-set="material-icons") file_upload
+        //- md-button.md-icon-button(aria-label="Preview", ng-click="vm.preview($event)", ng-disabled="vm.fieldModel.metadata.zencoder.jobState !== 'finished'")
+        //-   md-icon(md-font-set="material-icons") pageview
+        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel")
+          md-icon(md-font-set="material-icons") file_download
+
+  div(flex, layout="row", layout-margin)
+
+    //- div(flex, ng-show="vm.fieldOptions.entityMode === 'new'") Please save to enable uploading
+
+    div(flex, ng-show="vm.uploading")
+      div(ng-show="vm.uploading") Uploading {{ vm.progress || 0 }}%
+
+    div(flex, ng-show="!vm.uploading && vm.fieldModel")
+      div(ng-hide="vm.fieldModel.metadata.zencoder.thumbnail.url") Encoding. Please wait or save and come back later.
+      img(ng-if="vm.fieldModel.metadata.zencoder.thumbnail.url", ng-src="{{vm.fieldModel.metadata.zencoder.thumbnail.url}}")
+
+    div(flex, ng-show="!vm.uploading && vm.fieldModel")
+      table
+        tr
+          td Type
+          td {{vm.fieldModel.original.mimeType}}
+        tr
+          td Filename
+          td(title='{{vm.fieldModel.original.fileName}}') {{vm.fieldModel.original.fileName}}
+        tr
+          td Filesize
+          td {{vm.fieldModel.original.fileSize | fileSize}}

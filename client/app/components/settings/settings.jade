@@ -1,0 +1,95 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 Settings
+    span(flex)
+    md-button(ng-click='vm.saveSettings()', ng-disabled='vm.settingsForm.$invalid') Save
+
+md-content
+
+  form(name='vm.settingsForm', role='form', novalidate)
+
+    span(ng-if='::$root.user.superUser')
+
+      md-subheader.md-no-sticky.field-toolbar
+        md-toolbar.md-menu-toolbar
+          .md-toolbar-tools
+            h3 Super User
+
+      div(flex, layout="column", layout-margin)
+        br
+
+        md-input-container
+          label Client Name
+          input(ng-model='vm.settings.client.name', aria-label="Client Name")
+
+        md-input-container
+          label Website URL
+          input(ng-model='vm.settings.url', aria-label="Website URL")
+
+        md-input-container
+          label Google Analytics View ID
+          input(ng-model='vm.settings.ga.view', aria-label="Google Analytics View ID")
+
+        md-input-container
+          md-checkbox(ng-model='vm.settings.ecommerce.enabled', aria-label='E-commerce enabled?') E-commerce module enabled?
+
+        md-input-container
+          md-checkbox(ng-model='vm.settings.providers.instagram', aria-label='Instagram enabled?') Connect Instagram enabled?
+
+        md-input-container
+          md-checkbox(ng-model='vm.settings.providers.vimeo', aria-label='Vimeo enabled?') Connect Vimeo enabled?
+
+    md-subheader.md-no-sticky.field-toolbar
+      md-toolbar.md-menu-toolbar
+        .md-toolbar-tools
+          h3 General
+
+    div(flex, layout="column", layout-margin)
+      br
+
+      md-input-container
+        label Metadata Description
+        textarea(ng-model='vm.settings.metadata.description')
+
+    span(ng-show="vm.settings.providers.instagram")
+
+      md-subheader.md-no-sticky.field-toolbar
+        md-toolbar.md-menu-toolbar
+          .md-toolbar-tools
+            h3 Instagram
+            span(flex)
+            md-button(ng-click="vm.authenticateWithProvider('instagram')") {{ vm.settings.instagram.access_token ? 'Reconnect' : 'Connect' }}
+            span(ng-show="vm.settings.instagram.access_token")
+              md-button(ng-click="vm.settings.instagram.access_token = null; vm.settings.instagram.user = null;") Disconnect
+
+      div(flex, layout="row", layout-margin)
+
+        .md-subhead(ng-show="!vm.settings.instagram.access_token") Connect your Instagram account
+
+        md-list-item(ng-show="vm.settings.instagram.user")
+          img.md-avatar(ng-src="{{vm.settings.instagram.user.profile_picture}}")
+          .md-list-item-text
+            a(href="https://instagram.com/{{vm.settings.instagram.user.username}}", target="_blank") @{{vm.settings.instagram.user.username}}
+
+    span(ng-show="vm.settings.providers.vimeo")
+
+      md-subheader.md-no-sticky.field-toolbar
+        md-toolbar.md-menu-toolbar
+          .md-toolbar-tools
+            h3 Vimeo
+            span(flex)
+            md-button(ng-click="vm.authenticateWithProvider('vimeo')") {{ vm.settings.vimeo.access_token ? 'Reconnect' : 'Connect' }}
+            span(ng-show="vm.settings.vimeo.access_token")
+              md-button(ng-click="vm.settings.vimeo.access_token = null") Disconnect
+
+      div(flex, layout="row", layout-margin)
+
+        .md-subhead(ng-show="!vm.settings.vimeo.access_token") Connect your Vimeo account
+
+        md-list-item(ng-show="vm.settings.vimeo.user")
+          img.md-avatar(ng-src="{{vm.settings.vimeo.user.pictures[3].link}}")
+          .md-list-item-text
+            a(href="{{vm.settings.vimeo.user.link}}", target="_blank") {{vm.settings.vimeo.user.name}}
+

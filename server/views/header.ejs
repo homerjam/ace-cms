@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app" ng-strict-di class="flexbox">
+
+<head>
+
+    <base href="<%= basePath %>"></base>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google" content="notranslate">
+    <meta name="pinterest" content="nopin">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+
+    <title>FOKUS</title>
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <link rel="stylesheet" href="<%= basePath %>font/roboto/font.css?v=<%= version %>">
+
+<% if (environment !== 'development') { %>
+
+    <link rel="stylesheet" href="<%= basePath %>build/css/bundle.css?v=<%= version %>">
+
+<% } %>
+
+</head>
+
+<body>

@@ -1,0 +1,35 @@
+div(layout="column", layout-margin)
+
+  md-input-container
+    md-checkbox(ng-model='vm.item.settings.required', aria-label='Required?') Required
+
+  br
+
+md-toolbar.md-table-toolbar.md-primary
+  .md-toolbar-tools Video Outputs
+    span(flex)
+    md-button(ng-click="vm.fieldSettingsAdd('videoOutputs')") Add Output
+
+md-table-container(ng-show="vm.item.settings.videoOutputs.length")
+  table(md-table)
+
+    thead(md-head)
+      tr(md-row)
+        th(md-column) Name
+        th(md-column) Slug
+        th(md-column) Format
+        th(md-column) Resolution
+        th(md-column) Quality
+
+    tbody(md-body)
+      tr(md-row, ng-repeat="output in vm.item.settings.videoOutputs")
+        td(md-cell) {{output.name}}
+        td(md-cell) {{output.slug}}
+        td(md-cell) {{output.format}}
+        td(md-cell) {{output.maxWidth}}×{{output.maxHeight}}
+        td(md-cell) {{output.quality}}
+        td(md-cell)
+          md-button.md-icon-button(ng-click="vm.fieldSettingsEdit('videoOutputs', output)")
+            md-icon(md-font-set="material-icons") edit
+          md-button.md-icon-button(ng-click="vm.fieldSettingsDelete('videoOutputs', output)")
+            md-icon(md-font-set="material-icons") close

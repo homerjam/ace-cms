@@ -1,0 +1,41 @@
+dashboard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: rgb(250, 250, 250);
+
+  md-content {
+    background: transparent;
+  }
+
+  .chart {
+    position: relative;
+
+    &__wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    &--sessions {
+      padding-top: 50%;
+    }
+  }
+
+  ace-c3 {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+
+  ace-c3 svg {
+    width: 100% !important;
+    height: 100% !important;
+    font-family: Roboto !important;
+    font-size: 12px !important;
+  }
+}

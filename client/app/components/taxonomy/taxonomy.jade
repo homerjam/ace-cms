@@ -1,0 +1,16 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 {{vm.taxonomy.name || "Taxonomy"}}
+    span(flex)
+    md-button.md-fab.md-mini(ng-click="vm.newTerm()", aria-label="New Term")
+      md-icon(md-font-set="material-icons") add
+
+md-content
+
+  div(flex, layout="column", layout-margin)
+
+    div(ui-tree="vm.treeOptions")
+      ol(ui-tree-nodes, ng-model="vm.taxonomy.terms")
+        li(ng-repeat="node in vm.taxonomy.terms", ui-tree-node, data-expand-on-hover="500", ace-bind-html="vm.termTemplate")

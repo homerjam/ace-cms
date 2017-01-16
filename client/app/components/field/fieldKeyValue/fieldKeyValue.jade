@@ -1,0 +1,26 @@
+md-subheader.md-no-sticky.field-toolbar
+  md-toolbar.md-menu-toolbar
+    .md-toolbar-tools
+      md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
+      h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
+      span(flex)
+      md-button.md-icon-button(aria-label="Add key/value", ng-click="vm.fieldModel.push({key: '', value: ''})")
+        md-icon(md-font-set="material-icons") add
+
+div(flex, layout="column", layout-margin)
+  table(style="width: 100%")
+    tbody
+      tr(ng-repeat='keyValue in vm.fieldModel', ace-sortable, axis="'y'", index-fn="vm.getIndex", collection-fn="vm.getCollection", handle-selector="'[ace-sortable-handle]'")
+        td
+          md-icon(md-font-set="material-icons", ace-sortable-handle) more_horiz
+        td
+          md-input-container(style="width: 100%")
+            label Key
+            input(ng-model="keyValue.key")
+        td
+          md-input-container(style="width: 100%")
+            label Value
+            input(ng-model="keyValue.value")
+        td
+          md-button.md-icon-button(aria-label="Remove key/value", ng-click='vm.fieldModel.splice($index, 1)')
+            md-icon(style="display: inline-block", md-font-set="material-icons") close

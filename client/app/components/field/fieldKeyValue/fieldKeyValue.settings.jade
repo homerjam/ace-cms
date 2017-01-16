@@ -1,0 +1,17 @@
+div(layout="column", layout-margin)
+
+  md-input-container
+    label Source
+    md-select(ng-model='vm.item.settings.source', required, placeholder="Source")
+      md-option(ng-repeat="item in $field.field(vm.item.fieldType).sources", ng-value='item.value') {{item.name}}
+
+  div(ng-if="vm.item.settings.source === 'default'")
+    md-chips(ng-model="vm.item.settings.options", ng-init="vm.item.settings.options = vm.item.settings.options || []", placeholder="Options", secondary-placeholder="+Option")
+      md-chip-template
+        span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip}}
+    br
+
+  md-input-container(ng-if="vm.item.settings.source === 'taxonomy'")
+    label Taxonomy
+    md-select(ng-model='vm.item.settings.taxonomy', required, placeholder="Taxonomy")
+      md-option(ng-repeat="item in $admin.get('taxonomy', true)", ng-value='item') {{item.name}}
