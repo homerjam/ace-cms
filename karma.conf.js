@@ -44,22 +44,41 @@ module.exports = function (config) {
       module: {
         loaders: [
           {
-            test: /\.js/,
-            exclude: [/node_modules/],
-            loader: 'babel',
-          }, {
-            test: /\.html/,
+            test: /\.js$/,
+            exclude: /node_modules|bower_components/,
+            loaders: [
+              'ng-annotate',
+              'babel',
+            ],
+          },
+          {
+            test: /\.html$/,
             loader: 'raw',
-          }, {
-            test: /\.scss/,
-            loader: 'style!css!sass',
-          }, {
+          },
+          {
+            test: /\.jade$/,
+            loaders: ['raw', 'jade-html'],
+          },
+          {
             test: /\.styl$/,
-            loader: 'style!css!stylus',
-          }, {
+            loaders: ['style', 'css?sourceMap', 'autoprefixer?{browsers:["last 2 versions", "Explorer >= 9"]}', 'stylus?sourceMap'],
+          },
+          {
+            test: /\.scss$/,
+            loaders: ['style', 'css?sourceMap', 'autoprefixer?{browsers:["last 2 versions", "Explorer >= 9"]}', 'sass?sourceMap'],
+          },
+          {
             test: /\.css$/,
-            loader: 'style!css',
-          }
+            loaders: ['style', 'css?sourceMap', 'autoprefixer?{browsers:["last 2 versions", "Explorer >= 9"]}'],
+          },
+          {
+            test: /\.(woff(2)?|ttf|eot|svg)([\?]?.*)?$/,
+            loader: 'url-loader?name=assets/[name]-[hash].[ext]&limit=100000',
+          },
+          {
+            test: /\.json$/,
+            loader: 'json',
+          },
         ],
       },
     },

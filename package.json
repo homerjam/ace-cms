@@ -1,11 +1,19 @@
 {
   "name": "ace-cms",
-  "version": "0.2.112",
+  "version": "0.3.0",
+  "description": "A flexible, API focused, multi-site CMS",
+  "author": {
+    "name": "Studio Thomas",
+    "email": "hello@studiothomas.co.uk",
+    "url": "http://studiothomas.co.uk"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": "https://github.com/studiothomas/ace-api.git",
+  "main": "server/app.js",
   "scripts": {
     "start": "nodemon --debug --watch server index.js",
     "test": "karma start"
   },
-  "main": "server/app.js",
   "engines": {
     "node": "6.x"
   },
