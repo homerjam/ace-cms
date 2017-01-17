@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import { Buffer } from 'buffer';
 import extend from 'lodash/extend';
 import arrayBufferConcat from 'array-buffer-concat';
-import icc from 'icc';
+import { parse } from 'babel!icc';
 import loadImage from 'blueimp-load-image';
 import canvasToBlob from 'blueimp-canvas-to-blob';
 
@@ -62,7 +62,7 @@ class ImagePrep {
           }
 
           // Parse the profile
-          profile = icc.parse(buffer);
+          profile = parse(buffer);
         }
 
         loadImage(fileOrBlob, (resizedImageCanvas) => {
