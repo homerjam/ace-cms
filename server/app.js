@@ -1,5 +1,5 @@
 const express = require('express');
-const http = require('http');
+const fs = require('fs');
 const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -24,7 +24,7 @@ const AceApi = require('ace-api');
 // const AceApi = require('../../ace-api');
 
 const packageJson = require('../package.json');
-const apiDefaultConfig = require('./api.default.config');
+const apiConfigDefault = require('./api.config.default');
 
 const ENVIRONMENT = process.env.ENVIRONMENT || 'development';
 const VERSION = packageJson.version;
@@ -55,7 +55,7 @@ const ASSIST_PASSWORD = process.env.ASSIST_PASSWORD || '';
 
 class AceCms {
   constructor (app, config) {
-    const apiConfig = config || apiDefaultConfig;
+    const apiConfig = config || apiConfigDefault;
 
     app.use(helmet());
     app.set('trust proxy', true);
@@ -99,7 +99,7 @@ class AceCms {
 
     /* Passport */
 
-    require('./auth0.strategy');
+    require('./passport.strategy.auth0');
     app.use(passport.initialize());
     app.use(passport.session());
 
@@ -110,8 +110,13 @@ class AceCms {
 
     /* Static */
 
-    router.use(express.static(path.join(__dirname, '..', 'public')));
-    router.use('/angular-i18n', express.static(path.join(__dirname, '..', 'node_modules', 'angular-i18n')));
+    router.use(express.static(path.resolve(__dirname, '../public')));
+
+    if (fs.existsSync(path.resolve(__dirname, '../node_modules'))) {
+      router.use('/angular-i18n', express.static(path.resolve(__dirname, '../node_modules/angular-i18n')));
+    } else {
+      router.use('/angular-i18n', express.static(path.resolve(__dirname, '../../angular-i18n')));
+    }
 
     /* Force https */
 
