@@ -1,6 +1,8 @@
+/* eslint-env browser */
+
 class FieldVimeoController {
   /* @ngInject */
-  constructor ($timeout, $window, $http, $log, $mdDialog, SettingsFactory) {
+  constructor ($timeout, $http, $log, $mdDialog, SettingsFactory) {
     const vm = this;
 
     let accessToken;
@@ -52,7 +54,7 @@ class FieldVimeoController {
           }
 
           const thumbnail = result.pictures.sizes[result.pictures.sizes.length - 1];
-          const thumbnailUrl = new $window.URL(thumbnail.link);
+          const thumbnailUrl = new URL(thumbnail.link);
 
           const files = result.files.map((file) => {
             return {

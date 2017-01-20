@@ -2,7 +2,49 @@
 
 A flexible, API focused, multi-site CMS. ACE takes it's name from the key parts of the stack - Angular, Couch DB and Express.
 
-### Environment variables
+## Setup
+
+#### Database
+
+ACE uses CouchDB, you can host your own instance or just use Cloudant. If you choose to host your own then you'll need to build couch with cloudant/clouseau and cloudant/dreyfus. For local development you can use this handy dockerised version [homerjam/couchdb-cloudant-search](https://hub.docker.com/r/homerjam/couchdb-cloudant-search/).
+
+Once you've setup up CouchDB/Cloudant add the URL with credentials to the config:
+
+    DB_URL=https://username:password@username.cloudant.com
+
+ACE is multi-site so you'll need to create an authorisation database to map users to their accounts upon sign in, we'll refer to this as the `auth` database. Create one and push the `auth` design docs from `studiothomas/ace-api` to it. Then add the `auth` db name to the config:
+
+    AUTH_DB_NAME=auth
+
+#### Session
+
+ACE uses redis to persist session data. [Redis Labs](https://redislabs.com/pricing) have a free tier you can use for testing/development.
+
+    REDIS_HOST=endpoint.com
+    REDIS_PORT=11484
+    REDIS_PASSWORD=password
+
+Provide a secret for session hashing:
+
+    SESSION_SECRET=secret
+
+#### Authorisation
+
+ACE uses [Auth0](https://auth0.com/) to handle authorisation, setup a new client and update the config with required details. You'll need to add a callback URL in the client settings, this should take the format `https://DOMAIN[BASE_PATH]/login`.
+
+    AUTH0_DOMAIN=domain.auth0.com
+    AUTH0_CLIENT_ID=
+    AUTH0_CLIENT_SECRET=
+
+#### Assistant
+
+ACE uses a separate app to store images, you'll need to deploy this following the instructions at `studiothomas/ace-assist` then update the config:
+
+	ASSIST_URL=
+	ASSIST_USERNAME=
+	ASSIST_PASSWORD=
+
+## Environment variables
 
 	ENVIRONMENT=development|testing|production
 
@@ -11,9 +53,17 @@ A flexible, API focused, multi-site CMS. ACE takes it's name from the key parts 
 	FORCE_HTTPS=false
 	FORCE_WWW=false
 
+    # Database URL (including username/password)
+	DB_URL=
+
+    # Redis credentials (used to store sessions)
+	REDIS_HOST=
+	REDIS_PORT=
+	REDIS_PASSWORD=
+
 	SESSION_SECRET=
 
-	# The database used during authorisation to map users to agents (in production)
+	# The database used during authorisation to map users to slugs (in production)
 	AUTH_DB_NAME=
 
     # Used to sign JWTs
@@ -25,13 +75,13 @@ A flexible, API focused, multi-site CMS. ACE takes it's name from the key parts 
 	# Database(s) available to super user (comma separated)
 	SLUGS=
 
-	ASSIST_URL=
-	ASSIST_USERNAME=
-	ASSIST_PASSWORD=
-
     AUTH0_DOMAIN=
     AUTH0_CLIENT_ID=
     AUTH0_CLIENT_SECRET=
+
+	ASSIST_URL=
+	ASSIST_USERNAME=
+	ASSIST_PASSWORD=
 
 	EMBEDLY_API_KEY=
 
@@ -65,14 +115,6 @@ A flexible, API focused, multi-site CMS. ACE takes it's name from the key parts 
     VIMEO_CLIENT_ID=
     VIMEO_CLIENT_SECRET=
 
-    # Redis credentials (used to store sessions)
-	REDIS_HOST=
-	REDIS_PORT=
-	REDIS_PASSWORD=
-
-    # Database URL (including username/password)
-	DB_URL=
-
 
 	# Development only
 	PORT=port 				# http server port to proxy
@@ -88,7 +130,7 @@ A flexible, API focused, multi-site CMS. ACE takes it's name from the key parts 
 	DEV_STRIPE_ACCOUNT_ID=stripe_account_id
 
 
-### Usage
+## Usage
 
 	# start server
 	$ npm start
