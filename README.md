@@ -6,7 +6,7 @@ A flexible, API focused, multi-site CMS. ACE takes it's name from the key parts 
 
 #### Database
 
-ACE uses CouchDB, you can host your own instance or just use Cloudant. If you choose to host your own then you'll need to build couch with cloudant/clouseau and cloudant/dreyfus. For local development you can use this handy dockerised version [homerjam/couchdb-cloudant-search](https://hub.docker.com/r/homerjam/couchdb-cloudant-search/).
+ACE uses CouchDB, you can host your own instance or just use [Cloudant](https://cloudant.com). If you choose to host your own then you'll need to build couch with cloudant/clouseau and cloudant/dreyfus. For local development you can use this handy dockerised version [homerjam/couchdb-cloudant-search](https://hub.docker.com/r/homerjam/couchdb-cloudant-search/).
 
 Once you've setup up CouchDB/Cloudant add the URL with credentials to the config:
 
@@ -96,11 +96,12 @@ ACE uses a separate app to store images, you'll need to deploy this following th
 	AWS_ACCESS_KEY_ID=amazon_web_services_key
 	AWS_ACCESS_KEY_SECRET=amazon_web_services_secret
 
-	# Transcoding settings (not used - video conversion now handled by to Zencoder)
-	AWS_TCODE_PIPELINE_ID=
-	AWS_TCODE_BUCKET_IN=
-	AWS_TCODE_BUCKET_OUT=
-	AWS_TCODE_REGION=
+    # S3 bucket for non-image uploads
+    AWS_S3_BUCKET=
+
+    # Zencoder
+    ZENCODER_S3_BUCKET=
+    ZENCODER_S3_CREDENTIALS=
 
 	# Stripe credentials
 	STRIPE_API_KEY=         # Secret key
