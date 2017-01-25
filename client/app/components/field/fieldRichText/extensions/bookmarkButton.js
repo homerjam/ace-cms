@@ -1,3 +1,5 @@
+/* eslint-env browser */
+
 import MediumEditor from 'medium-editor';
 
 const BookmarkButton = MediumEditor.Extension.extend({
@@ -23,55 +25,41 @@ const BookmarkButton = MediumEditor.Extension.extend({
 
   handleClick(event) {
     const selection = MediumEditor.selection.getSelectionHtml(document);
+    const caret = window.getSelection();
+    const range = caret.getRangeAt(0);
 
     this.base.trigger('blur', {}, this.base.elements[0]);
 
     this.options.bookmarkHtml(selection)
       .then((html) => {
-        this.insertHtmlAtCaret(html);
+        this.insertHtml(html, caret, range);
         this.base.checkContentChanged();
       });
   },
 
-  insertHtmlAtCaret(html) {
-    let selection;
-    let range;
+  insertHtml(html, caret, range) {
+    range.deleteContents();
 
-    // IE9 and non-IE
-    if (window.getSelection) {
-      selection = window.getSelection();
-
-      if (selection.getRangeAt && selection.rangeCount) {
-        range = selection.getRangeAt(0);
-        range.deleteContents();
-
-        // Range.createContextualFragment() would be useful here but is
-        // only relatively recently standardized and is not supported in
-        // some browsers (IE9, for one)
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = html;
-        const fragment = document.createDocumentFragment();
-        let node;
-        let lastNode;
-        while ((node = tempElement.firstChild)) {
-          lastNode = fragment.appendChild(node);
-        }
-        range.insertNode(fragment);
-
-        // Preserve the selection
-        if (lastNode) {
-          range = range.cloneRange();
-          range.setStartAfter(lastNode);
-          range.collapse(true);
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }
-      }
+    // Range.createContextualFragment() would be useful here but is
+    // only relatively recently standardized and is not supported in
+    // some browsers (IE9, for one)
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = html;
+    const fragment = document.createDocumentFragment();
+    let node;
+    let lastNode;
+    while ((node = tempElement.firstChild)) {
+      lastNode = fragment.appendChild(node);
     }
+    range.insertNode(fragment);
 
-    // IE < 9
-    if (!window.getSelection && document.selection && document.selection.type !== 'Control') {
-      document.selection.createRange().pasteHTML(html);
+    // Preserve the caret
+    if (lastNode) {
+      range = range.cloneRange();
+      range.setStartAfter(lastNode);
+      range.collapse(true);
+      caret.removeAllRanges();
+      caret.addRange(range);
     }
   },
 });
