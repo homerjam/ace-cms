@@ -77,7 +77,7 @@ angular.module('app', [
 
     // Routing
     $locationProvider.html5Mode(true);
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/404');
     $urlMatcherFactoryProvider.strictMode(false);
 
     // Whitelist urls
@@ -198,10 +198,10 @@ angular.module('app', [
             return $q.reject(response);
           }
 
-          if (!response.data.permission && /\/api(.*)$/.test(response.config.url)) {
-            $window.location.href = '/';
-            return $q.reject(response);
-          }
+          // if (!response.data.permission && /\/api(.*)$/.test(response.config.url)) {
+          //   $window.location.href = '/';
+          //   return $q.reject(response);
+          // }
 
           const $mdDialog = $injector.get('$mdDialog');
 
@@ -221,15 +221,17 @@ angular.module('app', [
       url: '/switch',
       onEnter: ($window) => {
         $window.location.href = `${appConfig.basePath}switch`;
+        $window.location.reload();
       },
     });
 
     $stateProvider.state('logout', {
       url: '/logout',
       onEnter: ($http, $window) => {
-        $http.post(`${apiPrefix}/logout`)
+        $http.post('/logout')
           .then(() => {
             $window.location.href = `${appConfig.basePath}?success=logout`;
+            $window.location.reload();
           });
       },
     });
