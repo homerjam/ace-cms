@@ -11,7 +11,7 @@ const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, He
   service.getByKey = key => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/taxonomy/${key}`,
+      url: `${apiPrefix}/taxonomy?slug=${key}`,
     })
       .then((response) => {
         resolve(response.data);

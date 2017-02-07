@@ -1,21 +1,17 @@
-import gulp from 'gulp';
-import path from 'path';
-import runSequence from 'run-sequence';
-import browserSync from 'browser-sync';
-import rename from 'gulp-rename';
-import template from 'gulp-template';
-import bump from 'gulp-bump';
-import jscs from 'gulp-jscs';
-import plumber from 'gulp-plumber';
-import yargs from 'yargs';
-import env from 'node-env-file';
-import _ from 'lodash';
-import webpack from 'webpack';
-import webpackStream from 'webpack-stream';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import webpackConfigDev from './webpack.dev';
-import webpackConfigBuild from './webpack.build';
+const gulp = require('gulp');
+const path = require('path');
+const runSequence = require('run-sequence');
+const browserSync = require('browser-sync');
+const rename = require('gulp-rename');
+const template = require('gulp-template');
+const bump = require('gulp-bump');
+const yargs = require('yargs');
+const env = require('node-env-file');
+const _ = require('lodash');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackConfigDev = require('./webpack.dev');
 
 if (!process.env.ENVIRONMENT) {
   env('.env');
@@ -84,33 +80,12 @@ gulp.task('component', () => {
     .pipe(gulp.dest(destPath));
 });
 
-gulp.task('jscs:fix', () => {
-  return gulp.src(['**/*.js'])
-    .pipe(plumber())
-    .pipe(jscs({
-      fix: true,
-    }))
-    .pipe(jscs.reporter())
-    .pipe(jscs.reporter('fail'))
-    .pipe(gulp.dest('./'));
-});
-
-gulp.task('build', () => {
-  return gulp.src(webpackConfigBuild.entry)
-    .pipe(webpackStream(webpackConfigBuild))
-    .pipe(gulp.dest(webpackConfigBuild.output.path));
-});
-
 gulp.task('bump', () => {
-  return gulp.src(['./package.json', './bower.json'])
+  return gulp.src(['./package.json'])
     .pipe(bump({
       type: 'patch',
     }))
     .pipe(gulp.dest('./'));
-});
-
-gulp.task('release', (done) => {
-  runSequence('build', 'bump', done);
 });
 
 gulp.task('default', (done) => {

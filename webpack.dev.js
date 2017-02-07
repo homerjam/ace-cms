@@ -2,12 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  debug: true,
-  // devtool: 'eval-source-map',
   devtool: 'eval',
 
   entry: [
-    // 'webpack/hot/dev-server',
     'webpack-hot-middleware/client?reload=true&noInfo=true',
     path.join(__dirname, 'client', 'app', 'app'),
   ],
@@ -19,60 +16,89 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.NoErrorsPlugin(),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-  // new webpack.ProvidePlugin({
-  //   jQuery: 'jquery',
-  //   $: 'jquery',
-  //   'window.jQuery': 'jquery',
-  // }),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
 
-  resolve: {
-    root: [path.join(__dirname, 'node_modules')],
-    fallback: [path.join(__dirname, 'bower_components')],
-  },
-
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules|bower_components/,
-        loaders: [
-          // 'monkey-hot',
-          'ng-annotate',
-          'babel',
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                ['es2015', { modules: false }],
+              ],
+              plugins: [
+                ['angularjs-annotate', { explicitOnly: false }],
+              ],
+            },
+          },
         ],
       },
       {
         test: /\.html$/,
-        loader: 'raw',
+        loader: 'raw-loader',
       },
       {
         test: /\.jade$/,
-        loaders: ['raw', 'jade-html'],
-      },
-      {
-        test: /\.styl$/,
-        loaders: ['style', 'css?sourceMap', 'autoprefixer?{browsers:["last 2 versions", "Explorer >= 9"]}', 'stylus?sourceMap'],
+        use: [
+          'raw-loader',
+          'jade-html-loader',
+        ],
       },
       {
         test: /\.scss$/,
-        loaders: ['style', 'css?sourceMap', 'autoprefixer?{browsers:["last 2 versions", "Explorer >= 9"]}', 'sass?sourceMap'],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'autoprefixer-loader',
+            options: {
+              browsers: ['last 2 versions', 'Explorer >= 9'],
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        loaders: ['style', 'css?sourceMap', 'autoprefixer?{browsers:["last 2 versions", "Explorer >= 9"]}'],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'autoprefixer-loader',
+            options: {
+              browsers: ['last 2 versions', 'Explorer >= 9'],
+            },
+          },
+        ],
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)([\?]?.*)?$/,
-        loader: 'url-loader?name=assets/[name]-[hash].[ext]&limit=100000',
-      },
-      {
-        test: /\.json$/,
-        loader: 'json',
+        test: /\.(woff(2)?|ttf|eot|svg)([?]?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          name: 'assets/[name]-[hash].[ext]',
+          limit: 100000,
+        },
       },
     ],
   },

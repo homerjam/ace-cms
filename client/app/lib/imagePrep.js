@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import { Buffer } from 'buffer';
 import extend from 'lodash/extend';
 import arrayBufferConcat from 'array-buffer-concat';
-import { parse } from 'babel!icc';
+import { parse } from 'babel-loader?{presets:["es2015"]}!icc';
 import loadImage from 'blueimp-load-image';
 import canvasToBlob from 'blueimp-canvas-to-blob';
 

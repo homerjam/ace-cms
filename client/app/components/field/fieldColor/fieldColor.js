@@ -1,6 +1,6 @@
 import angular from 'angular';
 import tinyColor from 'tinycolor2';
-import mdColorPicker from 'imports?tinycolor=>tinycolor!md-color-picker/dist/mdColorPicker';
+import mdColorPicker from 'imports-loader?tinycolor=>tinycolor!md-color-picker/dist/mdColorPicker';
 import fieldColorComponent from './fieldColor.component';
 import settingsTemplate from './fieldColor.settings.jade';
 

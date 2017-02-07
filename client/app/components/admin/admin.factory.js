@@ -31,7 +31,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.loadCurrentUser = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/user/current`,
+      url: `${apiPrefix}/admin/user/current`,
     })
       .then((response) => {
         User = response.data;
@@ -44,7 +44,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.loadRoles = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/roles`,
+      url: `${apiPrefix}/admin/roles`,
     })
       .then((response) => {
         Roles = response.data;
@@ -143,7 +143,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
 
     $http({
       method: 'GET',
-      url: `${apiPrefix}/${type}/list`,
+      url: `${apiPrefix}/admin/${type}/list`,
       params,
     })
       .then((response) => {
@@ -164,7 +164,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.create = (type, item) => $q((resolve, reject) => {
     $http({
       method: 'POST',
-      url: `${apiPrefix}/${type}`,
+      url: `${apiPrefix}/admin/${type}`,
       data: {
         item,
       },
@@ -183,7 +183,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.read = (type, params) => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/${type}`,
+      url: `${apiPrefix}/admin/${type}`,
       params,
     })
       .then((response) => {
@@ -216,7 +216,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
 
     $http({
       method: 'PUT',
-      url: `${apiPrefix}/${type}`,
+      url: `${apiPrefix}/admin/${type}`,
       data: {
         items: updatedItems,
       },
@@ -296,7 +296,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.deleteItems = (type, items) => $q((resolve, reject) => {
     $http({
       method: 'DELETE',
-      url: `${apiPrefix}/${type}`,
+      url: `${apiPrefix}/admin/${type}`,
       data: {
         items,
       },

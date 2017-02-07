@@ -85,8 +85,8 @@ md-content
 
     hr
 
-    md-list-item(ng-click="vm.preview()")
-      md-icon(md-font-set="material-icons") launch
+    md-list-item(ng-show="$root.$settings.settings().url", ng-click="vm.preview()")
+      md-icon(md-font-set="material-icons") desktop_mac
       p Preview
 
     md-list-item(ui-sref="logout")
