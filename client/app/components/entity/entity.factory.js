@@ -159,6 +159,10 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     entity.fields = _.mapValues(entity.fields, (field, fieldSlug) => {
       const fieldOpts = AdminFactory.getByKey('field')[fieldSlug];
 
+      if (!_.find(schema.fields, field => field.slug === fieldSlug)) {
+        return null;
+      }
+
       field.type = 'entityField';
       field.fieldType = fieldOpts.fieldType;
 
@@ -166,6 +170,8 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
       return field;
     });
+
+    entity.fields = _.pickBy(entity.fields, field => field);
 
     entity.thumbnail = service.getEntityThumbnail(entity);
 
