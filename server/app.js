@@ -30,6 +30,7 @@ const ENVIRONMENT = process.env.ENVIRONMENT || 'development';
 const VERSION = packageJson.version;
 const SLUGS = process.env.SLUGS || '';
 const SESSION_SECRET = process.env.SESSION_SECRET || '';
+const SESSION_TTL = process.env.SESSION_TTL || 7200;
 const FORCE_HTTPS = process.env.FORCE_HTTPS ? JSON.parse(process.env.FORCE_HTTPS) : false;
 const FORCE_WWW = process.env.FORCE_WWW ? JSON.parse(process.env.FORCE_WWW) : false;
 
@@ -88,7 +89,7 @@ class AceCms {
         store: new RedisStore({
           host: REDIS_HOST,
           port: REDIS_PORT,
-          ttl: 3600,
+          ttl: SESSION_TTL,
           pass: REDIS_PASSWORD,
         }),
         secret: SESSION_SECRET,
@@ -274,7 +275,8 @@ class AceCms {
         },
       };
 
-      req.session.errorMessage = req.session.successMessage = null;
+      req.session.errorMessage = null;
+      req.session.successMessage = null;
 
       res.render('login', data);
     });

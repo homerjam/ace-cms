@@ -62,6 +62,7 @@ ACE uses a separate app to store images, you'll need to deploy this following th
 	REDIS_PASSWORD=
 
 	SESSION_SECRET=
+	SESSION_TTL=
 
 	# The database used during authorisation to map users to slugs (in production)
 	AUTH_DB_NAME=
