@@ -19,7 +19,7 @@
     "node": "6.x"
   },
   "dependencies": {
-    "ace-api": "^0.2.7",
+    "ace-api": "^0.2.8",
     "angular-i18n": "^1.6.2",
     "body-parser": "^1.17.0",
     "compression": "^1.6.2",
