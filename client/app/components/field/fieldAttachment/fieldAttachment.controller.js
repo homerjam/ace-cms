@@ -79,7 +79,7 @@ class FieldAttachmentController {
       $mdDialog.show(
         $mdDialog.alert()
           .title('Download URL')
-          .textContent(`${$location.protocol()}://${$location.host()}${$location.port() !== 80 ? `:${$location.port()}` : ''}${downloadUrl}`)
+          .textContent(`${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${downloadUrl}`)
           .ok('Close')
       );
     };
