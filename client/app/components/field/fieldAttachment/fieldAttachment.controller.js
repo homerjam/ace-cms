@@ -65,7 +65,8 @@ class FieldAttachmentController {
     };
 
     vm.fileUrl = () => {
-      const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
+      // const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
+      const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.metadata.s3.bucket}/${vm.fieldModel.metadata.s3.src}/${vm.fieldModel.original.fileName}`;
 
       // $mdDialog.show(
       //   $mdDialog.prompt()
