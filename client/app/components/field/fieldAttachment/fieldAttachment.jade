@@ -9,6 +9,8 @@ span(ace-flow options="vm.flowOptions")
           md-icon(md-font-set="material-icons") file_upload
         md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel")
           md-icon(md-font-set="material-icons") file_download
+        md-button.md-icon-button(aria-label="Download URL", ng-click="vm.downloadUrl($event)", ng-disabled="!vm.fieldModel")
+          md-icon(md-font-set="mdi", md-font-icon="mdi-link-variant")
 
   div(flex, layout="row", layout-margin)
 

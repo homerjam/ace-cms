@@ -25,7 +25,9 @@ export default angular.module('ace.flow', [])
 
               args.unshift(flow);
 
-              callback(...args);
+              $timeout(() => {
+                callback(...args);
+              });
             });
           });
         }

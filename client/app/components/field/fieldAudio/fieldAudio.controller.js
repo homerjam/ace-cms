@@ -36,8 +36,6 @@ class FieldAudioController {
           vm.fieldModel = _file;
 
           checkZencoderJob();
-
-          $scope.$apply();
         },
         filesSubmitted: (flow, files) => {
           if (files.filter(file => file.valid).length) {

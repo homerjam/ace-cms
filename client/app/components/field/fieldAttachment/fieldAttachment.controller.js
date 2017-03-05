@@ -1,6 +1,6 @@
 class FieldAttachmentController {
   /* @ngInject */
-  constructor ($scope, $window, $http, $timeout, $mdDialog, apiPrefix) {
+  constructor ($scope, $window, $http, $timeout, $location, $mdDialog, apiPrefix) {
     const vm = this;
 
     const attachmentExtensions = 'pdf,doc,docx,csv,xls,txt';
@@ -34,8 +34,6 @@ class FieldAttachmentController {
           const _file = JSON.parse(message);
 
           vm.fieldModel = _file;
-
-          $scope.$apply();
         },
         filesSubmitted: (flow, files) => {
           if (files.filter(file => file.valid).length) {
@@ -64,6 +62,26 @@ class FieldAttachmentController {
 
     vm.download = () => {
       $window.open(`${apiPrefix}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
+    };
+
+    vm.downloadUrl = () => {
+      const downloadUrl = `${apiPrefix}/file/download/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
+
+      // $mdDialog.show(
+      //   $mdDialog.prompt()
+      //     .title('Download URL')
+      //     .placeholder('Download URL')
+      //     .ariaLabel('Download URL')
+      //     .initialValue(downloadUrl)
+      //     .ok('Close')
+      // );
+
+      $mdDialog.show(
+        $mdDialog.alert()
+          .title('Download URL')
+          .textContent(`${$location.protocol()}://${$location.host()}${$location.port() !== 80 ? `:${$location.port()}` : ''}${downloadUrl}`)
+          .ok('Close')
+      );
     };
   }
 }

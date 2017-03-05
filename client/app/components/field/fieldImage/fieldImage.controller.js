@@ -197,8 +197,6 @@ class FieldImageController {
             .then((newFile) => {
               vm.fieldModel = newFile;
             });
-
-          $scope.$apply();
         },
         filesSubmitted: (flow, files) => {
           // Trigger a batch upload event, send files
