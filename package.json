@@ -1,6 +1,6 @@
 {
   "name": "ace-cms",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "A flexible, API focused, multi-site CMS",
   "author": {
     "name": "Studio Thomas",
@@ -19,7 +19,7 @@
     "node": "6.x"
   },
   "dependencies": {
-    "ace-api": "^0.2.8",
+    "ace-api": "^0.2.9",
     "angular-i18n": "^1.6.2",
     "body-parser": "^1.17.0",
     "compression": "^1.6.2",

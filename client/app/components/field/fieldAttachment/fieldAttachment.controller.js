@@ -64,22 +64,22 @@ class FieldAttachmentController {
       $window.open(`${apiPrefix}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
     };
 
-    vm.downloadUrl = () => {
-      const downloadUrl = `${apiPrefix}/file/download/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
+    vm.fileUrl = () => {
+      const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
 
       // $mdDialog.show(
       //   $mdDialog.prompt()
-      //     .title('Download URL')
-      //     .placeholder('Download URL')
-      //     .ariaLabel('Download URL')
-      //     .initialValue(downloadUrl)
+      //     .title('File URL')
+      //     .placeholder('File URL')
+      //     .ariaLabel('File URL')
+      //     .initialValue(fileUrl)
       //     .ok('Close')
       // );
 
       $mdDialog.show(
         $mdDialog.alert()
-          .title('Download URL')
-          .textContent(`${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${downloadUrl}`)
+          .title('File URL')
+          .textContent(`${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${fileUrl}`)
           .ok('Close')
       );
     };
