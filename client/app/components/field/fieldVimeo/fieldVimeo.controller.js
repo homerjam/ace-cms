@@ -43,6 +43,16 @@ class FieldVimeoController {
         .then((response) => {
           const result = response.data;
 
+          if (!/pro/i.test(result.user.account)) {
+            $mdDialog.show(
+              $mdDialog.alert()
+                .title('Error')
+                .textContent('Please upgrade to Vimeo Pro')
+                .ok('Close')
+            );
+            return;
+          }
+
           if (!result.pictures) {
             $mdDialog.show(
               $mdDialog.alert()
@@ -55,6 +65,16 @@ class FieldVimeoController {
 
           const thumbnail = result.pictures.sizes[result.pictures.sizes.length - 1];
           const thumbnailUrl = new URL(thumbnail.link);
+
+          if (!result.files) {
+            $mdDialog.show(
+              $mdDialog.alert()
+                .title('Error')
+                .textContent('Files not found')
+                .ok('Close')
+            );
+            return;
+          }
 
           const files = result.files.map((file) => {
             return {
