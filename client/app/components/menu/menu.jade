@@ -11,7 +11,7 @@ md-content
       p Dashboard
 
     md-menu(md-offset="220 0", ng-show="vm.schemas.length")
-      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('new|entity|view', $root.$state.current.name)}")
+      md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('new|entity|view', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") create
         p Content
       md-menu-content(width="4")
@@ -24,7 +24,7 @@ md-content
             span {{ item.text }}
 
     md-menu(md-offset="220 0", ng-show="vm.taxonomies.length")
-      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('taxonomy', $root.$state.current.name)}")
+      md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('taxonomy', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") format_list_bulleted
         p Taxonomy
       md-menu-content(width="4")
@@ -34,7 +34,7 @@ md-content
             span {{ item.text }}
 
     md-menu(md-offset="220 0", ng-show="($root.user.permissions.ecommerce || $root.user.superUser) && $root.$settings.settings().ecommerce.enabled")
-      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('ecommerce', $root.$state.current.name)}")
+      md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('ecommerce', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") shopping_cart
         p E-commerce
       md-menu-content(width="4")
@@ -52,7 +52,7 @@ md-content
             span Settings
 
     md-menu(md-offset="220 0", ng-show="vm.batchUploadSchemas.length > 1")
-      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('batchUpload', $root.$state.current.name)}")
+      md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('batchUpload', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") file_upload
         p Upload
       md-menu-content(width="4")
@@ -96,7 +96,7 @@ md-content
     hr
 
     md-menu(md-offset="220 0", ng-if="::$root.user.superUser")
-      md-list-item(ng-click="$mdOpenMenu()", ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
+      md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
         md-icon(md-font-set="material-icons") settings_applications
         p Admin
       md-menu-content(width="4")

@@ -30,7 +30,7 @@ div(layout="column", style="position: absolute; width: 100%; height: 100%")
         md-icon(md-font-set="mdi", md-font-icon="mdi-select-off")
 
       md-menu(ng-show="::vm.filterFields.length")
-        md-button.md-icon-button(ng-click="$mdOpenMenu()", aria-label="Filter")
+        md-button.md-icon-button(ng-click="$mdMenu.open()", aria-label="Filter")
           md-icon(md-font-set="material-icons") filter_list
         md-menu-content(width="4")
           md-menu-item(ng-repeat="field in vm.filterFields")

@@ -16,12 +16,12 @@ const useragent = require('express-useragent');
 const passport = require('passport');
 const env = require('node-env-file');
 
+const AceApi = require('ace-api');
+const AceApiServer = require('ace-api-server');
+
 if (!process.env.ENVIRONMENT) {
   env('.env');
 }
-
-const AceApi = require('ace-api');
-// const AceApi = require('../../ace-api');
 
 const packageJson = require('../package.json');
 const apiConfigDefault = require('./api.config.default');
@@ -189,13 +189,12 @@ class AceCms {
       return res.redirect(`${BASE_PATH}login${querystring}`);
     };
 
-    /* Register API */
+    /* Register API Server */
 
-    apiConfig._app = app;
-    apiConfig._router = router;
-    apiConfig._ensureAuthenticated = ensureAuthenticated;
+    apiConfig.__router = router;
+    apiConfig.__ensureAuthenticated = ensureAuthenticated;
 
-    const aceApi = AceApi(apiConfig);
+    AceApiServer(app, apiConfig);
 
     /* Verify */
 
@@ -215,7 +214,7 @@ class AceCms {
 
         const email = req.user.emails[0].value;
 
-        const auth = new aceApi.Auth(null, apiConfig);
+        const auth = new AceApi.Auth(null, apiConfig);
 
         auth.authoriseUser(email, req)
           .then((user) => {

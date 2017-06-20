@@ -21,7 +21,7 @@ md-toolbar(ng-if="::!vm.entity.trashed")
       md-icon(md-font-set="material-icons") navigate_next
 
     md-menu(ng-show="::(vm.mode === 'normal' || vm.mode === 'singular') && !vm.isModal")
-      md-button.md-icon-button(ng-click="$mdOpenMenu()", aria-label="More")
+      md-button.md-icon-button(ng-click="$mdMenu.open()", aria-label="More")
         md-icon(md-font-set="material-icons") more_vert
       md-menu-content(width="4")
         md-menu-item(ng-repeat="item in vm.dropdownMore")

@@ -1,6 +1,6 @@
 # ACE CMS
 
-A flexible, API focused, multi-site CMS. ACE takes it's name from the key parts of the stack - Angular, Couch DB and Express.
+Flexible, multi-site, headless CMS. ACE takes it's name from the key parts of the stack - Angular, Couch DB and Express.
 
 ## Setup
 
