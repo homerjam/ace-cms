@@ -201,7 +201,7 @@ class FileController {
       }
 
       if (item.location === 'assist') {
-        $window.open(`${$rootScope.assistUrl}/download/${$rootScope.slug}/${item.fileName}/${item.original.fileName}`);
+        $window.open(`${$rootScope.assistUrl}/file/download/${$rootScope.slug}/${item.fileName}/${item.original.fileName}`);
       }
     };
 

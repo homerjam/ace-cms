@@ -17,7 +17,7 @@ class FieldImageController {
 
     vm.download = () => {
       const fileName = vm.fieldModel.original.fileName.replace(/^(#|\?)/, '_');
-      $window.open([$rootScope.assistUrl, 'download', $rootScope.slug, vm.fieldModel.fileName, fileName].join('/'));
+      $window.open(`${$rootScope.assistUrl}/file/download/${$rootScope.slug}/${vm.fieldModel.fileName}/${fileName}`);
     };
 
     vm.dzi = () => {
@@ -53,7 +53,7 @@ class FieldImageController {
       }], 0);
     };
 
-    vm.getThumbnail = settings => vm.fieldModel ? [$rootScope.assistUrl, 'transform', $rootScope.slug, settings, vm.fieldModel.fileName].join('/') : null;
+    vm.getThumbnail = settings => (vm.fieldModel ? [$rootScope.assistUrl, 'transform', $rootScope.slug, settings, vm.fieldModel.fileName].join('/') : null);
 
     const settings = vm.fieldOptions.settings || {};
 
@@ -77,7 +77,7 @@ class FieldImageController {
     const imageExtensions = 'jpg,jpeg,png,svg';
 
     vm.flowOptions = {
-      target: [$rootScope.assistUrl, 'upload'].join('/'),
+      target: `${$rootScope.assistUrl}/file/upload`,
       query: {
         options: JSON.stringify(uploadOptions),
       },
@@ -134,7 +134,7 @@ class FieldImageController {
                   .ok('Upload')
                   .cancel('Cancel')
               )
-              .then(upload, cancel);
+                .then(upload, cancel);
               return;
             }
 
@@ -147,7 +147,7 @@ class FieldImageController {
                   .ok('Upload')
                   .cancel('Cancel')
               )
-              .then(upload, cancel);
+                .then(upload, cancel);
               return;
             }
 
@@ -160,7 +160,7 @@ class FieldImageController {
                   .ok('Upload')
                   .cancel('Cancel')
               )
-              .then(upload, cancel);
+                .then(upload, cancel);
               return;
             }
 
