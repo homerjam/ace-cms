@@ -5,8 +5,6 @@ class EcommerceController {
   constructor ($rootScope, $scope, $state, $window, $http, $timeout, $q, $log, $mdDialog, EcommerceFactory, SettingsFactory, HelperFactory, ModalService, uiGridConstants, apiPrefix) {
     const vm = this;
 
-    const locals = $state.$current.locals.globals;
-
     const type = $state.current.data.ecommerceType;
     const ecommerceSettings = EcommerceFactory.settings();
 

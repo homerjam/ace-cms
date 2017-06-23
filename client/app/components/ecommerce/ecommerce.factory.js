@@ -8,7 +8,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
 
   $rootScope.$ecom = service;
 
-  let settings;
+  let settings = {};
 
   service.currencySymbol = '';
 

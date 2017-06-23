@@ -18,8 +18,6 @@ const batchUploadModule = angular.module('batchUpload', [
         },
       },
       onEnter($state, BatchUploadFactory) {
-        'ngInject';
-
         // if (!BatchUploadFactory.isUploading()) {
         //   $state.go('dashboard');
         // }

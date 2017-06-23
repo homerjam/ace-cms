@@ -4,7 +4,7 @@ import Handlebars from 'handlebars/dist/handlebars';
 
 class EntityController {
   /* @ngInject */
-  constructor($rootScope, $scope, $window, $log, $state, $stateParams, $mdDialog, AdminFactory, EntityFactory, EntityGridFactory, FieldFactory, BatchFactory, SettingsFactory, BatchUploadFactory) {
+  constructor($rootScope, $scope, $window, $log, $state, $stateParams, $transitions, $mdDialog, AdminFactory, EntityFactory, EntityGridFactory, FieldFactory, BatchFactory, SettingsFactory, BatchUploadFactory) {
     const vm = this;
 
     vm.entity = vm.entities[0] || {};
@@ -71,10 +71,8 @@ class EntityController {
     // Prompt for unsaved changes
 
     if (vm.mode !== 'batchUpload') {
-      const isChanged = $scope.$on('$stateChangeStart', (event, toState, toParams) => {
+      const isChanged = $transitions.onStart({ to: '*' }, (trans) => {
         if (vm.entityForm.$dirty) {
-          event.preventDefault();
-
           const confirm = $mdDialog.confirm()
             // .title('Confirm Action')
             .textContent('You have unsaved changes, are you sure?')
@@ -86,8 +84,10 @@ class EntityController {
             .then(() => {
               isChanged();
 
-              $state.go(toState, toParams);
+              $state.go(trans.to().name, trans.params('to'));
             });
+
+          return false;
         }
       });
     }

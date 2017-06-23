@@ -3,10 +3,10 @@ import termTemplate from './taxonomy.term.jade';
 
 class TaxonomyController {
   /* @ngInject */
-  constructor($rootScope, $scope, $document, $state, $timeout, $log, $q, $mdDialog, TaxonomyFactory, HelperFactory, Slug) {
+  constructor($rootScope, $scope, $document, $state, $transitions, $timeout, $log, $q, $mdDialog, TaxonomyFactory, HelperFactory, Slug) {
     const vm = this;
 
-    vm.taxonomy = $state.$current.locals.globals.taxonomy;
+    vm.taxonomy = $scope.$parent.$resolve.taxonomy;
 
     vm.termTemplate = termTemplate;
 
@@ -16,10 +16,8 @@ class TaxonomyController {
 
     let originalTerms = angular.copy(vm.taxonomy.terms);
 
-    const isChanged = $scope.$on('$stateChangeStart', (event, toState, toParams) => {
+    const isChanged = $transitions.onStart({ to: '*' }, (trans) => {
       if (!angular.equals(originalTerms, vm.taxonomy.terms)) {
-        event.preventDefault();
-
         const confirm = $mdDialog.confirm()
           // .title('Confirm Action')
           .textContent('You have unsaved changes, are you sure?')
@@ -31,8 +29,10 @@ class TaxonomyController {
           .then(() => {
             isChanged();
 
-            $state.go(toState, toParams);
+            $state.go(trans.to().name, trans.params('to'));
           });
+
+        return false;
       }
     });
 

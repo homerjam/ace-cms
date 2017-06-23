@@ -3,7 +3,7 @@ import he from 'he/he';
 
 class EntityGridController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $stateParams, $q, $filter, $log, $timeout, $window, $mdDialog, HelperFactory, EntityGridFactory, AdminFactory, EntityFactory, BatchFactory, uiGridConstants) {
+  constructor ($rootScope, $scope, $state, $stateParams, $transitions, $q, $filter, $log, $timeout, $window, $mdDialog, HelperFactory, EntityGridFactory, AdminFactory, EntityFactory, BatchFactory, uiGridConstants) {
     const vm = this;
 
     vm.items = [];
@@ -404,7 +404,8 @@ class EntityGridController {
 
     /* State */
 
-    const onStateChangStart = $scope.$on('$stateChangeStart', () => {
+    // Record last grid state and options per schema on exit
+    const onStateChangStart = $transitions.onStart({ to: '*' }, (trans) => {
       onStateChangStart();
 
       if (vm.mode !== 'modal') {

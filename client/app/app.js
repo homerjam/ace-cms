@@ -235,10 +235,9 @@ angular.module('app', [
           });
       },
     });
-
   })
 
-  .run(($rootScope, $state, $location, $window, $log, $injector, $q, $timeout, tmhDynamicLocale, appConfig, apiPrefix, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
+  .run(($rootScope, $state, $location, $window, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, apiPrefix, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
     'ngInject';
 
     $rootScope.slug = appConfig.slug;
@@ -256,26 +255,26 @@ angular.module('app', [
     $rootScope.$state = $state;
     $rootScope.$location = $location;
 
-    $rootScope.$on('$stateChangeError', (event, toState, toParams, fromState, fromParams, error) => {
+    $state.defaultErrorHandler((error) => {
       $log.error(error);
 
-      if (toState.name !== 'dashboard') {
+      if ($state.current().name !== 'dashboard') {
         $state.go('dashboard');
       }
     });
 
     const getUser = () => $q((resolve, reject) => {
       AdminFactory.loadCurrentUser()
-          .then((user) => {
-            AdminFactory.loadRoles()
-              .then((roles) => {
-                user.permissions = roles[user.role].permissions;
+        .then((user) => {
+          AdminFactory.loadRoles()
+            .then((roles) => {
+              user.permissions = roles[user.role].permissions;
 
-                $rootScope.user = user;
+              $rootScope.user = user;
 
-                resolve(user);
-              }, reject);
-          }, reject);
+              resolve(user);
+            }, reject);
+        }, reject);
     });
 
     const isAuthorised = (toState, toParams) => {
@@ -289,7 +288,6 @@ angular.module('app', [
       if (toState.data && toState.data.permissions) {
         if (angular.isString(toState.data.permissions)) {
           required = toState.data.permissions.split(',');
-
         } else {
           required = toState.data.permissions(toParams);
         }
@@ -317,29 +315,30 @@ angular.module('app', [
       HelperFactory.token(),
     ];
 
-    $rootScope.$on('$stateChangeStart', (event, toState, toParams) => {
-      if (!dependenciesLoaded) {
-        event.preventDefault();
+    $transitions.onStart({ to: '*' }, (trans) => {
+      const toStateName = trans.to().name;
+      const toParams = trans.params('to');
 
+      if (!dependenciesLoaded) {
         $q.all(dependencies).then(() => {
           dependenciesLoaded = true;
-
-          $state.go(toState, toParams);
+          $state.go(toStateName, toParams);
         });
 
-        return;
+        return false;
       }
 
-      if (!isAuthorised(toState, toParams)) {
-        event.preventDefault();
-
+      if (!isAuthorised(toStateName, toParams)) {
         $state.go('dashboard');
+        return false;
       }
+
+      return true;
     });
 
-    $rootScope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) => {
-      $state.previous = fromState.name === '' ? false : fromState;
-      $state.previousParams = fromParams;
+    $transitions.onSuccess({ to: '*' }, (trans) => {
+      $state.previous = trans.from().name === '' ? null : trans.from();
+      $state.previousParams = trans.params('from');
 
       $mdSidenav('mainMenu').close();
     });
@@ -351,5 +350,4 @@ angular.module('app', [
     $rootScope.toggleMainMenu = () => {
       $mdSidenav('mainMenu').toggle();
     };
-
   });

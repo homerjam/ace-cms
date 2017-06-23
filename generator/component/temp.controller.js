@@ -5,7 +5,7 @@ class <%= upCaseName %>Controller {
 
     vm.name = '<%= upCaseName %>';
 
-    let locals = $state.$current.locals.globals;
+    let locals = $scope.$parent.$resolve;
   }
 }
 

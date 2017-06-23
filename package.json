@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@flowjs/flow.js": "^2.11.2",
+    "@uirouter/angularjs": "^1.0.3",
     "angular": "^1.6.4",
     "angular-animate": "^1.6.4",
     "angular-aria": "^1.6.4",
@@ -59,7 +60,6 @@
     "angular-slugify": "^1.0.3",
     "angular-touch": "^1.6.4",
     "angular-ui-grid": "^4.0.6",
-    "angular-ui-router": "^0.4.2",
     "angular-ui-tree": "^2.22.5",
     "array-buffer-concat": "^1.0.1",
     "autoprefixer": "^7.1.1",
@@ -79,7 +79,7 @@
     "cssnano": "^3.10.0",
     "eslint": "^4.0.0",
     "eslint-config-airbnb": "^15.0.1",
-    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.1.0",
     "exports-loader": "^0.6.4",
@@ -126,7 +126,7 @@
     "url-loader": "^0.5.9",
     "uuid": "^3.1.0",
     "webpack": "^3.0.0",
-    "webpack-dev-middleware": "^1.10.2",
+    "webpack-dev-middleware": "^1.11.0",
     "webpack-hot-middleware": "^2.18.0",
     "yargs": "^8.0.2"
   }
