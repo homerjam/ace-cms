@@ -1,12 +1,12 @@
 /* eslint-env browser */
 
 import angular from 'angular';
-import uiRouter from 'angular-ui-router';
 import angularSanitize from 'angular-sanitize';
 import angularAnimate from 'angular-animate';
 import angularTouch from 'angular-touch';
 import angularAria from 'angular-aria';
 import angularMessages from 'angular-messages';
+import uiRouter from '@uirouter/angularjs';
 import moment from 'moment';
 import angularMoment from 'angular-moment';
 import 'angular-material-data-table/dist/md-data-table.css';
@@ -256,7 +256,7 @@ angular.module('app', [
     $rootScope.$location = $location;
 
     $state.defaultErrorHandler((error) => {
-      $log.error(error);
+      $log.error(error.detail);
 
       if ($state.current().name !== 'dashboard') {
         $state.go('dashboard');

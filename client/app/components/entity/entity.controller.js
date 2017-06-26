@@ -89,6 +89,8 @@ class EntityController {
 
           return false;
         }
+
+        isChanged();
       });
     }
 
