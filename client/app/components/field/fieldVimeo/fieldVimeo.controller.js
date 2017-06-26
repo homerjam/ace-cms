@@ -40,92 +40,90 @@ class FieldVimeoController {
             Accept: 'application/vnd.vimeo.*+json;version=3.2',
           },
         })
-        .then((response) => {
-          const result = response.data;
+          .then((response) => {
+            const result = response.data;
 
-          if (!/pro/i.test(result.user.account)) {
-            $mdDialog.show(
-              $mdDialog.alert()
-                .title('Error')
-                .textContent('Please upgrade to Vimeo Pro')
-                .ok('Close')
-            );
-            return;
-          }
+            if (!/pro/i.test(result.user.account)) {
+              $mdDialog.show(
+                $mdDialog.alert()
+                  .title('Error')
+                  .textContent('Please upgrade to Vimeo Pro')
+                  .ok('Close')
+              );
+              return;
+            }
 
-          if (!result.pictures) {
-            $mdDialog.show(
-              $mdDialog.alert()
-                .title('Error')
-                .textContent('Thumbnail not found')
-                .ok('Close')
-            );
-            return;
-          }
+            if (!result.pictures) {
+              $mdDialog.show(
+                $mdDialog.alert()
+                  .title('Error')
+                  .textContent('Thumbnail not found')
+                  .ok('Close')
+              );
+              return;
+            }
 
-          const thumbnail = result.pictures.sizes[result.pictures.sizes.length - 1];
-          const thumbnailUrl = new URL(thumbnail.link);
+            const thumbnail = result.pictures.sizes[result.pictures.sizes.length - 1];
+            const thumbnailUrl = new URL(thumbnail.link);
 
-          if (!result.files) {
-            $mdDialog.show(
-              $mdDialog.alert()
-                .title('Error')
-                .textContent('Files not found')
-                .ok('Close')
-            );
-            return;
-          }
+            if (!result.files) {
+              $mdDialog.show(
+                $mdDialog.alert()
+                  .title('Error')
+                  .textContent('Files not found')
+                  .ok('Close')
+              );
+              return;
+            }
 
-          const files = result.files.map((file) => {
-            return {
+            const files = result.files.map(file => ({
               width: file.width ? file.width : null,
               height: file.height ? file.height : null,
               fileSize: file.size,
               mimeType: file.type,
               url: file.link_secure,
-            };
-          })
-          .sort((a, b) => {
-            if (!a.width) {
-              return 1;
-            }
-            if (a.width * a.height > b.width * b.height) {
-              return -1;
-            }
-            if (a.width * a.height < b.width * b.height) {
-              return 1;
-            }
-            return 0;
-          });
+            }))
+              .sort((a, b) => {
+                if (!a.width) {
+                  return 1;
+                }
+                if (a.width * a.height > b.width * b.height) {
+                  return -1;
+                }
+                if (a.width * a.height < b.width * b.height) {
+                  return 1;
+                }
+                return 0;
+              });
 
-          vm.fieldModel.video = {
-            provider: 'Vimeo',
-            id: vimeoId,
-            title: result.name,
-            description: result.description,
-            tags: result.tags,
-            user: {
-              id: result.user.uri.replace('/users/', ''),
-              name: result.user.name,
-            },
-            duration: result.duration,
-            width: result.width,
-            height: result.height,
-            thumbnail: {
-              url: `${thumbnailUrl.protocol}//${thumbnailUrl.host}${thumbnailUrl.pathname}`,
-              width: thumbnail.width,
-              height: thumbnail.height,
-            },
-            files,
-          };
-        }, (response) => {
-          $mdDialog.show(
-            $mdDialog.alert()
-              .title('Error')
-              .textContent(response.data.error || 'Please try again')
-              .ok('Close')
-          );
-        });
+            vm.fieldModel.video = {
+              provider: 'Vimeo',
+              id: vimeoId,
+              title: result.name,
+              description: result.description,
+              tags: result.tags,
+              user: {
+                id: result.user.uri.replace('/users/', ''),
+                name: result.user.name,
+              },
+              duration: result.duration,
+              width: result.width,
+              height: result.height,
+              thumbnail: {
+                url: `${thumbnailUrl.protocol}//${thumbnailUrl.host}${thumbnailUrl.pathname}`,
+                width: thumbnail.width,
+                height: thumbnail.height,
+              },
+              files,
+            };
+          }, (response) => {
+            $mdDialog.show(
+              $mdDialog.alert()
+                .title('Error')
+                .textContent(response.data.error || 'Please try again')
+                .ok('Close')
+            );
+          });
       });
     };
   }

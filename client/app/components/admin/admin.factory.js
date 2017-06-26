@@ -152,7 +152,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
         resolve(service.get(type, true));
       }, (error) => {
         if (error.status === 404) {
-          console.error(error.data);
+          $log.error(error.data);
           resolve();
           return;
         }
