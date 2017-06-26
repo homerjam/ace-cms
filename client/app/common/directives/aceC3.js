@@ -3,54 +3,46 @@ import c3 from 'c3';
 import 'c3/c3.css';
 
 export default angular.module('ace.c3', [])
-  .directive('aceC3', () => ({
-    restrict: 'EA',
-
-    scope: {
-      options: '=',
+  .component('aceC3', {
+    bindings: {
+      options: '<',
     },
-
-    bindToController: true,
-    controllerAs: 'vm',
-
-    controller: ['$scope', '$element', '$window', '$timeout',
-    function ($scope, $element, $window, $timeout) {
-      const vm = this;
+    controller: function ($scope, $element, $window, $timeout) {
+      const ctrl = this;
 
       let chart;
       let resizeTimeout;
 
-      const resize = () => {
-        if (vm.options && !vm.options.width && !vm.options.height) {
+      function resize() {
+        if (ctrl.options && !ctrl.options.width && !ctrl.options.height) {
           chart.resize({
             width: $element[0].clientWidth,
             height: $element[0].clientHeight,
           });
         }
-      };
+      }
 
-      const resizeHandler = () => {
-        $timeout.cancel($timeout);
-        resizeTimeout = $timeout(resize, 500);
-      };
+      function resizeHandler() {
+        $timeout.cancel(resizeTimeout);
+        resizeTimeout = $timeout(resize, 50);
+      }
 
-      $scope.$watch(() => vm.options, (newData) => {
-        if (!newData) {
+      ctrl.$onChanges = () => {
+        if (!ctrl.options) {
           return;
         }
 
-        vm.options.bindto = $element[0];
+        ctrl.options.bindto = $element[0];
 
-        chart = c3.generate(vm.options);
+        chart = c3.generate(ctrl.options);
 
         $timeout(resize);
-      });
+      };
 
       angular.element($window).on('resize', resizeHandler);
 
-      $scope.$on('$destroy', () => {
+      ctrl.$onDestroy = () => {
         angular.element($window).off('resize', resizeHandler);
-      });
-
-    }],
-  }));
+      };
+    },
+  });
