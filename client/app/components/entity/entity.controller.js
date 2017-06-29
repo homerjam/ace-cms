@@ -72,7 +72,7 @@ class EntityController {
 
     if (vm.mode !== 'batchUpload') {
       const isChanged = $transitions.onStart({ to: '*' }, (trans) => {
-        if (vm.entityForm.$dirty) {
+        if (vm.entityForm && vm.entityForm.$dirty) {
           const confirm = $mdDialog.confirm()
             // .title('Confirm Action')
             .textContent('You have unsaved changes, are you sure?')
