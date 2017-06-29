@@ -1,10 +1,8 @@
-const env = require('node-env-file');
+const path = require('path');
 
 if (!process.env.ENVIRONMENT) {
-  env('.env');
+  require('node-env-file')('.env');
 }
-
-const path = require('path');
 
 module.exports = {
   environment: process.env.ENVIRONMENT || 'development',

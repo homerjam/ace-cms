@@ -122,10 +122,6 @@ class AceCms {
     /* Force https */
 
     const forceHttps = (req, res, next) => {
-      if (/Prerender|PhantomJS/i.test(req.headers['user-agent'] || '')) {
-        next();
-        return;
-      }
       if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
         res.redirect(301, `https://${req.headers.host}${req.path}`);
         return;
@@ -191,10 +187,7 @@ class AceCms {
 
     /* Register API Server */
 
-    apiConfig.__router = router;
-    apiConfig.__ensureAuthenticated = ensureAuthenticated;
-
-    AceApiServer(app, apiConfig);
+    AceApiServer(router, apiConfig, ensureAuthenticated);
 
     /* Verify */
 
@@ -214,7 +207,7 @@ class AceCms {
 
         const email = req.user.emails[0].value;
 
-        const auth = new AceApi.Auth(null, apiConfig);
+        const auth = new AceApi.Auth(apiConfig);
 
         auth.authoriseUser(email, req)
           .then((user) => {
