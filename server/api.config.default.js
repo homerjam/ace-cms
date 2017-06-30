@@ -8,18 +8,21 @@ module.exports = {
   environment: process.env.ENVIRONMENT || 'development',
 
   debug: process.env.DEBUG || false,
-  cache: process.env.CACHE ? JSON.parse(process.env.CACHE) : false,
   forceAuth: process.env.FORCE_AUTH ? JSON.parse(process.env.FORCE_AUTH) : false,
 
-  slug: process.env.SLUG || '',
+  cache: {
+    enabled: process.env.CACHE_ENABLED ? JSON.parse(process.env.CACHE_ENABLED) : false,
+  },
+
+  slug: process.env.SLUG,
   baseUrl: process.env.BASE_URL || '',
   basePath: process.env.BASE_PATH || '/',
   apiPrefix: process.env.API_PREFIX || 'api',
 
   db: {
-    url: process.env.DB_URL || '',
+    url: process.env.DB_URL,
     host: process.env.DB_HOST,
-    name: process.env.DB_NAME || '',
+    name: process.env.DB_NAME,
   },
 
   auth: {
@@ -29,9 +32,9 @@ module.exports = {
   },
 
   dev: {
+    slug: process.env.DEV_SLUG,
+    dbName: process.env.DEV_DB_NAME,
     email: process.env.DEV_EMAIL || '',
-    slug: process.env.DEV_SLUG || '',
-    dbName: process.env.DEV_DB_NAME || '',
     role: process.env.DEV_ROLE || '',
     superUser: process.env.DEV_SUPER_USER ? JSON.parse(process.env.DEV_SUPER_USER) : false,
     storeName: process.env.DEV_STORE_NAME,
@@ -128,6 +131,6 @@ module.exports = {
   },
 
   email: {
-    templatesPath: path.join(__dirname, 'email'),
+    templatesPath: path.resolve(__dirname, 'email'),
   },
 };
