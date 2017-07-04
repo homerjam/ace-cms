@@ -35,6 +35,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
     })
       .then((response) => {
         User = response.data;
+        User.superUser = User.role === 'super';
         resolve(User);
       }, reject);
   });

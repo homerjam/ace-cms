@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -14,49 +15,22 @@ const RedisStore = require('connect-redis')(session);
 const helmet = require('helmet');
 const useragent = require('express-useragent');
 const passport = require('passport');
-const env = require('node-env-file');
 
-const AceApi = require('ace-api');
-const AceApiServer = require('ace-api-server');
-
-if (!process.env.ENVIRONMENT) {
-  env('.env');
-}
+const AceApi = require('../../ace-api');
+const AceApiServer = require('../../ace-api-server');
 
 const packageJson = require('../package.json');
-const apiConfigDefault = require('./api.config.default');
+const defaultConfig = require('./config.default');
+const defaultApiConfig = require('../../ace-api/config.default');
 
-const ENVIRONMENT = process.env.ENVIRONMENT || 'development';
 const VERSION = packageJson.version;
-const SLUGS = process.env.SLUGS || '';
-const SESSION_SECRET = process.env.SESSION_SECRET || '';
-const SESSION_TTL = process.env.SESSION_TTL || 7200;
-const FORCE_HTTPS = process.env.FORCE_HTTPS ? JSON.parse(process.env.FORCE_HTTPS) : false;
-const FORCE_WWW = process.env.FORCE_WWW ? JSON.parse(process.env.FORCE_WWW) : false;
-
-const BASE_PATH = process.env.BASE_PATH || '/';
-
-const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID || '';
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN || '';
-
-const DEV_EMAIL = process.env.DEV_EMAIL || '';
-const DEV_SLUG = process.env.DEV_SLUG || '';
-const DEV_ROLE = process.env.DEV_ROLE || '';
-const DEV_SUPER_USER = process.env.DEV_SUPER_USER ? JSON.parse(process.env.DEV_SUPER_USER) : false;
-
-const REDIS_HOST = process.env.REDIS_HOST || '';
-const REDIS_PORT = process.env.REDIS_PORT || '';
-const REDIS_PASSWORD = process.env.REDIS_PASSWORD || '';
-
-const ASSIST_URL = process.env.ASSIST_URL || '';
-const ASSIST_USERNAME = process.env.ASSIST_USERNAME || '';
-const ASSIST_PASSWORD = process.env.ASSIST_PASSWORD || '';
 
 /* App */
 
 class AceCms {
-  constructor (app, config) {
-    const apiConfig = config || apiConfigDefault;
+  constructor (app, config, apiConfig) {
+    config = _.merge({}, defaultConfig, config);
+    apiConfig = _.merge({}, defaultApiConfig, apiConfig);
 
     app.use(helmet());
     app.set('trust proxy', true);
@@ -78,21 +52,22 @@ class AceCms {
 
     /* Session */
 
-    if (ENVIRONMENT !== 'production') {
+    if (config.environment !== 'production') {
       app.use(session({
-        secret: SESSION_SECRET,
+        secret: config.session.secret,
         resave: true,
         saveUninitialized: true,
       }));
+
     } else {
       app.use(session({
         store: new RedisStore({
-          host: REDIS_HOST,
-          port: REDIS_PORT,
-          ttl: SESSION_TTL,
-          pass: REDIS_PASSWORD,
+          host: config.redis.host,
+          port: config.redis.port,
+          ttl: config.session.ttl,
+          pass: config.redis.password,
         }),
-        secret: SESSION_SECRET,
+        secret: config.session.secret,
         resave: true,
         saveUninitialized: true,
       }));
@@ -100,14 +75,14 @@ class AceCms {
 
     /* Passport */
 
-    require('./passport.strategy.auth0');
+    require('./passport.strategy.auth0')(config);
     app.use(passport.initialize());
     app.use(passport.session());
 
     /* Router */
 
     const router = express.Router();
-    app.use(`${BASE_PATH}`, router);
+    app.use(`${config.basePath}`, router);
 
     /* Static */
 
@@ -129,7 +104,7 @@ class AceCms {
       next();
     };
 
-    if (ENVIRONMENT === 'production' && FORCE_HTTPS === true) {
+    if (config.environment === 'production' && config.forceHttps === true) {
       router.use(forceHttps);
     }
 
@@ -144,45 +119,44 @@ class AceCms {
       next();
     };
 
-    if (ENVIRONMENT === 'production' && FORCE_WWW === true) {
+    if (config.environment === 'production' && config.forceWww === true) {
       router.use(forceWww);
     }
 
     /* Auth */
 
     const ensureAuthenticated = (req, res, next) => {
-      if (!req.session) {
-        return res.status(500).send('Session not initialised, please refresh');
-      }
-
       req.session.referer = req.originalUrl;
 
+      if (config.environment === 'development') {
+        const jwt = new AceApi.Jwt(apiConfig);
+
+        req.session.apiToken = jwt.generateToken({
+          userId: apiConfig.dev.userId,
+          slug: req.session.slug || apiConfig.dev.slug,
+          role: apiConfig.dev.role,
+        });
+
+        next();
+        return;
+      }
+
+      if (req.isAuthenticated()) {
+        next();
+        return;
+      }
+
+      if (req.xhr || (req.headers.accept && /json/i.test(req.headers.accept))) {
+        res.status(401);
+        res.send({
+          code: 401,
+          message: 'Not authorised',
+        });
+        return;
+      }
+
       const querystring = Object.keys(req.query).length ? `?${qs.stringify(req.query)}` : '';
-
-      if (ENVIRONMENT !== 'production') {
-        if (!req.session.slug) {
-          req.session.slug = DEV_SLUG;
-        }
-        req.session.email = DEV_EMAIL;
-        req.session.role = DEV_ROLE;
-        req.session.superUser = DEV_SUPER_USER;
-
-        req.session.userAuthorised = true;
-
-        return next();
-      }
-
-      if (req.isAuthenticated() && req.session.email) {
-        req.session.userAuthorised = true;
-
-        return next();
-      }
-
-      if (req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1)) {
-        return res.status(401).send('Not authorised');
-      }
-
-      return res.redirect(`${BASE_PATH}login${querystring}`);
+      res.redirect(`${config.basePath}login${querystring}`);
     };
 
     /* Register API Server */
@@ -197,41 +171,48 @@ class AceCms {
         return;
       }
 
-      const authenticate = passport.authenticate('auth0', { failureRedirect: `${BASE_PATH}login` });
+      const authenticate = passport.authenticate('auth0', { failureRedirect: `${config.basePath}login` });
 
       authenticate(req, res, (error) => {
         if (error) {
-          res.status(error.status).send(error);
+          res.status(error.status);
+          res.send(error);
           return;
         }
 
-        const email = req.user.emails[0].value;
+        const userId = req.user.emails[0].value; // TODO: Replace email as userId?
 
         const auth = new AceApi.Auth(apiConfig);
+        const jwt = new AceApi.Jwt(apiConfig);
 
-        auth.authoriseUser(email, req)
+        auth.authoriseUser(userId)
           .then((user) => {
             req.session.accessToken = req.query.access_token;
             req.session.idToken = req.query.id_token;
 
-            if (!req.session.email) {
-              req.session.email = email;
-            }
+            const payload = {
+              userId,
+              role: user.role,
+            };
 
-            if (!req.session.slug && user.slug) {
+            req.session.userId = userId;
+            req.session.role = user.role;
+
+            if (user.slug) { // user.slug is undefined for super user
+              payload.slug = user.slug;
               req.session.slug = user.slug;
             }
 
-            req.session.role = user.role;
-            req.session.superUser = user.superUser || false;
+            req.session.apiToken = jwt.generateToken(payload);
 
-            res.redirect(BASE_PATH);
+            res.redirect(config.basePath);
+
           }, (reason) => {
             console.error(reason);
 
             req.session.errorMessage = reason;
 
-            res.redirect(`${BASE_PATH}login`);
+            res.redirect(`${config.basePath}login`);
           });
       });
     };
@@ -255,15 +236,15 @@ class AceCms {
       }
 
       const data = {
-        basePath: BASE_PATH,
-        environment: ENVIRONMENT,
+        basePath: config.basePath,
+        environment: config.environment,
         version: VERSION,
-        forceHttps: FORCE_HTTPS,
+        forceHttps: config.forceHttps,
         errorMessage,
         successMessage,
         auth0: {
-          clientId: AUTH0_CLIENT_ID,
-          domain: AUTH0_DOMAIN,
+          clientId: config.auth0.clientId,
+          domain: config.auth0.domain,
         },
       };
 
@@ -276,51 +257,60 @@ class AceCms {
     router.post('/logout', (req, res) => {
       req.logout();
       req.session.destroy(() => {
-        res.status(200).send('Logged out successfully');
+        res.status(200);
+        res.send('Logged out successfully');
       });
     });
 
     router.get('/logout', (req, res) => {
       req.logout();
       req.session.destroy(() => {
-        res.redirect(`${BASE_PATH}?success=logout`);
+        res.redirect(`${config.basePath}?success=logout`);
       });
     });
 
     router.get('/switch', ensureAuthenticated, (req, res) => {
-      if (req.session.superUser || ENVIRONMENT === 'development') {
+      if (req.session.role === 'super' || config.environment === 'development') {
         if (req.query.slug) {
           req.session.slug = req.query.slug;
+
+          const jwt = new AceApi.Jwt(apiConfig);
+
+          req.session.apiToken = jwt.generateToken({
+            userId: req.session.userId,
+            slug: req.session.slug,
+            role: req.session.role,
+          });
 
           if (req.session.referer && req.session.referer.indexOf('/switch') === -1) {
             return res.redirect(req.session.referer);
           }
 
-          return res.redirect(BASE_PATH);
+          return res.redirect(config.basePath);
         }
 
         return res.render('switch', {
-          basePath: BASE_PATH,
-          environment: ENVIRONMENT,
+          basePath: config.basePath,
+          environment: config.environment,
           version: VERSION,
-          slugs: SLUGS.split(','),
+          slugs: config.slugs.split(','),
         });
       }
 
-      return res.redirect(`${BASE_PATH}logout`);
+      return res.redirect(`${config.basePath}logout`);
     });
 
     /* Index */
 
-    let assistCredentials = new Buffer(`${ASSIST_USERNAME}:${passwordHash.generate(ASSIST_PASSWORD)}`);
+    let assistCredentials = new Buffer(`${config.assist.username}:${passwordHash.generate(config.assist.password)}`);
     assistCredentials = assistCredentials.toString('base64');
 
     function index (req, res) {
       res.render('index', {
-        basePath: BASE_PATH,
-        environment: ENVIRONMENT,
+        basePath: config.basePath,
+        environment: config.environment,
         version: VERSION,
-        assistUrl: ASSIST_URL,
+        assistUrl: config.assist.url,
         assistCredentials,
         apiPrefix: apiConfig.apiPrefix,
         session: req.session,
@@ -328,13 +318,14 @@ class AceCms {
     }
 
     router.use(ensureAuthenticated, (req, res) => {
-      if (req.headers.accept && req.headers.accept.indexOf('application/json') > -1) {
-        res.status(404).send('Not found');
-        return;
-      }
+      // if (req.headers.accept && req.headers.accept.indexOf('application/json') > -1) {
+      //   res.status(404);
+      //   res.send('Not found');
+      //   return;
+      // }
 
-      if (!req.session.slug) {
-        res.redirect(`${BASE_PATH}switch`);
+      if (req.session.role === 'super' && !req.session.slug) {
+        res.redirect(`${config.basePath}switch`);
         return;
       }
 

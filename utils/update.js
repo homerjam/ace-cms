@@ -4,7 +4,7 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const Cloudant = require('cloudant');
 
-env(path.join(__dirname, '..', '.env'));
+env(path.resolve(__dirname, '../.env'));
 
 const args = process.argv.slice(2);
 

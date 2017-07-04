@@ -268,7 +268,9 @@ angular.module('app', [
         .then((user) => {
           AdminFactory.loadRoles()
             .then((roles) => {
-              user.permissions = roles[user.role].permissions;
+              if (!user.superUser && roles[user.role]) {
+                user.permissions = roles[user.role].permissions;
+              }
 
               $rootScope.user = user;
 
