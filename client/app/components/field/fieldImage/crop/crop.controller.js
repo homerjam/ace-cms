@@ -75,7 +75,7 @@ class CropController {
       };
     };
 
-    vm.getThumbnail = () => [$rootScope.assistUrl, 'transform', $rootScope.slug, 'w:600;h:600;q:80', image.fileName].join('/');
+    vm.getThumbnail = () => [$rootScope.assistUrl, $rootScope.slug, 'transform', 'w:600;h:600;q:80', image.fileName].join('/');
 
   }
 }

@@ -50,7 +50,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
     }
 
     flow = new Flow({
-      target: `${$rootScope.assistUrl}/file/upload`,
+      target: `${$rootScope.assistUrl}/${$rootScope.slug}/file/upload`,
       query: {
         options: JSON.stringify(uploadOptions),
       },

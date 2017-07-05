@@ -22,7 +22,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       return null;
     }
 
-    return [$rootScope.assistUrl, 'proxy', 'transform', transformSettings, thumbnail.thumbnailUrl.replace(/https?:\/\//, '')].join('/');
+    return [$rootScope.assistUrl, $rootScope.slug, 'proxy', 'transform', transformSettings, thumbnail.thumbnailUrl.replace(/https?:\/\//, '')].join('/');
   };
 
   service.getFieldThumbnailUrl = (field, transformSettings = 'h:200;q:60') => {
@@ -122,7 +122,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       cache: false,
     })
       .then((response) => {
-        $rootScope.token = response.data;
+        $rootScope.token = response.data.token;
 
         $timeout(service.getToken, 3600000);
 

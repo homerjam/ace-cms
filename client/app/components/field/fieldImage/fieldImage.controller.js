@@ -17,7 +17,7 @@ class FieldImageController {
 
     vm.download = () => {
       const fileName = vm.fieldModel.original.fileName.replace(/^(#|\?)/, '_');
-      $window.open(`${$rootScope.assistUrl}/file/download/${$rootScope.slug}/${vm.fieldModel.fileName}/${fileName}`);
+      $window.open(`${$rootScope.assistUrl}/${$rootScope.slug}/file/download/${vm.fieldModel.fileName}/${fileName}`);
     };
 
     vm.dzi = () => {
@@ -49,11 +49,11 @@ class FieldImageController {
     vm.preview = () => {
       HelperFactory.mediaPreview([{
         type: 'image',
-        src: [$rootScope.assistUrl, 'transform', $rootScope.slug, 'h:1000;q:80', vm.fieldModel.fileName].join('/'),
+        src: [$rootScope.assistUrl, $rootScope.slug, 'transform', 'h:1000;q:80', vm.fieldModel.fileName].join('/'),
       }], 0);
     };
 
-    vm.getThumbnail = settings => (vm.fieldModel ? [$rootScope.assistUrl, 'transform', $rootScope.slug, settings, vm.fieldModel.fileName].join('/') : null);
+    vm.getThumbnail = settings => (vm.fieldModel ? [$rootScope.assistUrl, $rootScope.slug, 'transform', settings, vm.fieldModel.fileName].join('/') : null);
 
     const settings = vm.fieldOptions.settings || {};
 
@@ -77,7 +77,7 @@ class FieldImageController {
     const imageExtensions = 'jpg,jpeg,png,svg';
 
     vm.flowOptions = {
-      target: `${$rootScope.assistUrl}/file/upload`,
+      target: `${$rootScope.assistUrl}/${$rootScope.slug}/file/upload`,
       query: {
         options: JSON.stringify(uploadOptions),
       },

@@ -131,7 +131,7 @@ class AceCms {
       if (config.environment === 'development') {
         const jwt = new AceApi.Jwt(apiConfig);
 
-        req.session.apiToken = jwt.generateToken({
+        req.session.apiToken = jwt.signToken({
           userId: apiConfig.dev.userId,
           slug: req.session.slug || apiConfig.dev.slug,
           role: apiConfig.dev.role,
@@ -203,7 +203,9 @@ class AceCms {
               req.session.slug = user.slug;
             }
 
-            req.session.apiToken = jwt.generateToken(payload);
+            req.session.apiToken = jwt.signToken(payload, {
+              expiresIn: 7200,
+            });
 
             res.redirect(config.basePath);
 
@@ -276,7 +278,7 @@ class AceCms {
 
           const jwt = new AceApi.Jwt(apiConfig);
 
-          req.session.apiToken = jwt.generateToken({
+          req.session.apiToken = jwt.signToken({
             userId: req.session.userId,
             slug: req.session.slug,
             role: req.session.role,
