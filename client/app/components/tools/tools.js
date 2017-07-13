@@ -1,5 +1,5 @@
 import angular from 'angular';
-import uiRouter from 'angular-ui-router';
+import uiRouter from '@uirouter/angularjs';
 import toolsComponent from './tools.component';
 
 const toolsModule = angular.module('tools', [

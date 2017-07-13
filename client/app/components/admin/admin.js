@@ -1,5 +1,5 @@
 import angular from 'angular';
-import uiRouter from 'angular-ui-router';
+import uiRouter from '@uirouter/angularjs';
 import adminComponent from './admin.component';
 import AdminFactory from './admin.factory';
 import AdminFieldSettingsFactory from './fieldSettings/admin.fieldSettings.factory';
