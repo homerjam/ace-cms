@@ -144,7 +144,7 @@ class EntityController {
 
         const url = new $window.URL(compiledUrlTemplate);
 
-        url.search += `${/^\?/.test(url.search) ? '&' : '?'}token=${$rootScope.token}`;
+        url.search += `${/^\?/.test(url.search) ? '&' : '?'}apiToken=${$rootScope.apiToken}`;
 
         $window.open(url);
       }

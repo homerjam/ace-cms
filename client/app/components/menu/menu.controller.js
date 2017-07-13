@@ -4,7 +4,7 @@ class MenuController {
     const vm = this;
 
     vm.preview = () => {
-      $window.open(`${SettingsFactory.settings().url}?token=${$rootScope.token}`);
+      $window.open(`${SettingsFactory.settings().url}?apiToken=${$rootScope.apiToken}`);
     };
 
     const updateDropdownContent = () => {

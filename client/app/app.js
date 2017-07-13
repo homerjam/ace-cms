@@ -314,7 +314,7 @@ angular.module('app', [
       AdminFactory.load('taxonomy'),
       SettingsFactory.loadSettings(),
       EcommerceFactory.loadSettings(),
-      HelperFactory.token(),
+      HelperFactory.getApiToken(),
     ];
 
     $transitions.onStart({ to: '*' }, (trans) => {

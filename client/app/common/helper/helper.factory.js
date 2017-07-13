@@ -115,18 +115,18 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       }, reject);
   });
 
-  service.token = () => $q((resolve, reject) => {
+  service.getApiToken = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
       url: `${apiPrefix}/token`,
       cache: false,
     })
       .then((response) => {
-        $rootScope.token = response.data.token;
+        $rootScope.apiToken = response.data.token;
 
-        $timeout(service.getToken, 3600000);
+        $timeout(service.getApiToken, 3600000);
 
-        resolve($rootScope.token);
+        resolve($rootScope.apiToken);
       }, reject);
   });
 
