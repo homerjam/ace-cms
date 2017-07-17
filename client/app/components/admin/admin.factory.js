@@ -4,7 +4,7 @@ import _ from 'lodash';
 import AdminModalController from './modal/admin.modal.controller';
 import * as adminModalTemplates from './modal';
 
-const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
+const AdminFactory = ($rootScope, $http, $q, $log, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -31,7 +31,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.loadCurrentUser = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/admin/user/current`,
+      url: `${appConfig.apiUrl}/admin/user/current`,
     })
       .then((response) => {
         User = response.data;
@@ -45,7 +45,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.loadRoles = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/admin/roles`,
+      url: `${appConfig.apiUrl}/admin/roles`,
     })
       .then((response) => {
         Roles = response.data;
@@ -144,7 +144,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
 
     $http({
       method: 'GET',
-      url: `${apiPrefix}/admin/${type}/list`,
+      url: `${appConfig.apiUrl}/admin/${type}/list`,
       params,
     })
       .then((response) => {
@@ -165,7 +165,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.create = (type, item) => $q((resolve, reject) => {
     $http({
       method: 'POST',
-      url: `${apiPrefix}/admin/${type}`,
+      url: `${appConfig.apiUrl}/admin/${type}`,
       data: {
         item,
       },
@@ -184,7 +184,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.read = (type, params) => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/admin/${type}`,
+      url: `${appConfig.apiUrl}/admin/${type}`,
       params,
     })
       .then((response) => {
@@ -217,7 +217,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
 
     $http({
       method: 'PUT',
-      url: `${apiPrefix}/admin/${type}`,
+      url: `${appConfig.apiUrl}/admin/${type}`,
       data: {
         items: updatedItems,
       },
@@ -297,7 +297,7 @@ const AdminFactory = ($rootScope, $http, $q, $log, ModalService, apiPrefix) => {
   service.deleteItems = (type, items) => $q((resolve, reject) => {
     $http({
       method: 'DELETE',
-      url: `${apiPrefix}/admin/${type}`,
+      url: `${appConfig.apiUrl}/admin/${type}`,
       data: {
         items,
       },

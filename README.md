@@ -80,6 +80,9 @@ ACE uses a separate app to store images, you'll need to deploy this following th
     AUTH0_CLIENT_ID=
     AUTH0_CLIENT_SECRET=
 
+    API_PREFIX=api
+    API_URL=/api
+
 	ASSIST_URL=
 	ASSIST_USERNAME=
 	ASSIST_PASSWORD=
@@ -121,10 +124,10 @@ ACE uses a separate app to store images, you'll need to deploy this following th
 	# Development only
 	PORT=port 				# http server port to proxy
 	DEV_PORT=dev_port 		# browsersync port
-	DEV_EMAIL=dev_email		# development user
+    DEV_USER_ID=            # development user
 	DEV_SLUG=dev_slug		# development db
-	DEV_ROLE=admin			# development user's role
-	#DEV_SUPER=true			# if present development user will be super
+	DEV_ROLE=super			# development user's role
+	DEV_EMAIL=dev_email		# development email
 
 	DEV_STORE_NAME=store_name
 	DEV_SENDER_NAME=sender_name

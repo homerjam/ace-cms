@@ -1,8 +1,8 @@
 import angular from 'angular';
 
 export default angular.module('ace.videoPreview', [])
-  .directive('aceVideoPreview', ['$rootScope', '$http', '$timeout', 'apiPrefix',
-    ($rootScope, $http, $timeout, apiPrefix) => ({
+  .directive('aceVideoPreview', ['$rootScope', '$http', '$timeout', 'appConfig',
+    ($rootScope, $http, $timeout, appConfig) => ({
       restrict: 'EA',
       replace: true,
 
@@ -40,7 +40,7 @@ export default angular.module('ace.videoPreview', [])
           $scope.encoding = true;
 
           $http({
-            url: `${apiPrefix}/transcode/job/${jobId}`,
+            url: `${appConfig.apiUrl}/transcode/job/${jobId}`,
             method: 'GET',
           }).success((data) => {
             if (data.Status !== 'Complete') {

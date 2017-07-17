@@ -5,7 +5,7 @@ import Handlebars from 'handlebars/dist/handlebars';
 import selectEntityModalTemplate from './modal/selectEntity.jade';
 import entityModalTemplate from './modal/entity.jade';
 
-const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGridFactory, FieldFactory, AdminFactory, HelperFactory, Slug, ModalService, apiPrefix) => {
+const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGridFactory, FieldFactory, AdminFactory, HelperFactory, Slug, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -39,7 +39,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
       const opts = {
         method: multipleEntities ? 'POST' : 'GET',
-        url: `${apiPrefix}/entities`,
+        url: `${appConfig.apiUrl}/entities`,
       };
 
       opts[multipleEntities ? 'data' : 'params'] = params;
@@ -181,7 +181,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   service.search = params => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/entities/search`,
+      url: `${appConfig.apiUrl}/entities/search`,
       params: params || {},
     })
       .then((response) => {
@@ -198,7 +198,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
     $http({
       method: 'GET',
-      url: `${apiPrefix }/entities/filterValues`,
+      url: `${appConfig.apiUrl}/entities/filterValues`,
       params })
       .then((response) => {
         const results = response.data.map((value, key) => ({
@@ -213,7 +213,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   service.getRevisions = params => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/entity/revisions`,
+      url: `${appConfig.apiUrl}/entity/revisions`,
       params: params || {},
     })
       .then((response) => {
@@ -235,7 +235,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
     $http({
       method: 'POST',
-      url: `${apiPrefix }/entity`,
+      url: `${appConfig.apiUrl}/entity`,
       data: {
         entity,
       },
@@ -258,7 +258,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
     $http({
       method: 'PUT',
-      url: `${apiPrefix }/entity`,
+      url: `${appConfig.apiUrl}/entity`,
       data: {
         entities,
       },
@@ -283,7 +283,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
     $http({
       method: 'DELETE',
-      url: `${apiPrefix }/entity`,
+      url: `${appConfig.apiUrl}/entity`,
       data: {
         entities,
         forever,
@@ -301,7 +301,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
     $http({
       method: 'PUT',
-      url: `${apiPrefix}/entity`,
+      url: `${appConfig.apiUrl}/entity`,
       data: {
         restore: true,
         entities,
@@ -315,7 +315,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   service.emptyTrash = () => $q((resolve, reject) => {
     $http({
       method: 'DELETE',
-      url: `${apiPrefix }/entity/trashed`,
+      url: `${appConfig.apiUrl}/entity/trashed`,
     })
       .then((response) => {
         resolve(response.data);

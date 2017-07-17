@@ -2,7 +2,7 @@ import angular from 'angular';
 
 class EcommerceController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $window, $http, $timeout, $q, $log, $mdDialog, EcommerceFactory, SettingsFactory, HelperFactory, ModalService, uiGridConstants, apiPrefix) {
+  constructor ($rootScope, $scope, $state, $window, $http, $timeout, $q, $log, $mdDialog, EcommerceFactory, SettingsFactory, HelperFactory, ModalService, uiGridConstants, appConfig) {
     const vm = this;
 
     const type = $state.current.data.ecommerceType;
@@ -27,7 +27,7 @@ class EcommerceController {
       SettingsFactory.authenticateWithProvider(provider)
         .then((providerSettings) => {
           if (provider === 'stripe') {
-            $http.get(`${apiPrefix}/stripe/account`)
+            $http.get(`${appConfig.apiUrl}/stripe/account`)
               .then((response) => {
                 providerSettings.account = response.data;
                 vm.ecommerceSettings[provider] = providerSettings;

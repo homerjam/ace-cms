@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-const FileFactory = ($http, $q, $log, AdminFactory, apiPrefix) => {
+const FileFactory = ($http, $q, $log, AdminFactory, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -31,7 +31,7 @@ const FileFactory = ($http, $q, $log, AdminFactory, apiPrefix) => {
 
     $http({
       method: 'GET',
-      url: `${apiPrefix}/file/search`,
+      url: `${appConfig.apiUrl}/file/search`,
       params,
     })
       .then((response) => {
@@ -63,7 +63,7 @@ const FileFactory = ($http, $q, $log, AdminFactory, apiPrefix) => {
 
     $http({
       method: 'POST',
-      url: `${apiPrefix}/file`,
+      url: `${appConfig.apiUrl}/file`,
       data: {
         file,
       },
@@ -83,7 +83,7 @@ const FileFactory = ($http, $q, $log, AdminFactory, apiPrefix) => {
 
     $http({
       method: 'DELETE',
-      url: `${apiPrefix}/file`,
+      url: `${appConfig.apiUrl}/file`,
       data: {
         files,
       },
@@ -97,7 +97,7 @@ const FileFactory = ($http, $q, $log, AdminFactory, apiPrefix) => {
   service.emptyTrash = () => $q((resolve, reject) => {
     $http({
       method: 'DELETE',
-      url: `${apiPrefix}/file/trashed`,
+      url: `${appConfig.apiUrl}/file/trashed`,
     })
       .then((response) => {
         resolve(response.data);

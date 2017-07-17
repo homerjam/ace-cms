@@ -61,15 +61,14 @@ angular.module('app', [
 ])
 
   .constant('appConfig', window.appConfig)
-  .constant('apiPrefix', window.appConfig.basePath + window.appConfig.apiPrefix)
 
   .directive('app', AppComponent)
 
-  .config(($compileProvider, $stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $httpProvider, $provide, $sceDelegateProvider, $sceProvider, $qProvider, $localeProvider, cfpLoadingBarProvider, tmhDynamicLocaleProvider, $mdDateLocaleProvider, $mdThemingProvider, $mdIconProvider, appConfig, apiPrefix) => {
+  .config(($compileProvider, $stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $httpProvider, $provide, $sceDelegateProvider, $sceProvider, $qProvider, $localeProvider, cfpLoadingBarProvider, tmhDynamicLocaleProvider, $mdDateLocaleProvider, $mdThemingProvider, $mdIconProvider, appConfig) => {
     'ngInject';
 
     // Compilation
-    $compileProvider.preAssignBindingsEnabled(true); // https://github.com/angular/angular.js/blob/master/CHANGELOG.md#breaking-changes
+    $compileProvider.preAssignBindingsEnabled(true); // https://github.com/angular/angular.js/commit/bcd0d4d896d0dfdd988ff4f849c1d40366125858
     $compileProvider.debugInfoEnabled(false);
 
     // Disable unhandled rejection errors
@@ -237,14 +236,14 @@ angular.module('app', [
     });
   })
 
-  .run(($rootScope, $state, $location, $window, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, apiPrefix, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
+  .run(($rootScope, $state, $location, $window, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
     'ngInject';
 
     $rootScope.slug = appConfig.slug;
     $rootScope.basePath = appConfig.basePath;
     $rootScope.assistUrl = appConfig.assistUrl;
     $rootScope.assistCredentials = appConfig.assistCredentials;
-    $rootScope.apiPrefix = apiPrefix;
+    $rootScope.apiUrl = appConfig.apiUrl;
 
     // $rootScope.$on('$localeChangeSuccess', function(event) {
     //     $log.log('$localeChangeSuccess', event);

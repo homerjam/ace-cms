@@ -2,7 +2,7 @@ import angular from 'angular';
 
 class FileController {
   /* @ngInject */
-  constructor($rootScope, $scope, $state, $window, $q, $log, $timeout, $mdDialog, HelperFactory, FileFactory, uiGridConstants, apiPrefix) {
+  constructor($rootScope, $scope, $state, $window, $q, $log, $timeout, $mdDialog, HelperFactory, FileFactory, uiGridConstants, appConfig) {
     const vm = this;
 
     vm.status = 'active';
@@ -197,7 +197,7 @@ class FileController {
 
     vm.downloadSelected = (item) => {
       if (item.location === 's3') {
-        $window.open(`${apiPrefix}/file/download/s3?bucket=${item.metadata.s3.bucket}&key=${item.metadata.s3.src}&filename=${item.original.fileName}`);
+        $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${item.metadata.s3.bucket}&key=${item.metadata.s3.src}&filename=${item.original.fileName}`);
       }
 
       if (item.location === 'assist') {

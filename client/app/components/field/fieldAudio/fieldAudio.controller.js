@@ -1,12 +1,12 @@
 class FieldAudioController {
   /* @ngInject */
-  constructor ($scope, $window, $http, $timeout, $mdDialog, apiPrefix) {
+  constructor ($scope, $window, $http, $timeout, $mdDialog, appConfig) {
     const vm = this;
 
     const audioExtensions = 'mp3,aac,wav,flac,ogg,wma';
 
     vm.flowOptions = {
-      target: `${apiPrefix}/upload`,
+      target: `${appConfig.apiUrl}/upload`,
       query: {
         options: JSON.stringify(vm.fieldOptions),
       },
@@ -63,7 +63,7 @@ class FieldAudioController {
     };
 
     function checkZencoderJob () {
-      $http.get(`${apiPrefix}/zencode/job`, {
+      $http.get(`${appConfig.apiUrl}/zencode/job`, {
         params: {
           id: vm.fieldModel.metadata.zencoder.job.id,
         },
@@ -81,7 +81,7 @@ class FieldAudioController {
     }
 
     vm.download = () => {
-      $window.open(`${apiPrefix}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
+      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
     };
   }
 }

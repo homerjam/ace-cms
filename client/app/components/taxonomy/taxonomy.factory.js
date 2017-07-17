@@ -1,7 +1,7 @@
 import angular from 'angular';
 import uuid from 'uuid';
 
-const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, HelperFactory, Slug, apiPrefix) => {
+const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, HelperFactory, Slug, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -11,7 +11,7 @@ const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, He
   service.getByKey = key => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/taxonomy?slug=${key}`,
+      url: `${appConfig.apiUrl}/taxonomy?slug=${key}`,
     })
       .then((response) => {
         resolve(response.data);
@@ -56,7 +56,7 @@ const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, He
   service.addTerm = (taxonomySlug, term) => $q((resolve, reject) => {
     $http({
       method: 'POST',
-      url: `${apiPrefix}/taxonomy/term`,
+      url: `${appConfig.apiUrl}/taxonomy/term`,
       data: {
         taxonomySlug,
         term,
@@ -68,7 +68,7 @@ const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, He
   service.editTerm = term => $q((resolve, reject) => {
     $http({
       method: 'PUT',
-      url: `${apiPrefix}/taxonomy/term`,
+      url: `${appConfig.apiUrl}/taxonomy/term`,
       params: term,
     })
       .then(resolve, reject);
@@ -77,7 +77,7 @@ const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, He
   service.removeTerm = term => $q((resolve, reject) => {
     $http({
       method: 'DELETE',
-      url: `${apiPrefix}/taxonomy/term`,
+      url: `${appConfig.apiUrl}/taxonomy/term`,
       params: term,
     })
       .then(resolve, reject);

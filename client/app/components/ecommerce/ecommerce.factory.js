@@ -1,7 +1,7 @@
 import angular from 'angular';
 import * as modalTemplates from './modal';
 
-const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, SettingsFactory, HelperFactory, AdminFactory, ModalService, apiPrefix) => {
+const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, SettingsFactory, HelperFactory, AdminFactory, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -25,7 +25,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
   service.loadSettings = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/ecommerce/settings`,
+      url: `${appConfig.apiUrl}/ecommerce/settings`,
     })
       .then((response) => {
         resolve(service.settings(response.data));
@@ -40,7 +40,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
 
     $http({
       method: 'PUT',
-      url: `${apiPrefix}/ecommerce/settings`,
+      url: `${appConfig.apiUrl}/ecommerce/settings`,
       data: {
         settings: obj,
       },
@@ -64,7 +64,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
 
     $http({
       method: 'GET',
-      url: `${apiPrefix}/ecommerce/${type}`,
+      url: `${appConfig.apiUrl}/ecommerce/${type}`,
       params,
     })
       .then((response) => {
@@ -90,7 +90,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
 
     $http({
       method: 'POST',
-      url: `${apiPrefix}/ecommerce/${type}`,
+      url: `${appConfig.apiUrl}/ecommerce/${type}`,
       data: {
         item: obj,
       },
@@ -104,7 +104,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
   service.delete = (type, objs) => $q((resolve, reject) => {
     $http({
       method: 'DELETE',
-      url: `${apiPrefix}/ecommerce/${type}`,
+      url: `${appConfig.apiUrl}/ecommerce/${type}`,
       data: {
         items: objs,
       },
@@ -150,7 +150,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
         };
 
         vm.previewEmailTemplate = (template) => {
-          $window.open(`${apiPrefix}/ecommerce/order/message/${template}?orderId=${vm.order._id}`);
+          $window.open(`${appConfig.apiUrl}/ecommerce/order/message/${template}?orderId=${vm.order._id}`);
         };
       },
       controllerAs: 'vm',
@@ -230,7 +230,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
   service.stripeRefund = (order, amount) => $q((resolve, reject) => {
     $http({
       method: 'POST',
-      url: `${apiPrefix}/stripe/refund`,
+      url: `${appConfig.apiUrl}/stripe/refund`,
       data: {
         order,
         amount,

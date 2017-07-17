@@ -1,12 +1,12 @@
 class FieldAttachmentController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $window, $http, $timeout, $location, $mdDialog, apiPrefix) {
+  constructor ($rootScope, $scope, $window, $http, $timeout, $location, $mdDialog, appConfig) {
     const vm = this;
 
     const attachmentExtensions = 'pdf,doc,docx,csv,xls,txt';
 
     vm.flowOptions = {
-      target: `${apiPrefix}/upload`,
+      target: `${appConfig.apiUrl}/upload`,
       query: {
         options: JSON.stringify(vm.fieldOptions),
       },
@@ -61,12 +61,12 @@ class FieldAttachmentController {
     };
 
     vm.download = () => {
-      $window.open(`${apiPrefix}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
+      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
     };
 
     vm.fileUrl = () => {
-      // const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
-      const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.metadata.s3.bucket}/${vm.fieldModel.metadata.s3.src}/${vm.fieldModel.original.fileName}?apiToken=${$rootScope.apiToken}`;
+      // const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
+      const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.metadata.s3.bucket}/${vm.fieldModel.metadata.s3.src}/${vm.fieldModel.original.fileName}?apiToken=${$rootScope.apiToken}`;
 
       const fullUrl = `${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${fileUrl}`;
 

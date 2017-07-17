@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-const SettingsFactory = ($rootScope, $window, $http, $q, $log, $auth, SatellizerConfig, apiPrefix) => {
+const SettingsFactory = ($rootScope, $window, $http, $q, $log, $auth, SatellizerConfig, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -20,7 +20,7 @@ const SettingsFactory = ($rootScope, $window, $http, $q, $log, $auth, Satellizer
   service.loadSettings = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/settings`,
+      url: `${appConfig.apiUrl}/settings`,
     })
       .then((response) => {
         resolve(service.settings(response.data));
@@ -30,7 +30,7 @@ const SettingsFactory = ($rootScope, $window, $http, $q, $log, $auth, Satellizer
   service.saveSettings = obj => $q((resolve, reject) => {
     $http({
       method: 'PUT',
-      url: `${apiPrefix}/settings`,
+      url: `${appConfig.apiUrl}/settings`,
       data: {
         settings: obj,
       },
@@ -43,13 +43,13 @@ const SettingsFactory = ($rootScope, $window, $http, $q, $log, $auth, Satellizer
   service.authenticateWithProvider = provider => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/auth/${provider}/config`,
+      url: `${appConfig.apiUrl}/auth/${provider}/config`,
       cache: true,
     })
       .then((response) => {
         SatellizerConfig.providers[provider].clientId = response.data.clientId;
-        SatellizerConfig.providers[provider].redirectUri = `${$window.location.origin}${apiPrefix}/auth/${provider}`;
-        SatellizerConfig.providers[provider].url = `${apiPrefix}/auth/${provider}`;
+        SatellizerConfig.providers[provider].redirectUri = `${$window.location.origin}${appConfig.apiUrl}/auth/${provider}`;
+        SatellizerConfig.providers[provider].url = `${appConfig.apiUrl}/auth/${provider}`;
         SatellizerConfig.providers[provider].popupOptions = {};
 
         $auth.authenticate(provider, {

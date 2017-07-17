@@ -1,12 +1,12 @@
 class ToolsController {
   /* @ngInject */
-  constructor (HelperFactory, apiPrefix) {
+  constructor (HelperFactory, appConfig) {
     const vm = this;
 
     vm.importDbSelected = (event, files) => {
       // const fileReader = new FileReader();
       // fileReader.onload = (event) => {
-      //   HelperFactory.postPayload(`${apiPrefix}/tools/import-db`, event.target.result);
+      //   HelperFactory.postPayload(`${appConfig.apiUrl}/tools/import-db`, event.target.result);
       // };
       // fileReader.readAsText(files[0]);
 

@@ -317,7 +317,7 @@ class AceCms {
         version: VERSION,
         assistUrl: config.assist.url,
         assistCredentials,
-        apiPrefix: apiConfig.apiPrefix,
+        apiUrl: config.apiUrl,
         session: req.session,
       });
     }

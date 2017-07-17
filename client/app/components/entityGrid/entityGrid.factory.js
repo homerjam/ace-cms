@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-const EntityGridFactory = ($http, $q, apiPrefix) => {
+const EntityGridFactory = ($http, $q, appConfig) => {
   'ngInject';
 
   const service = {
@@ -22,7 +22,7 @@ const EntityGridFactory = ($http, $q, apiPrefix) => {
 
     $http({
       method: 'GET',
-      url: apiPrefix + '/entities/search',
+      url: `${appConfig.apiUrl}/entities/search`,
       params: angular.extend(defaultParams, params),
     })
       .then((response) => {

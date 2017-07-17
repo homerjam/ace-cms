@@ -1,6 +1,6 @@
 {
   "name": "ace-cms",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Flexible, multi-site, headless CMS",
   "author": {
     "name": "Studio Thomas",
@@ -19,8 +19,8 @@
     "node": "6.x"
   },
   "dependencies": {
-    "ace-api": "^0.4.4",
-    "ace-api-server": "^0.1.6",
+    "ace-api": "^0.4.9",
+    "ace-api-server": "^0.1.13",
     "angular-i18n": "^1.6.5",
     "body-parser": "^1.17.2",
     "compression": "^1.7.0",
@@ -69,8 +69,8 @@
     "babel-loader": "^7.1.1",
     "babel-plugin-angularjs-annotate": "^0.8.0",
     "babel-preset-es2015": "^6.24.1",
-    "blueimp-canvas-to-blob": "^3.8.0",
-    "blueimp-load-image": "^2.12.2",
+    "blueimp-canvas-to-blob": "^3.9.0",
+    "blueimp-load-image": "^2.13.1",
     "browser-sync": "^2.18.12",
     "buffer": "^5.0.6",
     "c3": "^0.4.14",
@@ -113,7 +113,7 @@
     "medium-editor": "^5.23.1",
     "mocha": "^3.4.2",
     "node-sass": "^4.5.3",
-    "openseadragon": "^2.2.1",
+    "openseadragon": "^2.3.0",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
     "raw-loader": "^0.5.1",
     "run-sequence": "^2.0.0",
@@ -125,7 +125,7 @@
     "ui-grid-draggable-rows": "^0.3.3",
     "url-loader": "^0.5.9",
     "uuid": "^3.1.0",
-    "webpack": "^3.2.0",
+    "webpack": "^3.3.0",
     "webpack-dev-middleware": "^1.11.0",
     "webpack-hot-middleware": "^2.18.2",
     "yargs": "^8.0.2"

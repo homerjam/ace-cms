@@ -8,6 +8,8 @@ module.exports = {
 
   basePath: process.env.BASE_PATH || '/',
 
+  apiUrl: process.env.API_URL || '',
+
   session: {
     secret: process.env.SESSION_SECRET,
     ttl: process.env.SESSION_TTL || 7200,

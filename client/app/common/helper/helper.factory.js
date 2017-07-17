@@ -2,7 +2,7 @@ import _ from 'lodash';
 import angular from 'angular';
 import * as modalTemplates from './modal';
 
-const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, AdminFactory, FieldFactory, ModalService, apiPrefix) => {
+const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, AdminFactory, FieldFactory, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -106,7 +106,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
   service.analytics = params => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/analytics`,
+      url: `${appConfig.apiUrl}/analytics`,
       params: params || {},
       cache: true,
     })
@@ -118,7 +118,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
   service.getApiToken = () => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/token`,
+      url: `${appConfig.apiUrl}/token`,
       cache: false,
     })
       .then((response) => {
@@ -133,7 +133,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
   service.oembed = url => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${apiPrefix}/embedly/oembed`,
+      url: `${appConfig.apiUrl}/embedly/oembed`,
       params: {
         url,
       },
