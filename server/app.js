@@ -33,7 +33,6 @@ class AceCms {
     apiConfig = _.merge({}, defaultApiConfig, apiConfig);
 
     app.use(helmet());
-    app.set('trust proxy', true);
     app.set('views', `${__dirname}/views`);
     app.set('view engine', 'ejs');
     app.use(errorHandler());
@@ -97,7 +96,10 @@ class AceCms {
     /* Force https */
 
     const forceHttps = (req, res, next) => {
-      if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
+      if (
+        (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') &&
+        (req.headers['cf-visitor'] && JSON.parse(req.headers['cf-visitor']).scheme !== 'https') // Fix for Cloudflare/Heroku flexible SSL
+      ) {
         res.redirect(301, `https://${req.headers.host}${req.path}`);
         return;
       }
@@ -105,6 +107,7 @@ class AceCms {
     };
 
     if (config.environment === 'production' && config.forceHttps === true) {
+      router.enable('trust proxy');
       router.use(forceHttps);
     }
 
