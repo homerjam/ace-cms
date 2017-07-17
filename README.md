@@ -48,6 +48,7 @@ ACE uses a separate app to store images, you'll need to deploy this following th
 
 	ENVIRONMENT=development|testing|production
 
+    BASE_URL=
     BASE_PATH=/
 
 	FORCE_HTTPS=false
@@ -79,6 +80,7 @@ ACE uses a separate app to store images, you'll need to deploy this following th
     AUTH0_DOMAIN=
     AUTH0_CLIENT_ID=
     AUTH0_CLIENT_SECRET=
+    AUTH0_CALLBACK_URL=
 
     API_PREFIX=api
     API_URL=/api
