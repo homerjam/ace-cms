@@ -6,7 +6,7 @@ module.exports = (config) => {
     domain: config.auth0.domain,
     clientID: config.auth0.clientId,
     clientSecret: config.auth0.clientSecret,
-    callbackURL: `${config.basePath}login`,
+    callbackURL: config.auth0.callbackUrl,
   }, (accessToken, refreshToken, extraParams, profile, done) =>
   // accessToken is the token to call Auth0 API (not needed in the most cases)
   // extraParams.id_token has the JSON Web Token
