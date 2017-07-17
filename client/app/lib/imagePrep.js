@@ -6,7 +6,7 @@ import extend from 'lodash/extend';
 import arrayBufferConcat from 'array-buffer-concat';
 import { parse } from 'babel-loader?{presets:["es2015"]}!icc';
 import loadImage from 'blueimp-load-image';
-import canvasToBlob from 'blueimp-canvas-to-blob';
+// import canvasToBlob from 'blueimp-canvas-to-blob';
 
 class ImagePrep {
   constructor (options) {

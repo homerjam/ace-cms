@@ -1,6 +1,6 @@
 class FieldAttachmentController {
   /* @ngInject */
-  constructor ($scope, $window, $http, $timeout, $location, $mdDialog, apiPrefix) {
+  constructor ($rootScope, $scope, $window, $http, $timeout, $location, $mdDialog, apiPrefix) {
     const vm = this;
 
     const attachmentExtensions = 'pdf,doc,docx,csv,xls,txt';
@@ -66,23 +66,25 @@ class FieldAttachmentController {
 
     vm.fileUrl = () => {
       // const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
-      const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.metadata.s3.bucket}/${vm.fieldModel.metadata.s3.src}/${vm.fieldModel.original.fileName}`;
+      const fileUrl = `${apiPrefix}/file/s3/${vm.fieldModel.metadata.s3.bucket}/${vm.fieldModel.metadata.s3.src}/${vm.fieldModel.original.fileName}?apiToken=${$rootScope.apiToken}`;
 
-      // $mdDialog.show(
-      //   $mdDialog.prompt()
-      //     .title('File URL')
-      //     .placeholder('File URL')
-      //     .ariaLabel('File URL')
-      //     .initialValue(fileUrl)
-      //     .ok('Close')
-      // );
+      const fullUrl = `${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${fileUrl}`;
 
       $mdDialog.show(
-        $mdDialog.alert()
+        $mdDialog.prompt()
           .title('File URL')
-          .textContent(`${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${fileUrl}`)
+          .placeholder('File URL')
+          .ariaLabel('File URL')
+          .initialValue(fullUrl)
           .ok('Close')
       );
+
+      // $mdDialog.show(
+      //   $mdDialog.alert()
+      //     .title('File URL')
+      //     .textContent(fullUrl)
+      //     .ok('Close')
+      // );
     };
   }
 }
