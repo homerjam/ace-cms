@@ -107,7 +107,7 @@ class AceCms {
     };
 
     if (config.environment === 'production' && config.forceHttps === true) {
-      router.enable('trust proxy');
+      app.enable('trust proxy');
       router.use(forceHttps);
     }
 
