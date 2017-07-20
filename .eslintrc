@@ -17,6 +17,7 @@
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 1,
     "import/extensions": 1,
+    "import/no-webpack-loader-syntax": 1,
     "arrow-body-style": 1,
     "no-unused-vars": 1,
     "no-undef": 2,
