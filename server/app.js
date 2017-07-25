@@ -24,6 +24,7 @@ const defaultConfig = require('./config.default');
 const defaultApiConfig = require('ace-api/config.default');
 
 const VERSION = packageJson.version;
+const API_TOKEN_EXPIRES_IN = 7200;
 
 /* App */
 
@@ -207,14 +208,12 @@ class AceCms {
             }
 
             req.session.apiToken = jwt.signToken(payload, {
-              expiresIn: 7200,
+              expiresIn: API_TOKEN_EXPIRES_IN,
             });
 
             res.redirect(config.basePath);
 
           }, (reason) => {
-            console.error(reason);
-
             req.session.errorMessage = reason;
 
             res.redirect(`${config.basePath}login`);

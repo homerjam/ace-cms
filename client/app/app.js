@@ -197,17 +197,17 @@ angular.module('app', [
             return $q.reject(response);
           }
 
-          // if (!response.data.permission && /\/api(.*)$/.test(response.config.url)) {
-          //   $window.location.href = '/';
-          //   return $q.reject(response);
-          // }
-
           const $mdDialog = $injector.get('$mdDialog');
+          const appConfig = $injector.get('appConfig');
+          const message = response.data.message || response.data.error;
 
           $mdDialog.show(
             $mdDialog.alert()
               .title('Not Authorised')
-              .textContent(response.data.message || response.data.error)
+              .htmlContent(`
+                <p>${message}</p>
+                <p>Please <a href="${$window.location.origin + appConfig.basePath}logout" target="_blank">login</a></p>
+              `)
               .ok('Close')
           );
 
@@ -220,7 +220,6 @@ angular.module('app', [
       url: '/switch',
       onEnter: ($window) => {
         $window.location.href = `${appConfig.basePath}switch`;
-        $window.location.reload();
       },
     });
 
@@ -230,13 +229,12 @@ angular.module('app', [
         $http.post('/logout')
           .then(() => {
             $window.location.href = `${appConfig.basePath}?success=logout`;
-            $window.location.reload();
           });
       },
     });
   })
 
-  .run(($rootScope, $state, $location, $window, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
+  .run(($rootScope, $state, $location, $window, $document, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
     'ngInject';
 
     $rootScope.slug = appConfig.slug;
@@ -303,6 +301,14 @@ angular.module('app', [
       return authorised;
     };
 
+    const renewToken = (forceRenew = false) => {
+      if (!$document[0].hidden || forceRenew) {
+        HelperFactory.getApiToken();
+      }
+
+      $timeout(renewToken, 3600 * 1000);
+    };
+
     let dependenciesLoaded = false;
 
     const dependencies = [
@@ -313,7 +319,6 @@ angular.module('app', [
       AdminFactory.load('taxonomy'),
       SettingsFactory.loadSettings(),
       EcommerceFactory.loadSettings(),
-      HelperFactory.getApiToken(),
     ];
 
     $transitions.onStart({ to: '*' }, (trans) => {
@@ -321,10 +326,16 @@ angular.module('app', [
       const toParams = trans.params('to');
 
       if (!dependenciesLoaded) {
-        $q.all(dependencies).then(() => {
-          dependenciesLoaded = true;
-          $state.go(toStateName, toParams);
-        });
+        $q.all(dependencies)
+          .then(() => {
+            dependenciesLoaded = true;
+
+            renewToken(true);
+
+            $state.go(toStateName, toParams);
+          }, () => {
+            $window.location.href = `${appConfig.basePath}logout`;
+          });
 
         return false;
       }

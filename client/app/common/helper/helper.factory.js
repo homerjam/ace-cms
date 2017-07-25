@@ -119,12 +119,13 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
     $http({
       method: 'GET',
       url: `${appConfig.apiUrl}/token`,
+      params: {
+        expiresIn: 7200,
+      },
       cache: false,
     })
       .then((response) => {
         $rootScope.apiToken = response.data.token;
-
-        $timeout(service.getApiToken, 3600000);
 
         resolve($rootScope.apiToken);
       }, reject);
