@@ -215,23 +215,6 @@ angular.module('app', [
         },
       };
     });
-
-    $stateProvider.state('switch', {
-      url: '/switch',
-      onEnter: ($window) => {
-        $window.location.href = `${appConfig.basePath}switch`;
-      },
-    });
-
-    $stateProvider.state('logout', {
-      url: '/logout',
-      onEnter: ($http, $window) => {
-        $http.post('/logout')
-          .then(() => {
-            $window.location.href = `${appConfig.basePath}?success=logout`;
-          });
-      },
-    });
   })
 
   .run(($rootScope, $state, $location, $window, $document, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
