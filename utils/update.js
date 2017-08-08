@@ -1,10 +1,6 @@
-const env = require('node-env-file');
-const path = require('path');
 const _ = require('lodash');
 const Promise = require('bluebird');
 const Cloudant = require('cloudant');
-
-env(path.resolve(__dirname, '../.env'));
 
 const args = process.argv.slice(2);
 

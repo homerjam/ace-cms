@@ -1,0 +1,77 @@
+.modal-backdrop(ng-click="$modal.dismiss()")
+.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+
+        md-toolbar
+          .md-toolbar-tools
+            h2 Output
+            span(flex)
+            md-button.md-icon-button(ng-click="$modal.dismiss()")
+              md-icon(md-font-set="material-icons") close
+
+      .modal-body(style="padding: 16px 0")
+
+        form(name="vm.itemForm", role="form", novalidate)
+
+          div(layout="column", layout-margin)
+
+            md-input-container
+              label Name
+              input(ng-model="vm.output.name", required, ng-minlength="2", ng-maxlength="50", ng-pattern="/^(?!.*?(_src|\")).*$/i")
+
+            md-input-container
+              label Slug
+              input(ng-model="vm.output.slug", required, disabled, ng-pattern="/^(?!.*?(_src|\")).*$/i")
+
+            md-input-container
+              label Format
+              md-select(ng-model="vm.output.format")
+                md-option(ng-repeat="option in vm.formatOptions", value="{{option.value}}") {{option.name}}
+
+            md-input-container
+              label Maximum Width
+              input(type="number", ng-model="vm.output.maxWidth", min='0')
+
+            md-input-container
+              label Maximum Height
+              input(type="number", ng-model="vm.output.maxHeight", min='0')
+
+            md-input-container
+              label Quality
+              md-select(ng-model="vm.output.quality")
+                md-option(ng-repeat="option in vm.qualityOptions", value="{{option.value}}") {{option.value}}: {{option.name}}
+
+          md-toolbar.md-table-toolbar.md-primary
+            .md-toolbar-tools Thumbnails
+              span(flex)
+              md-button(ng-click="vm.thumbnailAdd()") Add Thumbnail
+
+          md-table-container(ng-show="vm.output.thumbnails.length")
+            table(md-table)
+
+              thead(md-head)
+                tr(md-row)
+                  th(md-column) Name
+                  th(md-column) Slug
+                  th(md-column) Format
+                  th(md-column) Number
+
+              tbody(md-body)
+                tr(md-row, ng-repeat="thumbnail in vm.output.thumbnails")
+                  td(md-cell) {{thumbnail.name}}
+                  td(md-cell) {{thumbnail.slug}}
+                  td(md-cell) {{thumbnail.format}}
+                  td(md-cell) {{thumbnail.number}}
+                  td(md-cell)
+                    md-button.md-icon-button(ng-click="vm.thumbnailEdit(thumbnail)")
+                      md-icon(md-font-set="material-icons") edit
+                    md-button.md-icon-button(ng-click="vm.thumbnailDelete(thumbnail)")
+                      md-icon(md-font-set="material-icons") close
+
+      .modal-footer(layout="row")
+
+        span(flex)
+        md-button.md-accent(ng-click="$modal.close(vm.output)", ng-disabled="vm.itemForm.$invalid") Save
+        md-button.md-warn(ng-click="$modal.dismiss()") Cancel

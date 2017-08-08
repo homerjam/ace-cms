@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const gulp = require('gulp');
 const path = require('path');
 const runSequence = require('run-sequence');
@@ -6,16 +8,11 @@ const rename = require('gulp-rename');
 const template = require('gulp-template');
 const bump = require('gulp-bump');
 const yargs = require('yargs');
-const env = require('node-env-file');
 const _ = require('lodash');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackConfigDev = require('./webpack.dev');
-
-if (!process.env.ENVIRONMENT) {
-  env('.env');
-}
 
 const resolveToApp = (glob) => {
   glob = glob || '';

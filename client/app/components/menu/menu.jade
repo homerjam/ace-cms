@@ -95,6 +95,10 @@ md-content
 
     hr
 
+    md-list-item(ui-sref="config", ui-sref-active="active", ng-if="::$root.user.superUser")
+      md-icon(md-font-set="material-icons") settings_applications
+      p Config
+
     md-menu(md-offset="220 0", ng-if="::$root.user.superUser")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
         md-icon(md-font-set="material-icons") settings_applications

@@ -92,7 +92,7 @@ angular.module('app', [
       'Content-Type': 'application/json;charset=utf-8',
     };
 
-    // Convert all date strings to date objects
+    // Convert all date strings in responses to date objects
     const dateMatchPattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     const convertDates = (obj) => {
       Object.keys(obj).forEach((key) => {
@@ -156,7 +156,7 @@ angular.module('app', [
     //   }
     // });
 
-    // md-datepicker defaults
+    // Datepicker defaults
     $mdDateLocaleProvider.formatDate = date => moment(date).locale('en-gb').format('L LT');
     $mdDateLocaleProvider.parseDate = dateString => new Date(dateString);
 
@@ -165,7 +165,6 @@ angular.module('app', [
       50: '#ffffff',
     });
     $mdThemingProvider.definePalette('greyWithWhite', greyMap);
-
     $mdThemingProvider.theme('default')
       .primaryPalette('blue-grey')
       .accentPalette('teal', {
@@ -217,7 +216,7 @@ angular.module('app', [
     });
   })
 
-  .run(($rootScope, $state, $location, $window, $document, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
+  .run(($rootScope, $state, $location, $window, $document, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, ConfigFactory, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
     'ngInject';
 
     $rootScope.slug = appConfig.slug;
@@ -226,8 +225,8 @@ angular.module('app', [
     $rootScope.assistCredentials = appConfig.assistCredentials;
     $rootScope.apiUrl = appConfig.apiUrl;
 
-    // $rootScope.$on('$localeChangeSuccess', function(event) {
-    //     $log.log('$localeChangeSuccess', event);
+    // $rootScope.$on('$localeChangeSuccess', (event) => {
+    //   $log.log('$localeChangeSuccess', event);
     // });
 
     tmhDynamicLocale.set('en-gb');
@@ -295,13 +294,14 @@ angular.module('app', [
     let dependenciesLoaded = false;
 
     const dependencies = [
-      getUser(),
-      AdminFactory.load('schema'),
-      AdminFactory.load('field'),
-      AdminFactory.load('action'),
-      AdminFactory.load('taxonomy'),
-      SettingsFactory.loadSettings(),
-      EcommerceFactory.loadSettings(),
+      ConfigFactory.load(),
+      // getUser(),
+      // AdminFactory.load('schema'),
+      // AdminFactory.load('field'),
+      // AdminFactory.load('action'),
+      // AdminFactory.load('taxonomy'),
+      // SettingsFactory.loadSettings(),
+      // EcommerceFactory.loadSettings(),
     ];
 
     $transitions.onStart({ to: '*' }, (trans) => {

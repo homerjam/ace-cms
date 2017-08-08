@@ -1,7 +1,7 @@
 class Field {
-  /* @ngInject */
   constructor(config = {}) {
     this.name = 'Field Name';
+    this.dataType = 'string'; // string|number|boolean
     this.settingsTemplate = '';
     this.thumbnailField = false;
     this.gridOptions = {

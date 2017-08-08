@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import angular from 'angular';
-import * as modalTemplates from './modal';
+import * as modalTemplates from '../modal';
 
 const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, AdminFactory, FieldFactory, ModalService, appConfig) => {
   'ngInject';

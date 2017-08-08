@@ -2,18 +2,16 @@ import moment from 'moment';
 
 class DashboardController {
   /* @ngInject */
-  constructor($window, SettingsFactory, HelperFactory, AdminFactory) {
+  constructor($rootScope, $window, ConfigFactory, SettingsFactory, HelperFactory, AdminFactory) {
     const vm = this;
 
-    vm.user = AdminFactory.getCurrentUser();
+    const config = ConfigFactory.config();
 
-    const settings = SettingsFactory.settings();
-
-    if (!settings.url || settings.url === '') {
+    if (!config.client.baseUrl || config.client.baseUrl === '') {
       return;
     }
 
-    const siteUrl = new $window.URL(settings.url || '');
+    const siteUrl = new $window.URL(config.client.baseUrl || '');
     let siteHostname = siteUrl.hostname.split('.');
     siteHostname = siteHostname.length >= 3 ? siteHostname.splice(1).join('.') : siteHostname.join('.');
 
@@ -27,11 +25,11 @@ class DashboardController {
 
     const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
 
-    if (settings.ga && settings.ga.view) {
+    if (config.client.gaView) {
       // var now = moment();
 
       HelperFactory.analytics({
-        ids: `ga:${settings.ga.view}`,
+        ids: `ga:${config.client.gaView}`,
         // 'start-date': moment(now).subtract(1, 'day').day(0).subtract(1, 'week').format('YYYY-MM-DD'),
         // 'end-date': moment(now).format('YYYY-MM-DD'),
         'start-date': '7daysAgo',
@@ -70,7 +68,7 @@ class DashboardController {
       });
 
       HelperFactory.analytics({
-        ids: `ga:${settings.ga.view}`,
+        ids: `ga:${config.client.gaView}`,
         // 'start-date': moment(now).subtract(1, 'day').day(0).subtract(1, 'week').format('YYYY-MM-DD'),
         // 'end-date': moment(now).format('YYYY-MM-DD'),
         'start-date': '7daysAgo',
