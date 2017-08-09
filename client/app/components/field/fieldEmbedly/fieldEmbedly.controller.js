@@ -11,8 +11,8 @@ class FieldEmbedlyController {
 
     vm.submitUrl = () => {
       $timeout(() => {
-        HelperFactory.oembed(vm.fieldModel.url).then((result) => {
-          result.url = result.url || vm.fieldModel.url;
+        HelperFactory.oembed(vm.fieldModel.value.url).then((result) => {
+          result.url = result.url || vm.fieldModel.value.url;
 
           if (/youtube/i.test(result.provider_name)) {
             result.id = result.url.match(youtubeRegex)[1];
@@ -21,8 +21,8 @@ class FieldEmbedlyController {
             result.id = result.url.match(vimeoRegex)[3];
           }
 
-          vm.fieldModel.oembed = result;
-          vm.fieldModel.url = result.url;
+          vm.fieldModel.value.oembed = result;
+          vm.fieldModel.value.url = result.url;
         });
       });
     };

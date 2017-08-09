@@ -27,8 +27,8 @@
 
             md-input-container
               label Type
-              md-select(ng-model="vm.item.actionType")
-                md-option(ng-repeat="(actionType, actionOpts) in $action.actions()", value="{{actionType}}") {{actionOpts.name}}
+              md-select(ng-model="vm.item.type")
+                md-option(ng-repeat="(type, actionOpts) in $action.actions()", value="{{type}}") {{actionOpts.name}}
 
           div(layout="column", ace-bind-html="vm.actionSettingsTemplate")
 

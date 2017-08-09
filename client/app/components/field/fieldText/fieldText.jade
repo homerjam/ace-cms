@@ -6,4 +6,4 @@ md-subheader.md-no-sticky.field-toolbar
 
 div(flex, layout="row", layout-margin)
   md-input-container(flex)
-    input(ng-model="vm.fieldModel", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined", aria-label="{{vm.fieldOptions.name}}")
+    input(ng-model="vm.fieldModel.value", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined", aria-label="{{vm.fieldOptions.name}}")

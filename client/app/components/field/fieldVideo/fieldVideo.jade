@@ -7,9 +7,9 @@ span(ace-flow options="vm.flowOptions")
         span(flex)
         md-button.md-icon-button(aria-label="Upload", ace-flow-browse)
           md-icon(md-font-set="material-icons") file_upload
-        //- md-button.md-icon-button(aria-label="Preview", ng-click="vm.preview($event)", ng-disabled="vm.fieldModel.metadata.zencoder.jobState !== 'finished'")
+        //- md-button.md-icon-button(aria-label="Preview", ng-click="vm.preview($event)", ng-disabled="vm.fieldModel.value.metadata.zencoder.jobState !== 'finished'")
         //-   md-icon(md-font-set="material-icons") pageview
-        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel")
+        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel.value")
           md-icon(md-font-set="material-icons") file_download
 
   div(flex, layout="row", layout-margin)
@@ -19,18 +19,18 @@ span(ace-flow options="vm.flowOptions")
     div(flex, ng-show="vm.uploading")
       div(ng-show="vm.uploading") Uploading {{ vm.progress || 0 }}%
 
-    div(flex, ng-show="!vm.uploading && vm.fieldModel")
-      div(ng-hide="vm.fieldModel.metadata.zencoder.thumbnail.url") Encoding. Please wait or save and come back later.
-      img(ng-if="vm.fieldModel.metadata.zencoder.thumbnail.url", ng-src="{{vm.fieldModel.metadata.zencoder.thumbnail.url}}")
+    div(flex, ng-show="!vm.uploading && vm.fieldModel.value")
+      div(ng-hide="vm.fieldModel.value.metadata.zencoder.thumbnail.url") Encoding. Please wait or save and come back later.
+      img(ng-if="vm.fieldModel.value.metadata.zencoder.thumbnail.url", ng-src="{{vm.fieldModel.value.metadata.zencoder.thumbnail.url}}")
 
-    div(flex, ng-show="!vm.uploading && vm.fieldModel")
+    div(flex, ng-show="!vm.uploading && vm.fieldModel.value")
       table
         tr
           td Type
-          td {{vm.fieldModel.original.mimeType}}
+          td {{vm.fieldModel.value.original.mimeType}}
         tr
           td Filename
-          td(title='{{vm.fieldModel.original.fileName}}') {{vm.fieldModel.original.fileName}}
+          td(title='{{vm.fieldModel.value.original.fileName}}') {{vm.fieldModel.value.original.fileName}}
         tr
           td Filesize
-          td {{vm.fieldModel.original.fileSize | fileSize}}
+          td {{vm.fieldModel.value.original.fileSize | fileSize}}

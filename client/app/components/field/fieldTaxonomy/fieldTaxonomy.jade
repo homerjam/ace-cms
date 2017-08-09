@@ -11,13 +11,13 @@ div(flex, layout="row", layout-margin)
   div(flex, layout="row")
 
     div(flex, ng-if="::!vm.fieldOptions.settings.multiple")
-      md-autocomplete(flex, md-no-cache="true", md-selected-item="vm.fieldModel.terms", md-search-text="vm.searchText", md-items="item in vm.search(vm.searchText)", md-item-text="item.title", md-floating-label="{{vm.fieldOptions.name}}", md-min-length="0")
+      md-autocomplete(flex, md-no-cache="true", md-selected-item="vm.fieldModel.value.terms", md-search-text="vm.searchText", md-items="item in vm.search(vm.searchText)", md-item-text="item.title", md-floating-label="{{vm.fieldOptions.name}}", md-min-length="0")
         md-item-template
           span(md-highlight-text="vm.searchText", md-highlight-flags="^i") {{item.title}}
         md-not-found No matches found.
 
     div(flex, ng-if="::vm.fieldOptions.settings.multiple")
-      md-chips(ng-model="vm.fieldModel.terms", md-autocomplete-snap, md-transform-chip="vm.transformChip($chip)", md-require-match="vm.fieldOptions.settings.existingOnly")
+      md-chips(ng-model="vm.fieldModel.value.terms", md-autocomplete-snap, md-transform-chip="vm.transformChip($chip)", md-require-match="vm.fieldOptions.settings.existingOnly")
         md-autocomplete(md-no-cache="true", md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="item in vm.search(vm.searchText)", md-item-text="item.title", placeholder="{{vm.fieldOptions.name}}", md-min-length="0")
           .md-caption(md-highlight-text="vm.searchText") {{vm.getParents(item)}}
           .md-body-1(md-highlight-text="vm.searchText") {{item.title}}

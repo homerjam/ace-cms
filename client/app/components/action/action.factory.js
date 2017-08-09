@@ -9,12 +9,12 @@ const ActionFactory = ($rootScope) => {
 
   const factory = {
 
-    registerAction(actionType, options) {
-      actions[actionType] = new Action(options);
+    registerAction(type, options) {
+      actions[type] = new Action(options);
     },
 
-    action(actionType) {
-      return actions[actionType];
+    action(type) {
+      return actions[type];
     },
 
     actions() {

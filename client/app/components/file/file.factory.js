@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-const FileFactory = ($http, $q, $log, AdminFactory, appConfig) => {
+const FileFactory = ($http, $q, $log, ConfigFactory, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -58,7 +58,7 @@ const FileFactory = ($http, $q, $log, AdminFactory, appConfig) => {
     file = angular.copy(file);
 
     file.type = 'file';
-    file.uploadedBy = AdminFactory.getCurrentUser()._id;
+    file.uploadedBy = ConfigFactory.user().id;
     file.uploaded = JSON.stringify(new Date()).replace(/"/g, '');
 
     $http({

@@ -1,7 +1,7 @@
 import angular from 'angular';
 import * as modalTemplates from './modal';
 
-const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, SettingsFactory, HelperFactory, AdminFactory, ModalService, appConfig) => {
+const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, ConfigFactory, HelperFactory, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -35,7 +35,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
   service.saveSettings = obj => $q((resolve, reject) => {
     obj = angular.fromJson(angular.toJson(obj));
 
-    obj.modifiedBy = AdminFactory.getCurrentUser()._id;
+    obj.modifiedBy = ConfigFactory.user().id;
     obj.modified = HelperFactory.now();
 
     $http({
@@ -85,7 +85,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
   service.save = (type, obj) => $q((resolve, reject) => {
     obj = angular.fromJson(angular.toJson(obj));
 
-    obj.modifiedBy = AdminFactory.getCurrentUser()._id;
+    obj.modifiedBy = ConfigFactory.user().id;
     obj.modified = HelperFactory.now();
 
     $http({
@@ -155,8 +155,6 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
       },
       controllerAs: 'vm',
       inputs: {
-        settings: SettingsFactory.settings(),
-        ecommerceSettings: service.settings(),
         order,
       },
     }).then((modal) => {
@@ -202,7 +200,8 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Setti
 
         vm.order = order;
 
-        vm.amount = vm.maxAmount = (vm.order.charge.amount - vm.order.charge.amountRefunded) / 100;
+        vm.amount = (vm.order.charge.amount - vm.order.charge.amountRefunded) / 100;
+        vm.maxAmount = vm.amount;
       },
       controllerAs: 'vm',
       inputs: {

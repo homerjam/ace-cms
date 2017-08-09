@@ -1,7 +1,7 @@
 import angular from 'angular';
 import uuid from 'uuid';
 
-const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, HelperFactory, Slug, appConfig) => {
+const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, ConfigFactory, HelperFactory, Slug, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -36,11 +36,11 @@ const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $log, AdminFactory, He
     const now = JSON.stringify(new Date()).replace(/"/g, '');
 
     if (!taxonomy.createdBy) {
-      taxonomy.createdBy = AdminFactory.getCurrentUser()._id;
+      taxonomy.createdBy = ConfigFactory.user().id;
       taxonomy.created = now;
     }
 
-    taxonomy.modifiedBy = AdminFactory.getCurrentUser()._id;
+    taxonomy.modifiedBy = ConfigFactory.user().id;
     taxonomy.modified = now;
 
     AdminFactory.update('taxonomy', [taxonomy], taxonomy)

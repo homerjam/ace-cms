@@ -4,37 +4,37 @@ md-subheader.md-no-sticky.field-toolbar
       md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
       h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
       span(flex)
-      md-button.md-icon-button(aria-label="Delete", ng-show="vm.fieldModel.video", ng-click="vm.fieldModel = null")
+      md-button.md-icon-button(aria-label="Delete", ng-show="vm.fieldModel.value.video", ng-click="vm.fieldModel.value = null")
         md-icon(md-font-set="material-icons") delete
 
-div(ng-show="!vm.fieldModel.video", flex, layout="row", layout-margin)
+div(ng-show="!vm.fieldModel.value.video", flex, layout="row", layout-margin)
 
   md-input-container(flex, md-no-float)
-    input(ng-model="vm.fieldModel.url", ng-paste="vm.submitUrl()" ng-keypress="($event.charCode === 13) ? vm.submitUrl() : return", placeholder="Source URL", ng-pattern="vm.embedlyRegex", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined")
+    input(ng-model="vm.fieldModel.value.url", ng-paste="vm.submitUrl()" ng-keypress="($event.charCode === 13) ? vm.submitUrl() : return", placeholder="Source URL", ng-pattern="vm.embedlyRegex", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined")
 
   md-button.md-icon-button(aria-label="Submit", ng-click="vm.submitUrl()")
     md-icon(md-font-set="material-icons") get_app
 
-div(ng-show="vm.fieldModel.video", flex, layout="row", layout-margin)
+div(ng-show="vm.fieldModel.value.video", flex, layout="row", layout-margin)
 
   div(flex)
-    img(ng-src="{{ vm.fieldModel.video.thumbnail.url }}")
+    img(ng-src="{{ vm.fieldModel.value.video.thumbnail.url }}")
 
   div(flex)
     table
       tr
         td Provider
-        td {{vm.fieldModel.video.provider}}
+        td {{vm.fieldModel.value.video.provider}}
       tr
         td URL
         td
-          span {{vm.fieldModel.url}}
+          span {{vm.fieldModel.value.url}}
       tr
         td Title
-        td {{vm.fieldModel.video.title}}
+        td {{vm.fieldModel.value.video.title}}
       tr
         td Author
-        td {{vm.fieldModel.video.user.name}}
+        td {{vm.fieldModel.value.video.user.name}}
       tr
         td Dimensions
-        td {{vm.fieldModel.video.width}}&times;{{vm.fieldModel.video.height}}
+        td {{vm.fieldModel.value.video.width}}&times;{{vm.fieldModel.value.video.height}}

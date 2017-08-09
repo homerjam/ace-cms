@@ -2,13 +2,13 @@
 
 class FieldVimeoController {
   /* @ngInject */
-  constructor ($timeout, $http, $log, $mdDialog, SettingsFactory) {
+  constructor ($timeout, $http, $log, $mdDialog, ConfigFactory) {
     const vm = this;
 
     let accessToken;
 
     try {
-      accessToken = SettingsFactory.settings().vimeo.access_token;
+      accessToken = ConfigFactory.config().provider.vimeo.access_token;
     } catch (error) {
       //
     }
@@ -26,11 +26,11 @@ class FieldVimeoController {
 
     vm.submitUrl = () => {
       $timeout(() => {
-        if (!vm.fieldModel || !vm.fieldModel.url) {
+        if (!vm.fieldModel.value || !vm.fieldModel.value.url) {
           return;
         }
 
-        const vimeoId = vm.fieldModel.url.match(vimeoRegex)[3];
+        const vimeoId = vm.fieldModel.value.url.match(vimeoRegex)[3];
 
         $http.get(`https://api.vimeo.com/me/videos/${vimeoId}`, {
           params: {
@@ -96,7 +96,7 @@ class FieldVimeoController {
                 return 0;
               });
 
-            vm.fieldModel.video = {
+            vm.fieldModel.value.video = {
               provider: 'Vimeo',
               id: vimeoId,
               title: result.name,

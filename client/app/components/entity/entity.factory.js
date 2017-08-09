@@ -5,7 +5,7 @@ import Handlebars from 'handlebars/dist/handlebars';
 import selectEntityModalTemplate from './modal/selectEntity.jade';
 import entityModalTemplate from './modal/entity.jade';
 
-const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGridFactory, FieldFactory, AdminFactory, HelperFactory, Slug, ModalService, appConfig) => {
+const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGridFactory, FieldFactory, ConfigFactory, HelperFactory, Slug, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -18,9 +18,9 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     }
 
     entity.fields = _.mapValues(entity.fields, (field, fieldSlug) => {
-      const fieldOpts = AdminFactory.getByKey('field')[fieldSlug];
+      const fieldOpts = ConfigFactory.getField(entity.schema, fieldSlug);
 
-      field.value = FieldFactory.field(fieldOpts.fieldType).fromDb(field.value, fieldOpts.settings);
+      field.value = FieldFactory.field(field.type).fromDb(field.value, fieldOpts.settings);
 
       return field;
     });
@@ -35,7 +35,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   function getEntityById (params) {
     return $q((resolve, reject) => {
       const multipleEntities = angular.isArray(params.id);
-      const singularSchema = !angular.isArray(params.id) && AdminFactory.getByKey('schema')[params.id.split('.')[1]] !== undefined;
+      const singularSchema = !angular.isArray(params.id) && ConfigFactory.getSchema(params.id.split('.')[1]);
 
       const opts = {
         method: multipleEntities ? 'POST' : 'GET',
@@ -61,28 +61,22 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     let title;
     let slug;
 
-    const fields = AdminFactory.getByKey('field');
-
     // Convert fields to a readable format
-    const fieldMap = {};
-    angular.forEach(entity.fields, (field, fieldSlug) => {
-      field.fieldType = fields[fieldSlug].fieldType;
-      fieldMap[fieldSlug] = $filter('field2String')(field, 10);
-    });
+    const fields = _.mapValues(entity.fields, field => $filter('field2String')(field, 10));
 
-    const schema = AdminFactory.getByKey('schema')[entity.schema];
+    const schema = ConfigFactory.getSchema(entity.schema);
 
     // Grab title template, fallback to first field
     const titleTemplate = schema.titleTemplate && schema.titleTemplate !== '' ? schema.titleTemplate : schema.singular ? schema.name : `{{${schema.fields[0].slug}}}`;
 
     // Compile template
-    title = Handlebars.compile(titleTemplate)(fieldMap);
+    title = Handlebars.compile(titleTemplate)(fields);
 
     // Trim dashes
     title = $filter('trimify')(title);
 
     if (schema.slugTemplate && schema.slugTemplate !== '') {
-      slug = Slug.slugify(Handlebars.compile(schema.slugTemplate)(fieldMap));
+      slug = Slug.slugify(Handlebars.compile(schema.slugTemplate)(fields));
       slug = $filter('trimify')(slug);
 
     } else {
@@ -97,7 +91,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   };
 
   service.getFieldThumbnail = (field) => {
-    const thumbnail = FieldFactory.field(field.fieldType).thumbnail(field.value);
+    const thumbnail = FieldFactory.field(field.type).thumbnail(field.value);
 
     if (thumbnail) {
       thumbnail.ratio = isNaN(thumbnail.width / thumbnail.height) ? 0 : thumbnail.width / thumbnail.height;
@@ -107,7 +101,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   };
 
   service.getEntityThumbnail = (entity) => {
-    const thumbnailFieldSlug = AdminFactory.getByKey('schema')[entity.schema].thumbnailField;
+    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailField;
 
     if (thumbnailFieldSlug && entity.fields[thumbnailFieldSlug]) {
       return service.getFieldThumbnail(entity.fields[thumbnailFieldSlug]);
@@ -117,7 +111,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   };
 
   service.getEntityThumbnailUrl = (entity, transformSettings) => {
-    const thumbnailFieldSlug = AdminFactory.getByKey('schema')[entity.schema].thumbnailField;
+    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailField;
 
     if (thumbnailFieldSlug && entity.fields[thumbnailFieldSlug]) {
       return HelperFactory.getFieldThumbnailUrl(entity.fields[thumbnailFieldSlug], transformSettings);
@@ -131,18 +125,18 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
     const now = JSON.stringify(new Date()).replace(/"/g, '');
 
-    const schema = AdminFactory.getByKey('schema')[schemaSlug || entity.schema];
+    const schema = ConfigFactory.getSchema(schemaSlug || entity.schema);
 
     if (!schema) {
       throw Error('Schema not found');
     }
 
     if (!entity.createdBy) {
-      entity.createdBy = AdminFactory.getCurrentUser()._id;
+      entity.createdBy = ConfigFactory.user().id;
       entity.created = now;
     }
 
-    entity.modifiedBy = AdminFactory.getCurrentUser()._id;
+    entity.modifiedBy = ConfigFactory.user().id;
     entity.modified = now;
 
     if (entity.published) {
@@ -157,16 +151,16 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     entity.slug = titleSlug.slug;
 
     entity.fields = _.mapValues(entity.fields, (field, fieldSlug) => {
-      const fieldOpts = AdminFactory.getByKey('field')[fieldSlug];
+      const fieldOpts = ConfigFactory.getField(schema.slug, fieldSlug);
 
       if (!_.find(schema.fields, field => field.slug === fieldSlug)) {
         return null;
       }
 
       field.type = 'entityField';
-      field.fieldType = fieldOpts.fieldType;
+      field.type = fieldOpts.type;
 
-      field.value = FieldFactory.field(fieldOpts.fieldType).toDb(field.value, fieldOpts.settings);
+      field.value = FieldFactory.field(fieldOpts.type).toDb(field.value, fieldOpts.settings);
 
       return field;
     });

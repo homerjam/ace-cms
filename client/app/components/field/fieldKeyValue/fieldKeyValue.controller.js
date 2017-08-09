@@ -3,8 +3,8 @@ class FieldKeyValueController {
   constructor() {
     const vm = this;
 
-    if (!vm.fieldModel) {
-      vm.fieldModel = [];
+    if (!vm.fieldModel.value) {
+      vm.fieldModel.value = [];
     }
 
     vm.getIndex = (scope) => {
@@ -12,7 +12,7 @@ class FieldKeyValueController {
     };
 
     vm.getCollection = (scope) => {
-      return vm.fieldModel;
+      return vm.fieldModel.value;
     };
   }
 }

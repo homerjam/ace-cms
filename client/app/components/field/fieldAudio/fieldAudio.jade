@@ -7,7 +7,7 @@ span(ace-flow options="vm.flowOptions")
         span(flex)
         md-button.md-icon-button(aria-label="Upload", ace-flow-browse)
           md-icon(md-font-set="material-icons") file_upload
-        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel")
+        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel.value")
           md-icon(md-font-set="material-icons") file_download
 
   div(flex, layout="row", layout-margin)
@@ -17,14 +17,14 @@ span(ace-flow options="vm.flowOptions")
     div(flex, ng-show="vm.uploading")
       div(ng-show="vm.uploading") Uploading {{ vm.progress || 0 }}%
 
-    div(flex, ng-show="!vm.uploading && vm.fieldModel")
+    div(flex, ng-show="!vm.uploading && vm.fieldModel.value")
       table
         tr
           td Type
-          td {{vm.fieldModel.original.mimeType}}
+          td {{vm.fieldModel.value.original.mimeType}}
         tr
           td Filename
-          td(title='{{vm.fieldModel.original.fileName}}') {{vm.fieldModel.original.fileName}}
+          td(title='{{vm.fieldModel.value.original.fileName}}') {{vm.fieldModel.value.original.fileName}}
         tr
           td Filesize
-          td {{vm.fieldModel.original.fileSize | fileSize}}
+          td {{vm.fieldModel.value.original.fileSize | fileSize}}

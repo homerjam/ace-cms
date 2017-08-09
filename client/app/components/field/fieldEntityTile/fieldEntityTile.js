@@ -14,7 +14,7 @@ const fieldEntityTileModule = angular.module('fieldEntityTile', [])
     $mdThemingProvider.theme('ungrouped').primaryPalette('blue-grey').dark();
   })
 
-  .run((FieldFactory, EntityFactory, AdminFactory) => {
+  .run((FieldFactory, EntityFactory) => {
     'ngInject';
 
     FieldFactory.registerField('entityTile', {

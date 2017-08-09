@@ -11,32 +11,54 @@ const ConfigFactory = ($rootScope, $http, $q, $log, ModalService, appConfig) => 
   let Config;
   let User;
 
-  const observerCallbacks = [];
+  // const observerCallbacks = [];
 
-  const notifyObservers = () => {
-    observerCallbacks.forEach((callback) => {
-      callback();
-    });
-  };
+  // const notifyObservers = () => {
+  //   observerCallbacks.forEach((callback) => {
+  //     callback();
+  //   });
+  // };
 
-  service.registerObserverCallback = (callback) => {
-    observerCallbacks.push(callback);
-  };
+  // service.registerObserverCallback = (callback) => {
+  //   observerCallbacks.push(callback);
+  // };
 
   service.load = async () => {
     const response = await $http.get(`${appConfig.apiUrl}/config`);
 
     Config = response.data;
+
+    const userId = response.headers('x-user-id');
+    const role = response.headers('x-role');
+
+    Config.users.forEach((user, i) => {
+      if (user.id === userId) {
+        User = Config.users[i];
+      }
+    });
+
     $rootScope.$config = Config;
 
-    User = Config.users.filter(user => user.id === response.headers('x-user-id'))[0];
-    User.superUser = User.role === 'super';
-    $rootScope.user = User;
+    $rootScope.$isSuperUser = role === 'super';
+
+    $rootScope.$user = User;
 
     return Config;
   };
 
   service.config = () => Config;
+
+  service.user = () => User;
+
+  service.getSchema = schemaSlug => Config.schemas.filter(schema => schema.slug === schemaSlug)[0];
+
+  service.getField = (schemaSlug, fieldSlug) => (service.getSchema(schemaSlug).fields || []).filter(field => field.slug === fieldSlug)[0];
+
+  service.getAction = (schemaSlug, actionSlug) => (service.getSchema(schemaSlug).actions || []).filter(action => action.slug === actionSlug)[0];
+
+  service.getTaxonomy = taxonomySlug => Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0];
+
+  service.getUser = userId => Config.users.filter(user => user.id === userId)[0];
 
   // service.loadCurrentUser = () => $q((resolve, reject) => {
   //   $http({

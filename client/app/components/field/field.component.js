@@ -6,14 +6,14 @@ const fieldComponent = function fieldComponent($compile) {
   'ngInject';
 
   const link = ($scope, $element) => {
-    const fieldType = _.kebabCase($scope.vm.fieldType);
+    const type = _.kebabCase($scope.vm.fieldType);
 
-    $element.html(`<field-${fieldType}
+    $element.html(`<field-${type}
       field-model="vm.fieldModel"
       field-options="vm.fieldOptions"
       field-apply="vm.fieldApply"
       field-disabled="vm.fieldDisabled"
-      ></field-${fieldType}>`);
+      ></field-${type}>`);
 
     $compile($element.contents())($scope);
   };

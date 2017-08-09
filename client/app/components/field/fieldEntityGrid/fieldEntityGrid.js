@@ -9,7 +9,7 @@ const fieldEntityGridModule = angular.module('fieldEntityGrid', [])
     'ngInject';
   })
 
-  .run((FieldFactory, EntityFactory, AdminFactory) => {
+  .run((FieldFactory, EntityFactory) => {
     'ngInject';
 
     FieldFactory.registerField('entityGrid', {

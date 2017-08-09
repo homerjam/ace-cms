@@ -33,7 +33,7 @@ class FieldAttachmentController {
         fileSuccess: (flow, file, message) => {
           const _file = JSON.parse(message);
 
-          vm.fieldModel = _file;
+          vm.fieldModel.value = _file;
         },
         filesSubmitted: (flow, files) => {
           if (files.filter(file => file.valid).length) {
@@ -61,12 +61,12 @@ class FieldAttachmentController {
     };
 
     vm.download = () => {
-      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
+      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}&filename=${vm.fieldModel.value.original.fileName}`);
     };
 
     vm.fileUrl = () => {
-      // const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.original.fileName}?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}`;
-      const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.metadata.s3.bucket}/${vm.fieldModel.metadata.s3.src}/${vm.fieldModel.original.fileName}?apiToken=${$rootScope.apiToken}`;
+      // const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.value.original.fileName}?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}`;
+      const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.value.metadata.s3.bucket}/${vm.fieldModel.value.metadata.s3.src}/${vm.fieldModel.value.original.fileName}?apiToken=${$rootScope.apiToken}`;
 
       const fullUrl = `${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${fileUrl}`;
 

@@ -4,30 +4,23 @@ import Handlebars from 'handlebars/dist/handlebars';
 
 class EntityController {
   /* @ngInject */
-  constructor($rootScope, $scope, $window, $log, $state, $stateParams, $transitions, $mdDialog, AdminFactory, EntityFactory, EntityGridFactory, FieldFactory, BatchFactory, SettingsFactory, BatchUploadFactory) {
+  constructor($rootScope, $scope, $window, $log, $state, $stateParams, $transitions, $mdDialog, ConfigFactory, EntityFactory, EntityGridFactory, FieldFactory, BatchFactory, BatchUploadFactory) {
     const vm = this;
 
     vm.entity = vm.entities[0] || {};
 
-    const schemas = AdminFactory.getByKey('schema');
-    const fields = AdminFactory.getByKey('field');
-
-    if (vm.entity.schema && schemas[vm.entity.schema]) {
-      vm.schema = angular.copy(schemas[vm.entity.schema]);
+    if (vm.entity.schema && ConfigFactory.getSchema(vm.entity.schema)) {
+      vm.schema = ConfigFactory.getSchema(vm.entity.schema);
     }
 
-    if (vm.mode === 'singular' && $stateParams.id && schemas[$stateParams.id]) {
-      vm.schema = angular.copy(schemas[$stateParams.id]);
+    if (vm.mode === 'singular' && $stateParams.id && ConfigFactory.getSchema($stateParams.id)) {
+      vm.schema = ConfigFactory.getSchema($stateParams.id);
       vm.entity._id = `entity.${vm.schema.slug}`;
     }
 
     vm.schema.fields = vm.schema.fields || [];
 
-    vm.schema.fields.map(field => angular.extend(field, fields[field.slug]));
-
     vm.schema.actions = vm.schema.actions || [];
-
-    vm.schema.actions.map(action => angular.extend(action, AdminFactory.getByKey('action')[action.slug]));
 
     if (vm.mode === 'batchEdit') {
       if (vm.entities.length === 0) {
@@ -57,7 +50,7 @@ class EntityController {
         return true;
       }
 
-      return FieldFactory.field(field.fieldType).modeDisabled[vm.mode];
+      return FieldFactory.field(field.type).modeDisabled[vm.mode];
     };
 
     const modeBreadcrumbs = {
@@ -131,12 +124,12 @@ class EntityController {
     // Functions
 
     vm.action = (action) => {
-      if (action.actionType === 'url') {
+      if (action.type === 'url') {
         const urlTemplate = Handlebars.compile(action.url);
 
         let compiledUrlTemplate = urlTemplate(vm.entity);
 
-        const settingsUrl = SettingsFactory.settings().url || '';
+        const settingsUrl = ConfigFactory.config().client.baseUrl || '';
 
         if (!/https?:\/\//.test(compiledUrlTemplate) && settingsUrl) {
           compiledUrlTemplate = settingsUrl + compiledUrlTemplate;
@@ -348,16 +341,12 @@ class EntityController {
       });
     });
 
-    const fieldOptionsMap = _.mapValues(fields, (field) => {
-      const options = _.omitBy(field, (value, key) => key.startsWith('_'));
-
-      options.entityId = vm.entity._id;
-      options.entityMode = vm.mode;
-
-      return options;
-    });
-
-    vm.fieldOptions = fieldSlug => fieldOptionsMap[fieldSlug];
+    vm.fieldOptions = (fieldSlug) => {
+      const field = ConfigFactory.getField(vm.entity.schema, fieldSlug);
+      field.entityId = vm.entity._id;
+      field.entityMode = vm.mode;
+      return field;
+    };
 
   }
 }

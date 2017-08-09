@@ -84,10 +84,10 @@ class AdminController {
 
     if (vm.adminType === 'field') {
       vm.columnDefs.push({
-        name: 'fieldType',
+        name: 'type',
         sortType: 'string',
         displayName: 'Type',
-        cellFilter: 'fieldTypeName',
+        cellFilter: 'typeName',
       });
 
       vm.columnDefs.push({
@@ -100,10 +100,10 @@ class AdminController {
 
     if (vm.adminType === 'action') {
       vm.columnDefs.push({
-        name: 'actionType',
+        name: 'type',
         sortType: 'string',
         displayName: 'Type',
-        cellFilter: 'actionTypeName',
+        cellFilter: 'typeName',
       });
 
       vm.columnDefs.push({

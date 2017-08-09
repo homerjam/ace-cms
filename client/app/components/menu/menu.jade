@@ -1,6 +1,6 @@
 md-toolbar(title="{{$root.slug}}")
   .md-toolbar-tools
-    h3(title="{{$root.slug}}") {{$root.$settings.settings().client.name || 'Fokus'}}
+    h3(title="{{$root.slug}}") {{$root.$config.client.name || 'Fokus'}}
 
 md-content
 
@@ -10,30 +10,30 @@ md-content
       md-icon(md-font-set="material-icons") dashboard
       p Dashboard
 
-    md-menu(md-offset="220 0", ng-show="vm.schemas.length")
+    md-menu(md-offset="220 0", ng-show="$root.$config.schemas.length")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('new|entity|view', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") create
         p Content
       md-menu-content(width="4")
-        md-menu-item(ng-repeat="item in vm.dropdownContent")
-          md-button(ng-if="item.schema.singular" ui-sref="singularEntity({id: item.schema.slug})")
+        md-menu-item(ng-repeat="schema in $root.$config.schemas")
+          md-button(ng-if="schema.settings.singular" ui-sref="singularEntity({id: schema.slug})")
             // md-icon(md-font-set="material-icons") dashboard
-            span {{ item.text }}
-          md-button(ng-if="!item.schema.singular" ui-sref="entityGrid({schemaSlug: item.schema.slug})")
+            span {{ schema.name }}
+          md-button(ng-if="!schema.settings.singular" ui-sref="entityGrid({schemaSlug: schema.slug})")
             // md-icon(md-font-set="material-icons") dashboard
-            span {{ item.text }}
+            span {{ schema.name | pluralize }}
 
-    md-menu(md-offset="220 0", ng-show="vm.taxonomies.length")
+    md-menu(md-offset="220 0", ng-show="$root.$config.taxonomies.length")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('taxonomy', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") format_list_bulleted
         p Taxonomy
       md-menu-content(width="4")
-        md-menu-item(ng-repeat="item in vm.dropdownTaxonomy")
-          md-button(ui-sref="taxonomy({taxonomySlug: item.taxonomy.slug})")
+        md-menu-item(ng-repeat="taxonomy in $root.$config.taxonomies")
+          md-button(ui-sref="taxonomy({taxonomySlug: taxonomy.slug})")
             // md-icon(md-font-set="material-icons") dashboard
-            span {{ item.text }}
+            span {{ taxonomy.name }}
 
-    md-menu(md-offset="220 0", ng-show="($root.user.permissions.ecommerce || $root.user.superUser) && $root.$settings.settings().ecommerce.enabled")
+    md-menu(md-offset="220 0", ng-show="($root.$user.permissions.ecommerce || $root.$isSuperUser) && $root.$settings.settings().ecommerce.enabled")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('ecommerce', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") shopping_cart
         p E-commerce
@@ -51,19 +51,15 @@ md-content
             // md-icon(md-font-set="material-icons") dashboard
             span Settings
 
-    md-menu(md-offset="220 0", ng-show="vm.batchUploadSchemas.length > 1")
+    md-menu(md-offset="220 0")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('batchUpload', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") file_upload
         p Upload
       md-menu-content(width="4")
-        md-menu-item(ng-repeat="item in vm.batchUploadSchemas")
-          md-button(ui-sref="batchUploadEntity({schemaSlug: item.slug})")
+        md-menu-item(ng-repeat="schema in $root.$config.schemas | batchUploadSchemas")
+          md-button(ui-sref="batchUploadEntity({schemaSlug: schema.slug})")
             // md-icon(md-font-set="material-icons") dashboard
-            span {{ item.name }}
-
-    md-list-item(ng-show="vm.batchUploadSchemas.length === 1", ui-sref="batchUploadEntity({schemaSlug: vm.batchUploadSchemas[0].slug})", ui-sref-active="active")
-      md-icon(md-font-set="material-icons") file_upload
-      p Upload
+            span {{ schema.name }}
 
     hr
 
@@ -75,11 +71,11 @@ md-content
       md-icon(md-font-set="material-icons") folder
       p Files
 
-    md-list-item(ui-sref="admin({adminType: 'user'})", ui-sref-active="active", ng-show="$root.user.permissions.user || $root.user.superUser")
+    md-list-item(ui-sref="admin({adminType: 'user'})", ui-sref-active="active", ng-show="$root.$user.permissions.user || $root.$isSuperUser")
       md-icon(md-font-set="material-icons") people
       p Users
 
-    md-list-item(ui-sref="settings", ui-sref-active="active", ng-show="$root.user.permissions.settings || $root.user.superUser")
+    md-list-item(ui-sref="settings", ui-sref-active="active", ng-show="$root.$user.permissions.settings || $root.$isSuperUser")
       md-icon(md-font-set="material-icons") settings
       p Settings
 
@@ -95,11 +91,7 @@ md-content
 
     hr
 
-    md-list-item(ui-sref="config", ui-sref-active="active", ng-if="::$root.user.superUser")
-      md-icon(md-font-set="material-icons") settings_applications
-      p Config
-
-    md-menu(md-offset="220 0", ng-if="::$root.user.superUser")
+    md-menu(md-offset="220 0", ng-if="::$root.$isSuperUser")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
         md-icon(md-font-set="material-icons") settings_applications
         p Admin
@@ -125,6 +117,6 @@ md-content
             // md-icon(md-font-set="material-icons") dashboard
             span Tools
 
-    md-list-item(ng-href="{{:: $root.basePath }}switch", target="_self", ng-if="::$root.user.superUser")
+    md-list-item(ng-href="{{:: $root.basePath }}switch", target="_self", ng-if="::$root.$isSuperUser")
       md-icon(md-font-set="material-icons") swap_horiz
       p Switch

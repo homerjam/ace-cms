@@ -11,10 +11,10 @@
   "repository": "https://github.com/studiothomas/ace-cms.git",
   "main": "server/app.js",
   "scripts": {
-    "start": "nodemon index.js --exec 'node -r dotenv/config' --inspect --watch server",
+    "start": "nodemon index --exec 'node -r dotenv/config' --inspect --watch server",
+    "dev": "node -r dotenv/config dev",
     "build": "webpack --config webpack.prod.js --env=prod --progress --profile --colors",
-    "release": "npm run build && gulp bump",
-    "test": "karma start"
+    "release": "npm run build && gulp bump"
   },
   "engines": {
     "node": "6.x"
@@ -101,18 +101,10 @@
     "jade-html-loader": "0.0.3",
     "jquery": "^3.2.1",
     "json-loader": "^0.5.7",
-    "karma": "^1.7.0",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.3",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^2.0.4",
     "material-design-icons": "^3.0.1",
     "md-color-picker": "^0.2.6",
     "mdi": "^2.0.46",
     "medium-editor": "^5.23.2",
-    "mocha": "^3.5.0",
     "node-sass": "^4.5.3",
     "openseadragon": "^2.3.0",
     "optimize-css-assets-webpack-plugin": "^3.0.0",
@@ -128,6 +120,7 @@
     "uuid": "^3.1.0",
     "webpack": "^3.5.1",
     "webpack-dev-middleware": "^1.12.0",
+    "webpack-dev-server": "^2.7.1",
     "webpack-hot-middleware": "^2.18.2",
     "yargs": "^8.0.2"
   }

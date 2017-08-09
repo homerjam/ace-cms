@@ -47,7 +47,7 @@ class AdminModalController {
         vm.item = {
           name: '',
           slug: '',
-          fieldType: 'text',
+          type: 'text',
           settings: {},
         };
       }
@@ -56,7 +56,7 @@ class AdminModalController {
         vm.item = {
           name: '',
           slug: '',
-          actionType: 'url',
+          type: 'url',
         };
       }
 
@@ -103,11 +103,11 @@ class AdminModalController {
     }
 
     // field
-    $scope.$watch(() => vm.item.fieldType, (fieldType) => {
-      if (!fieldType) {
+    $scope.$watch(() => vm.item.type, (type) => {
+      if (!type) {
         return;
       }
-      vm.fieldSettingsTemplate = FieldFactory.field(fieldType).settingsTemplate;
+      vm.fieldSettingsTemplate = FieldFactory.field(type).settingsTemplate;
     });
 
     if (vm.item.settings && vm.item.settings.schemas) {
@@ -119,11 +119,11 @@ class AdminModalController {
     }
 
     // action
-    $scope.$watch(() => vm.item.actionType, (actionType) => {
-      if (!actionType) {
+    $scope.$watch(() => vm.item.type, (type) => {
+      if (!type) {
         return;
       }
-      vm.actionSettingsTemplate = ActionFactory.action(actionType).settingsTemplate;
+      vm.actionSettingsTemplate = ActionFactory.action(type).settingsTemplate;
     });
 
     vm.newItem = (type, model) => {
@@ -174,14 +174,14 @@ class AdminModalController {
       if (vm.item.fields) {
         vm.item.fields = vm.item.fields.map(field => ({
           slug: field.slug,
-          fieldType: field.fieldType,
+          type: field.type,
         }));
       }
 
       if (vm.item.actions) {
         vm.item.actions = vm.item.actions.map(action => ({
           slug: action.slug,
-          actionType: action.actionType,
+          type: action.type,
         }));
       }
 

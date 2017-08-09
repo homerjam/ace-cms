@@ -9,7 +9,7 @@ const fieldEntityModule = angular.module('fieldEntity', [])
     'ngInject';
   })
 
-  .run((FieldFactory, EntityFactory, AdminFactory) => {
+  .run((FieldFactory, EntityFactory, ConfigFactory) => {
     'ngInject';
 
     FieldFactory.registerField('entity', {
@@ -77,8 +77,8 @@ const fieldEntityModule = angular.module('fieldEntity', [])
           return value[0].thumbnail;
         }
 
-        const thumbnailFieldSlug = AdminFactory.getByKey('schema')[value[0].schema].thumbnailField;
-        const thumbnailFieldType = AdminFactory.getByKey('field')[thumbnailFieldSlug].fieldType;
+        const thumbnailFieldSlug = ConfigFactory.getSchema(value[0].schema).thumbnailField[0];
+        const thumbnailFieldType = ConfigFactory.getField(value[0].schema, thumbnailFieldSlug).type;
 
         const thumbnail = FieldFactory.field(thumbnailFieldType).thumbnail(value[0].thumbnail);
 

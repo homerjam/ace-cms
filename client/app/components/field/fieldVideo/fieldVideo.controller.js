@@ -33,7 +33,7 @@ class FieldVideoController {
         fileSuccess: (flow, file, message) => {
           const _file = JSON.parse(message);
 
-          vm.fieldModel = _file;
+          vm.fieldModel.value = _file;
 
           checkZencoderJob();
         },
@@ -65,7 +65,7 @@ class FieldVideoController {
     function checkZencoderJob () {
       $http.get(`${appConfig.apiUrl}/zencode/job`, {
         params: {
-          id: vm.fieldModel.metadata.zencoder.job.id,
+          id: vm.fieldModel.value.metadata.zencoder.job.id,
         },
       })
       .then((response) => {
@@ -76,12 +76,12 @@ class FieldVideoController {
           return;
         }
 
-        vm.fieldModel.metadata.zencoder = job;
+        vm.fieldModel.value.metadata.zencoder = job;
       });
     }
 
     vm.download = () => {
-      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.metadata.s3.bucket}&key=${vm.fieldModel.metadata.s3.src}&filename=${vm.fieldModel.original.fileName}`);
+      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}&filename=${vm.fieldModel.value.original.fileName}`);
     };
   }
 }

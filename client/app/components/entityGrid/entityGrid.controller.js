@@ -1,9 +1,10 @@
+import _ from 'lodash';
 import angular from 'angular';
 import he from 'he/he';
 
 class EntityGridController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $stateParams, $transitions, $q, $filter, $log, $timeout, $window, $mdDialog, HelperFactory, EntityGridFactory, AdminFactory, EntityFactory, BatchFactory, uiGridConstants) {
+  constructor ($rootScope, $scope, $state, $stateParams, $transitions, $q, $filter, $log, $timeout, $window, $mdDialog, HelperFactory, EntityGridFactory, ConfigFactory, EntityFactory, BatchFactory, uiGridConstants) {
     const vm = this;
 
     vm.items = [];
@@ -32,25 +33,20 @@ class EntityGridController {
     let hasImageColumn = false;
     let bookmarks = {};
 
-    const fields = AdminFactory.getByKey('field');
-    const schemas = AdminFactory.getByKey('schema');
+    const schemas = ConfigFactory.config().schemas.filter(schema => schemaSlugs.indexOf(schema.slug) > -1);
 
-    vm.schemas = schemaSlugs.map((schema) => {
-      return schemas[schema];
-    });
-
-    if (vm.mode !== 'trash' && !vm.schemas[0]) {
+    if (vm.mode !== 'trash' && !schemas[0]) {
       throw Error('Schema not found');
     }
 
-    vm.heading = vm.mode === 'trash' ? 'Trash' : $filter('pluralize')(vm.schemas[0] ? vm.schemas[0].name : '');
+    vm.heading = vm.mode === 'trash' ? 'Trash' : $filter('pluralize')(schemas[0] ? schemas[0].name : '');
 
     vm.sortFields = [];
 
-    vm.schemas.forEach((schema) => {
-      if (schema.sortFields) {
-        schema.sortFields.forEach((fieldSlug) => {
-          const field = fields[fieldSlug];
+    schemas.forEach((schema) => {
+      if (schema.gridColumns) {
+        schema.gridColumns.forEach((fieldSlug) => {
+          const field = schema.fields.filter(field => field.slug === fieldSlug)[0];
           if (vm.sortFields.indexOf(field) === -1) {
             vm.sortFields.push(field);
           }
@@ -77,7 +73,7 @@ class EntityGridController {
 
     if (vm.mode !== 'trash' && vm.sortFields.length > 0) {
       vm.sortFields.forEach((field) => {
-        const columnOptions = HelperFactory.getColumnOptions(field.slug);
+        const columnOptions = HelperFactory.getColumnOptions(field);
 
         if (columnOptions.style === 'thumbnail') {
           hasImageColumn = true;
@@ -198,16 +194,15 @@ class EntityGridController {
       if (vm.searchTerm !== '') {
         const fieldTerms = [];
 
-        AdminFactory.get('field', true).forEach((field) => {
-          const fieldType = AdminFactory.getByKey('field')[field.slug].fieldType;
-
-          if (/image|video/.test(fieldType)) {
-            fieldTerms.push(`fields.${field.slug}.fileName:${vm.searchTerm}*`);
-            fieldTerms.push(`fields.${field.slug}.original.fileName:${vm.searchTerm}*`);
-
-          } else {
-            fieldTerms.push(`fields.${field.slug}:${vm.searchTerm}*`);
-          }
+        schemas.forEach((schema) => {
+          schema.fields.forEach((field) => {
+            if (/image|video/.test(field.type)) {
+              fieldTerms.push(`fields.${field.slug}.fileName:${vm.searchTerm}*`);
+              fieldTerms.push(`fields.${field.slug}.original.fileName:${vm.searchTerm}*`);
+            } else {
+              fieldTerms.push(`fields.${field.slug}:${vm.searchTerm}*`);
+            }
+          });
         });
 
         options.q.push(`(${fieldTerms.join(' OR ')})`);
@@ -228,17 +223,18 @@ class EntityGridController {
 
         let columnName = column.name.replace(/fields\.|\.value/g, '');
 
-        const columnOptions = HelperFactory.getColumnOptions(columnName);
-
         if (/^(modified|publishedAt)$/.test(columnName)) {
           type = '<number>';
 
         } else if (/^(slug|title|schema)$/.test(columnName)) {
           type = '<string>';
 
-        } else if (columnOptions && columnOptions.style !== 'thumbnail') {
-          columnName = `fields.${columnName}`;
-          type = '<string>';
+        } else {
+          const columnOptions = HelperFactory.getColumnOptions(columnName);
+          if (columnOptions && columnOptions.style !== 'thumbnail') {
+            columnName = `fields.${columnName}`;
+            type = '<string>';
+          }
         }
 
         options.sort.push(`${direction}sort.${columnName}${type}`);
@@ -447,7 +443,8 @@ class EntityGridController {
 
     if (vm.mode === 'normal' && state) {
       bookmarks = state.bookmarks;
-      vm.grid.data = vm.items = state.data;
+      vm.grid.data = state.data;
+      vm.items = state.data;
       vm.totalItems = state.totalItems;
       vm.searchTerm = state.searchTerm;
       vm.page = state.page;

@@ -2,37 +2,31 @@ import he from 'he/he';
 
 class FieldEntityController {
   /* @ngInject */
-  constructor($scope, $q, $log, AdminFactory, EntityFactory) {
+  constructor($scope, $q, $log, ConfigFactory, EntityFactory) {
     const vm = this;
 
-    if (!vm.fieldModel && vm.fieldOptions.settings.multiple) {
-      vm.fieldModel = [];
+    if (!vm.fieldModel.value && vm.fieldOptions.settings.multiple) {
+      vm.fieldModel.value = [];
     }
 
-    const schemas = AdminFactory.getByKey('schema');
-
     vm.schemas = vm.fieldOptions.settings.schemas.map(schema => ({
-      name: schemas[schema.slug].name,
-      slug: schema.slug,
+      name: ConfigFactory.getSchema(schema).name,
+      slug: schema,
     }));
 
     vm.newEntity = (schemaSlug) => {
       EntityFactory.newEntity(schemaSlug)
         .then((entity) => {
           if (vm.fieldOptions.settings.multiple) {
-            vm.fieldModel.push(entity);
+            vm.fieldModel.value.push(entity);
           } else {
-            vm.fieldModel = entity;
+            vm.fieldModel.value = entity;
           }
         });
     };
 
-    // vm.group = function (entity) {
-    //   return AdminFactory.getByKey('schema')[entity.schema].name;
-    // };
-
     vm.search = query => $q((resolve, reject) => {
-      const schemas = vm.fieldOptions.settings.schemas.map(schema => `schema:${schema.slug}`);
+      const schemas = vm.fieldOptions.settings.schemas.map(schema => `schema:${schema}`);
 
       if (!schemas.length) {
         $log.error('No schemas specified');

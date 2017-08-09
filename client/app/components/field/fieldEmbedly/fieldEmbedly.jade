@@ -4,37 +4,37 @@ md-subheader.md-no-sticky.field-toolbar
       md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
       h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
       span(flex)
-      md-button.md-icon-button(aria-label="Delete", ng-show="vm.fieldModel.oembed", ng-click="vm.fieldModel = null")
+      md-button.md-icon-button(aria-label="Delete", ng-show="vm.fieldModel.value.oembed", ng-click="vm.fieldModel.value = null")
         md-icon(md-font-set="material-icons") delete
 
-div(ng-show="!vm.fieldModel.oembed", flex, layout="row", layout-margin)
+div(ng-show="!vm.fieldModel.value.oembed", flex, layout="row", layout-margin)
 
   md-input-container(flex, md-no-float)
-    input(ng-model="vm.fieldModel.url", ng-paste="vm.submitUrl()" ng-keypress="($event.charCode === 13) ? vm.submitUrl() : return", placeholder="Source URL", ng-pattern="vm.embedlyRegex", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined")
+    input(ng-model="vm.fieldModel.value.url", ng-paste="vm.submitUrl()" ng-keypress="($event.charCode === 13) ? vm.submitUrl() : return", placeholder="Source URL", ng-pattern="vm.embedlyRegex", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined")
 
   md-button.md-icon-button(aria-label="Submit", ng-click="vm.submitUrl()")
     md-icon(md-font-set="material-icons") get_app
 
-div(ng-show="vm.fieldModel.oembed", flex, layout="row", layout-margin)
+div(ng-show="vm.fieldModel.value.oembed", flex, layout="row", layout-margin)
 
   div(flex)
-    img(ng-src="{{ vm.fieldModel.oembed.thumbnail_url }}")
+    img(ng-src="{{ vm.fieldModel.value.oembed.thumbnail_url }}")
 
   div(flex)
     table
       tr
         td Provider
-        td {{vm.fieldModel.oembed.provider_name}}
+        td {{vm.fieldModel.value.oembed.provider_name}}
       tr
         td URL
         td
-          span {{vm.fieldModel.oembed.url}}
+          span {{vm.fieldModel.value.oembed.url}}
       tr
         td Title
-        td {{vm.fieldModel.oembed.title}}
+        td {{vm.fieldModel.value.oembed.title}}
       tr
         td Author
-        td {{vm.fieldModel.oembed.author_name}}
+        td {{vm.fieldModel.value.oembed.author_name}}
       tr
         td Dimensions
-        td {{vm.fieldModel.oembed.width}}&times;{{vm.fieldModel.oembed.height}}
+        td {{vm.fieldModel.value.oembed.width}}&times;{{vm.fieldModel.value.oembed.height}}

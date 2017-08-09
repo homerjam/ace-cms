@@ -2,7 +2,7 @@ import _ from 'lodash';
 import angular from 'angular';
 import * as modalTemplates from '../modal';
 
-const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, AdminFactory, FieldFactory, ModalService, appConfig) => {
+const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, FieldFactory, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -30,27 +30,23 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       return null;
     }
 
-    const thumbnail = FieldFactory.field(field.fieldType).thumbnail(field.value);
+    const thumbnail = FieldFactory.field(field.type).thumbnail(field.value);
 
     return service.getThumbnailUrl(thumbnail, transformSettings);
   };
 
-  service.getColumnOptions = (fieldSlug) => {
-    const fieldOpts = AdminFactory.getByKey('field')[fieldSlug];
-
-    if (!fieldOpts) {
+  service.getColumnOptions = (field) => {
+    if (!field) {
       return null;
     }
 
     const columnOptions = {
-      name: `fields.${fieldSlug}`,
-      displayName: fieldOpts.name,
+      name: `fields.${field.slug}`,
+      displayName: field.name,
       allowCellFocus: false,
     };
 
-    const fieldType = fieldOpts.fieldType;
-
-    _.extend(columnOptions, FieldFactory.field(fieldType).gridOptions);
+    _.extend(columnOptions, FieldFactory.field(field.type).gridOptions);
 
     if (columnOptions.style === 'thumbnail') {
       columnOptions.enableSorting = false;

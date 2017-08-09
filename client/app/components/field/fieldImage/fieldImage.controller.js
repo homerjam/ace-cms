@@ -6,7 +6,7 @@ import ImagePrep from '../../../lib/imagePrep';
 
 class FieldImageController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $window, $mdDialog, AdminFactory, BatchUploadFactory, FileFactory, HelperFactory, ModalService) {
+  constructor ($rootScope, $scope, $state, $window, $mdDialog, BatchUploadFactory, FileFactory, HelperFactory, ModalService) {
     const vm = this;
 
     let mode = 'normal';
@@ -16,8 +16,8 @@ class FieldImageController {
     }
 
     vm.download = () => {
-      const fileName = vm.fieldModel.original.fileName.replace(/^(#|\?)/, '_');
-      $window.open(`${$rootScope.assistUrl}/${$rootScope.slug}/file/download/${vm.fieldModel.fileName}/${fileName}`);
+      const fileName = vm.fieldModel.value.original.fileName.replace(/^(#|\?)/, '_');
+      $window.open(`${$rootScope.assistUrl}/${$rootScope.slug}/file/download/${vm.fieldModel.value.fileName}/${fileName}`);
     };
 
     vm.dzi = () => {
@@ -25,7 +25,7 @@ class FieldImageController {
         template: dziTemplate,
         controllerAs: 'vm',
         inputs: {
-          image: [$rootScope.assistUrl, $rootScope.slug, vm.fieldModel.dzi.dir, vm.fieldModel.dzi.fileName].join('/'),
+          image: [$rootScope.assistUrl, $rootScope.slug, vm.fieldModel.value.dzi.dir, vm.fieldModel.value.dzi.fileName].join('/'),
         },
       });
     };
@@ -37,11 +37,11 @@ class FieldImageController {
         controllerAs: 'vm',
         inputs: {
           availableCrops: vm.fieldOptions.settings.crops,
-          image: vm.fieldModel,
+          image: vm.fieldModel.value,
         },
       }).then((modal) => {
         modal.result.then((crops) => {
-          vm.fieldModel.crops = crops;
+          vm.fieldModel.value.crops = crops;
         });
       });
     };
@@ -49,11 +49,11 @@ class FieldImageController {
     vm.preview = () => {
       HelperFactory.mediaPreview([{
         type: 'image',
-        src: [$rootScope.assistUrl, $rootScope.slug, 'transform', 'h:1000;q:80', vm.fieldModel.fileName].join('/'),
+        src: [$rootScope.assistUrl, $rootScope.slug, 'transform', 'h:1000;q:80', vm.fieldModel.value.fileName].join('/'),
       }], 0);
     };
 
-    vm.getThumbnail = settings => (vm.fieldModel ? [$rootScope.assistUrl, $rootScope.slug, 'transform', settings, vm.fieldModel.fileName].join('/') : null);
+    vm.getThumbnail = settings => (vm.fieldModel.value ? [$rootScope.assistUrl, $rootScope.slug, 'transform', settings, vm.fieldModel.value.fileName].join('/') : null);
 
     const settings = vm.fieldOptions.settings || {};
 
@@ -189,13 +189,13 @@ class FieldImageController {
         fileSuccess: (flow, file, message) => {
           const info = JSON.parse(message);
 
-          if (vm.fieldModel) {
-            vm.fieldModel = null;
+          if (vm.fieldModel.value) {
+            vm.fieldModel.value = null;
           }
 
           FileFactory.createFile(info)
             .then((newFile) => {
-              vm.fieldModel = newFile;
+              vm.fieldModel.value = newFile;
             });
         },
         filesSubmitted: (flow, files) => {

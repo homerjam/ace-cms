@@ -13,7 +13,7 @@ div(flex, layout="row", layout-margin)
       ace-rich-text,
       options="vm.options",
       show-html="vm.showHtml",
-      ng-model="vm.fieldModel.html",
+      ng-model="vm.fieldModel.value.html",
       ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined",
       aria-label="{{vm.fieldOptions.name}}"
       )

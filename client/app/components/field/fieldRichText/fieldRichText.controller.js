@@ -166,15 +166,15 @@ class FieldRichTextController {
     const mdInputContainer = $element.find('md-input-container');
 
     $scope.$watch(() => vm.showHtml, () => {
-      if (vm.fieldModel) {
-        vm.fieldModel.html = $filter('cleanHTML')(vm.fieldModel.html);
+      if (vm.fieldModel.value) {
+        vm.fieldModel.value.html = $filter('cleanHTML')(vm.fieldModel.value.html);
       }
     });
 
     $scope.$on('aceRichText:init', (event, editor) => {
       editor.subscribe('editablePaste', () => {
         $timeout(() => {
-          vm.fieldModel.html = $filter('cleanHTML')(vm.fieldModel.html, true);
+          vm.fieldModel.value.html = $filter('cleanHTML')(vm.fieldModel.value.html, true);
         });
       });
 

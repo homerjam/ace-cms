@@ -2,7 +2,7 @@ import moment from 'moment';
 
 class DashboardController {
   /* @ngInject */
-  constructor($rootScope, $window, ConfigFactory, SettingsFactory, HelperFactory, AdminFactory) {
+  constructor($rootScope, $window, ConfigFactory, HelperFactory) {
     const vm = this;
 
     const config = ConfigFactory.config();

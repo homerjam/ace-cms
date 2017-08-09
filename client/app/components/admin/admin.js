@@ -49,7 +49,7 @@ const adminModule = angular.module('admin', [
   .filter('thumbnailFields', (FieldFactory) => {
     'ngInject';
 
-    return input => (input || []).filter(field => FieldFactory.field(field.fieldType).thumbnailField);
+    return input => (input || []).filter(field => FieldFactory.field(field.type).thumbnailField);
   })
 
   .filter('fieldNames', (AdminFactory) => {
@@ -76,16 +76,16 @@ const adminModule = angular.module('admin', [
     };
   })
 
-  .filter('fieldTypeName', (FieldFactory) => {
+  .filter('typeName', (FieldFactory) => {
     'ngInject';
 
-    return fieldType => FieldFactory.field(fieldType).name;
+    return type => FieldFactory.field(type).name;
   })
 
-  .filter('actionTypeName', (ActionFactory) => {
+  .filter('typeName', (ActionFactory) => {
     'ngInject';
 
-    return actionType => ActionFactory.action(actionType).name;
+    return type => ActionFactory.action(type).name;
   })
 
   .filter('schemaName', () => (input) => {

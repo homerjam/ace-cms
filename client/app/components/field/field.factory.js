@@ -9,12 +9,12 @@ const FieldFactory = ($rootScope) => {
 
   const factory = {
 
-    registerField(fieldType, options) {
-      fields[fieldType] = new Field(options);
+    registerField(type, options) {
+      fields[type] = new Field(options);
     },
 
-    field(fieldType) {
-      return fields[fieldType];
+    field(type) {
+      return fields[type];
     },
 
     fields() {

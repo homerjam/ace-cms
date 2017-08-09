@@ -1,17 +1,17 @@
 const webpack = require('webpack');
-const path = require('path');
 
 module.exports = {
-  devtool: 'eval',
+  // devtool: 'eval',
+  devtool: 'inline-source-map',
 
   entry: [
     'webpack-hot-middleware/client?reload=true&noInfo=true',
-    path.join(__dirname, 'client', 'app', 'app'),
+    './client/app/app.js',
   ],
 
   output: {
+    path: '/',
     publicPath: '/dev/',
-    path: path.join(__dirname, 'public', 'build'),
     filename: 'js/bundle.js',
   },
 

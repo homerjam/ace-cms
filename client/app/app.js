@@ -216,7 +216,7 @@ angular.module('app', [
     });
   })
 
-  .run(($rootScope, $state, $location, $window, $document, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, ConfigFactory, AdminFactory, SettingsFactory, EcommerceFactory, HelperFactory, $mdSidenav) => {
+  .run(($rootScope, $state, $location, $window, $document, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, ConfigFactory, HelperFactory, $mdSidenav) => {
     'ngInject';
 
     $rootScope.slug = appConfig.slug;
@@ -242,31 +242,16 @@ angular.module('app', [
       }
     });
 
-    const getUser = () => $q((resolve, reject) => {
-      AdminFactory.loadCurrentUser()
-        .then((user) => {
-          AdminFactory.loadRoles()
-            .then((roles) => {
-              if (!user.superUser && roles[user.role]) {
-                user.permissions = roles[user.role].permissions;
-              }
-
-              $rootScope.user = user;
-
-              resolve(user);
-            }, reject);
-        }, reject);
-    });
-
     const isAuthorised = (toState, toParams) => {
-      if ($rootScope.user.superUser) {
+      if ($rootScope.$isSuperUser) {
         return true;
       }
 
       let authorised = true;
-      let required;
 
       if (toState.data && toState.data.permissions) {
+        let required;
+
         if (angular.isString(toState.data.permissions)) {
           required = toState.data.permissions.split(',');
         } else {
@@ -295,13 +280,6 @@ angular.module('app', [
 
     const dependencies = [
       ConfigFactory.load(),
-      // getUser(),
-      // AdminFactory.load('schema'),
-      // AdminFactory.load('field'),
-      // AdminFactory.load('action'),
-      // AdminFactory.load('taxonomy'),
-      // SettingsFactory.loadSettings(),
-      // EcommerceFactory.loadSettings(),
     ];
 
     $transitions.onStart({ to: '*' }, (trans) => {

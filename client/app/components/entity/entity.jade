@@ -68,4 +68,4 @@ md-content(mode="{{vm.mode}}")
 
     section(ng-repeat="field in vm.schema.fields", ng-class="{disabled: field.disabled || vm.fieldDisabled(field)}")
 
-      field(field-type="field.fieldType", field-options="vm.fieldOptions(field.slug)", field-model="vm.entity.fields[field.slug].value", field-apply="field.apply", field-disabled="field.disabled")
+      field(field-type="field.type", field-options="vm.fieldOptions(field.slug)", field-model="vm.entity.fields[field.slug]", field-apply="field.apply", field-disabled="field.disabled")

@@ -1,9 +1,8 @@
-import template from './<%= name %>.html';
-// import template from './<%= name %>.jade';
+import template from './<%= name %>.jade';
 import controller from './<%= name %>.controller';
 import './<%= name %>.scss';
 
-let <%= name %>Component = function <%= name %>Component() {
+const <%= name %>Component = function <%= name %>Component() {
   'ngInject';
   return {
     restrict: 'E',

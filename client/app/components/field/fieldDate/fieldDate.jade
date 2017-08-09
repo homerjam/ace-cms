@@ -5,4 +5,4 @@ md-subheader.md-no-sticky.field-toolbar
       h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
 
 div(flex, layout="row", layout-margin)
-  md-datepicker(ng-model="vm.fieldModel", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined", md-placeholder="{{vm.fieldOptions.name}}")
+  md-datepicker(ng-model="vm.fieldModel.value", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined", md-placeholder="{{vm.fieldOptions.name}}")

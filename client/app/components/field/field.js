@@ -58,10 +58,10 @@ const fieldModule = angular.module('field', [
         return output;
       }
 
-      output = FieldFactory.field(field.fieldType).toString(field.value);
+      output = FieldFactory.field(field.type).toString(field.value);
 
       if (typeof output !== 'string') {
-        throw Error(`Cannot convert ${field.fieldType} field to string`);
+        throw Error(`Cannot convert ${field.type} field to string`);
       }
 
       output = $filter('simplifyText')(output);

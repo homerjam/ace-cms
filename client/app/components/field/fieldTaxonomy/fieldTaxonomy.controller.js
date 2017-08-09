@@ -3,23 +3,21 @@ import angular from 'angular';
 
 class FieldTaxonomyController {
   /* @ngInject */
-  constructor($q, AdminFactory, TaxonomyFactory, Slug) {
+  constructor($q, ConfigFactory, TaxonomyFactory, Slug) {
     const vm = this;
 
-    if (!vm.fieldModel) {
-      vm.fieldModel = {};
+    if (!vm.fieldModel.value) {
+      vm.fieldModel.value = {};
     }
 
-    vm.fieldModel.type = 'taxonomy';
-    vm.fieldModel.taxonomy = vm.fieldOptions.settings.taxonomy;
+    vm.fieldModel.value.taxonomy = vm.fieldOptions.settings.taxonomy;
 
-    if (!vm.fieldModel.terms) {
-      vm.fieldModel.terms = [];
+    if (!vm.fieldModel.value.terms) {
+      vm.fieldModel.value.terms = [];
     }
 
     let options = [];
-    const taxonomies = AdminFactory.getByKey('taxonomy');
-    const taxonomy = taxonomies[vm.fieldOptions.settings.taxonomy.slug];
+    const taxonomy = ConfigFactory.getTaxonomy(vm.fieldOptions.settings.taxonomy);
 
     const buildTaxonomy = (term, parents, options) => {
       if (term.terms && term.terms.length) {
@@ -61,11 +59,11 @@ class FieldTaxonomyController {
     }
 
     vm.clear = () => {
-      vm.fieldModel.terms = [];
+      vm.fieldModel.value.terms = [];
     };
 
     vm.search = query => $q((resolve, reject) => {
-      const selected = _.isArray(vm.fieldModel.terms) ? vm.fieldModel.terms.map(term => term.id) : [];
+      const selected = _.isArray(vm.fieldModel.value.terms) ? vm.fieldModel.value.terms.map(term => term.id) : [];
 
       const filteredOptions = options.filter((term) => {
         if (selected.indexOf(term.id) > -1) {

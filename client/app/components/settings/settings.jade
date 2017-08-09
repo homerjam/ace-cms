@@ -10,7 +10,7 @@ md-content
 
   form(name='vm.settingsForm', role='form', novalidate)
 
-    span(ng-if='::$root.user.superUser')
+    span(ng-if='::$root.$isSuperUser')
 
       md-subheader.md-no-sticky.field-toolbar
         md-toolbar.md-menu-toolbar

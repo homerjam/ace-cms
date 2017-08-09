@@ -6,12 +6,12 @@ class FieldDateController {
     const vm = this;
 
     // Catch invalid dates
-    if (!_.isDate(vm.fieldModel) || _.isNaN(vm.fieldModel.getTime())) {
-      vm.fieldModel = new Date();
+    if (!_.isDate(vm.fieldModel.value) || _.isNaN(vm.fieldModel.value.getTime())) {
+      vm.fieldModel.value = new Date();
     }
 
-    if (!vm.fieldModel && vm.fieldOptions.settings.required) {
-      vm.fieldModel = new Date();
+    if (!vm.fieldModel.value && vm.fieldOptions.settings.required) {
+      vm.fieldModel.value = new Date();
     }
   }
 }

@@ -34,7 +34,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
 
     const settings = field.settings || {};
 
-    if (field.fieldType === 'image') {
+    if (field.type === 'image') {
       uploadOptions.resize = {
         maxWidth: settings.maxWidth === 0 ? Infinity : settings.maxWidth || 3000,
         maxHeight: settings.maxHeight === 0 ? Infinity : settings.maxHeight || 2000,
@@ -137,7 +137,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
     });
 
     flow.on('fileAdded', (file) => {
-      const valid = extensions[field.fieldType].indexOf(file.getExtension()) > -1;
+      const valid = extensions[field.type].indexOf(file.getExtension()) > -1;
 
       if (!valid) {
         $mdDialog.show(

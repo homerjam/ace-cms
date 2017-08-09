@@ -27,8 +27,8 @@
 
             md-input-container
               label Type
-              md-select(ng-model="vm.item.fieldType")
-                md-option(ng-repeat="(fieldType, fieldOpts) in $field.fields()", value="{{fieldType}}") {{fieldOpts.name}}
+              md-select(ng-model="vm.item.type")
+                md-option(ng-repeat="(type, fieldOpts) in $field.fields()", value="{{type}}") {{fieldOpts.name}}
 
           div(ace-bind-html="vm.fieldSettingsTemplate")
 

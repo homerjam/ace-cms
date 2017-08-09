@@ -2,24 +2,22 @@ import angular from 'angular';
 
 class FieldEntityGridController {
   /* @ngInject */
-  constructor($timeout, EntityFactory, AdminFactory, HelperFactory, uiGridConstants) {
+  constructor($timeout, EntityFactory, ConfigFactory, HelperFactory, uiGridConstants) {
     const vm = this;
 
-    if (!vm.fieldModel) {
-      vm.fieldModel = [];
+    if (!vm.fieldModel.value) {
+      vm.fieldModel.value = [];
     }
 
-    const schemas = AdminFactory.getByKey('schema');
-
     vm.schemas = vm.fieldOptions.settings.schemas.map(schema => ({
-      name: schemas[schema.slug].name,
-      slug: schema.slug,
+      name: ConfigFactory.getSchema(schema).name,
+      slug: schema,
     }));
 
     vm.newEntity = (schemaSlug) => {
       EntityFactory.newEntity(schemaSlug)
         .then((entity) => {
-          vm.fieldModel.push(entity);
+          vm.fieldModel.value.push(entity);
         });
     };
 
@@ -27,19 +25,19 @@ class FieldEntityGridController {
       EntityFactory.selectEntity(schemaSlug)
         .then((selected) => {
           selected.forEach((entity) => {
-            vm.fieldModel.push(entity);
+            vm.fieldModel.value.push(entity);
           });
         });
     };
 
     vm.entityEdit = (event, entity) => {
       EntityFactory.editEntity(entity).then((updatedEntity) => {
-        vm.fieldModel.splice(vm.fieldModel.indexOf(entity), 1, updatedEntity);
+        vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1, updatedEntity);
       });
     };
 
     vm.entityRemove = (event, entity) => {
-      vm.fieldModel.splice(vm.fieldModel.indexOf(entity), 1);
+      vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1);
     };
 
     let grid;
@@ -50,28 +48,29 @@ class FieldEntityGridController {
       }
 
       const columnDefs = [];
-      const sortFieldSlugs = [];
+      const sortFields = [];
       const buttons = [];
 
       vm.fieldOptions.settings.schemas.forEach((schema) => {
-        if (schemas[schema.slug].sortFields) {
-          schemas[schema.slug].sortFields.forEach((fieldSlug) => {
-            if (sortFieldSlugs.indexOf(fieldSlug) === -1) {
-              sortFieldSlugs.push(fieldSlug);
+        if (ConfigFactory.getSchema(schema).gridColumns) {
+          ConfigFactory.getSchema(schema).gridColumns.forEach((fieldSlug) => {
+            const field = ConfigFactory.getField(schema, fieldSlug);
+            if (sortFields.indexOf(field) === -1) {
+              sortFields.push(field);
             }
           });
         }
       });
 
-      if (sortFieldSlugs.length === 0) {
+      if (sortFields.length === 0) {
         columnDefs.push({
           name: 'title',
           displayName: 'Title',
         });
 
       } else {
-        sortFieldSlugs.forEach((fieldSlug) => {
-          const colOpts = HelperFactory.getColumnOptions(fieldSlug);
+        sortFields.forEach((field) => {
+          const colOpts = HelperFactory.getColumnOptions(field);
           columnDefs.push(colOpts);
         });
       }
@@ -86,7 +85,7 @@ class FieldEntityGridController {
       });
 
       grid = {
-        data: vm.fieldModel,
+        data: vm.fieldModel.value,
         rowHeight: 70,
         headerRowHeight: 45,
         enableGridMenu: true,

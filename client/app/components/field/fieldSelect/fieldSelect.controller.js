@@ -5,8 +5,8 @@ class FieldSelectController {
   constructor($q, Slug) {
     const vm = this;
 
-    if (!vm.fieldModel) {
-      vm.fieldModel = [];
+    if (!vm.fieldModel.value) {
+      vm.fieldModel.value = [];
     }
 
     vm.search = query => $q((resolve, reject) => {

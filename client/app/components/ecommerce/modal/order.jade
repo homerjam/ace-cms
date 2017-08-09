@@ -25,8 +25,8 @@
         div(flex, layout="row", layout-margin)
 
           md-button.md-raised.md-primary(ng-click="vm.refund()", ng-disabled="vm.order.charge.amountRefunded === vm.order.charge.amount") Refund
-          md-button(ng-if="::$root.user.superUser", ng-click="vm.previewEmailTemplate('orderReceipt')") Receipt
-          md-button(ng-if="::$root.user.superUser", ng-click="vm.previewEmailTemplate('orderNotification')") Notification
+          md-button(ng-if="::$root.$isSuperUser", ng-click="vm.previewEmailTemplate('orderReceipt')") Receipt
+          md-button(ng-if="::$root.$isSuperUser", ng-click="vm.previewEmailTemplate('orderNotification')") Notification
 
         hr
 

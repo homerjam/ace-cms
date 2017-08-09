@@ -2,23 +2,21 @@ import _ from 'lodash';
 
 class FieldEntityTileController {
   /* @ngInject */
-  constructor ($rootScope, $scope, AdminFactory, EntityFactory, HelperFactory) {
+  constructor ($rootScope, $scope, ConfigFactory, EntityFactory, HelperFactory) {
     const vm = this;
 
-    if (!vm.fieldModel) {
-      vm.fieldModel = [];
+    if (!vm.fieldModel.value) {
+      vm.fieldModel.value = [];
     }
 
-    const schemas = AdminFactory.getByKey('schema');
-
     vm.schemas = vm.fieldOptions.settings.schemas.map(schema => ({
-      name: schemas[schema.slug].name,
-      slug: schema.slug,
+      name: ConfigFactory.getSchema(schema).name,
+      slug: schema,
     }));
 
     function getInsertPoint () {
       let insertPoint = -1;
-      vm.fieldModel.forEach((item, i) => {
+      vm.fieldModel.value.forEach((item, i) => {
         if (insertPoint === -1 && item.$selected) {
           insertPoint = i;
         }
@@ -32,9 +30,9 @@ class FieldEntityTileController {
           const insertPoint = getInsertPoint();
 
           if (insertPoint > -1) {
-            vm.fieldModel.splice(insertPoint, 0, entity);
+            vm.fieldModel.value.splice(insertPoint, 0, entity);
           } else {
-            vm.fieldModel.push(entity);
+            vm.fieldModel.value.push(entity);
           }
         });
     };
@@ -48,9 +46,9 @@ class FieldEntityTileController {
 
           selected.forEach((entity) => {
             if (insertPoint > -1) {
-              vm.fieldModel.splice(insertPoint, 0, entity);
+              vm.fieldModel.value.splice(insertPoint, 0, entity);
             } else {
-              vm.fieldModel.push(entity);
+              vm.fieldModel.value.push(entity);
             }
           });
         });
@@ -60,33 +58,33 @@ class FieldEntityTileController {
       event.stopPropagation();
 
       EntityFactory.editEntity(entity).then((updatedEntity) => {
-        vm.fieldModel.splice(vm.fieldModel.indexOf(entity), 1, updatedEntity);
+        vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1, updatedEntity);
       });
     };
 
     vm.entityRemove = (event, entity) => {
       event.stopPropagation();
 
-      vm.fieldModel.splice(vm.fieldModel.indexOf(entity), 1);
+      vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1);
     };
 
-    vm.getSortFields = schema => AdminFactory.getByKey('schema')[schema].sortFields;
+    vm.getSortFields = schema => ConfigFactory.getSchema(schema).gridColumns;
 
     vm.hasPreview = (i) => {
-      if (!vm.fieldModel[i]) {
+      if (!vm.fieldModel.value[i]) {
         return false;
       }
 
-      return AdminFactory.getByKey('schema')[vm.fieldModel[i].schema].thumbnailField;
+      return ConfigFactory.getSchema(vm.fieldModel.value[i].schema).thumbnailField;
     };
 
     vm.preview = (event, item) => {
       event.stopPropagation();
 
       const media = [];
-      const index = vm.fieldModel.indexOf(item);
+      const index = vm.fieldModel.value.indexOf(item);
 
-      vm.fieldModel.forEach((item) => {
+      vm.fieldModel.value.forEach((item) => {
         const thumbnail = EntityFactory.getEntityThumbnail(item);
 
         if (!thumbnail) {
@@ -107,21 +105,21 @@ class FieldEntityTileController {
     };
 
     const setGroupSize = (item) => {
-      const index = vm.fieldModel.indexOf(item);
+      const index = vm.fieldModel.value.indexOf(item);
       let beforeCount = 0;
       let afterCount = 0;
       let i;
 
       for (i = index - 1; i > -1; i--) {
-        if (vm.fieldModel[i].groupAfter) {
+        if (vm.fieldModel.value[i].groupAfter) {
           beforeCount++;
         } else {
           break;
         }
       }
 
-      for (i = index + 1; i < vm.fieldModel.length; i++) {
-        if (vm.fieldModel[i].groupBefore) {
+      for (i = index + 1; i < vm.fieldModel.value.length; i++) {
+        if (vm.fieldModel.value[i].groupBefore) {
           afterCount++;
         } else {
           break;
@@ -133,15 +131,15 @@ class FieldEntityTileController {
 
     const testGroupSize = (item) => {
       const limit = vm.fieldOptions.settings.groupSizeLimit || Infinity;
-      const index = vm.fieldModel.indexOf(item);
+      const index = vm.fieldModel.value.indexOf(item);
       let prevItem;
       let nextItem;
 
       if (index > 0) {
-        prevItem = vm.fieldModel[index - 1];
+        prevItem = vm.fieldModel.value[index - 1];
       }
-      if (index < vm.fieldModel.length - 1) {
-        nextItem = vm.fieldModel[index + 1];
+      if (index < vm.fieldModel.value.length - 1) {
+        nextItem = vm.fieldModel.value[index + 1];
       }
 
       if (prevItem && item.$groupSize + prevItem.$groupSize > limit && !item.groupBefore) {
@@ -171,21 +169,21 @@ class FieldEntityTileController {
       event.stopPropagation();
 
       item.groupBefore = !item.groupBefore;
-      vm.fieldModel[vm.fieldModel.indexOf(item) - 1].groupAfter = item.groupBefore;
+      vm.fieldModel.value[vm.fieldModel.value.indexOf(item) - 1].groupAfter = item.groupBefore;
     };
 
     vm.toggleGroupAfter = (event, item) => {
       event.stopPropagation();
 
       item.groupAfter = !item.groupAfter;
-      vm.fieldModel[vm.fieldModel.indexOf(item) + 1].groupBefore = item.groupAfter;
+      vm.fieldModel.value[vm.fieldModel.value.indexOf(item) + 1].groupBefore = item.groupAfter;
     };
 
     $scope.$watch(() => {
-      return vm.fieldModel;
+      return vm.fieldModel.value;
     }, (newValue) => {
-      vm.fieldModel.forEach(setGroupSize);
-      vm.fieldModel.forEach(testGroupSize);
+      vm.fieldModel.value.forEach(setGroupSize);
+      vm.fieldModel.value.forEach(testGroupSize);
     }, true);
 
     $scope.$on('aceSortable:change', (event, obj) => {
@@ -208,7 +206,7 @@ class FieldEntityTileController {
         }
 
         selected.forEach((index, i) => {
-          HelperFactory.move.apply(vm.fieldModel, [index, reverse ? obj.to - i : obj.to + i]);
+          HelperFactory.move.apply(vm.fieldModel.value, [index, reverse ? obj.to - i : obj.to + i]);
         });
       }
     });
@@ -216,7 +214,7 @@ class FieldEntityTileController {
     vm.clickItem = (event, item) => {
       if (!(event.metaKey || event.ctrlKey) && !event.shiftKey) {
         const wasSelected = item.$selected;
-        vm.fieldModel.forEach((item, i) => {
+        vm.fieldModel.value.forEach((item, i) => {
           item.$selected = false;
         });
         item.$selected = !wasSelected;
@@ -229,10 +227,10 @@ class FieldEntityTileController {
       }
 
       let i;
-      const index = vm.fieldModel.indexOf(item);
+      const index = vm.fieldModel.value.indexOf(item);
       const selected = [];
 
-      vm.fieldModel.forEach((item, i) => {
+      vm.fieldModel.value.forEach((item, i) => {
         if (item.$selected) {
           selected.push(i);
         }
@@ -240,11 +238,11 @@ class FieldEntityTileController {
 
       if (index < selected[0]) {
         for (i = index; i < selected[0]; i++) {
-          vm.fieldModel[i].$selected = true;
+          vm.fieldModel.value[i].$selected = true;
         }
       } else if (index > selected[selected.length - 1]) {
         for (i = selected[0]; i <= index; i++) {
-          vm.fieldModel[i].$selected = true;
+          vm.fieldModel.value[i].$selected = true;
         }
       }
     };
@@ -254,7 +252,7 @@ class FieldEntityTileController {
     };
 
     vm.getCollection = (scope) => {
-      return vm.fieldModel;
+      return vm.fieldModel.value;
     };
   }
 }
