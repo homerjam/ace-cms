@@ -25,3 +25,17 @@ md-input-container > md-select {
 md-chip [ace-sortable] * {
   pointer-events: none;
 }
+
+.md-table {
+  .md-head {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 6px 10px rgba(0, 0, 0, 0.05);
+  }
+  .md-column {
+    font-weight: 500 !important;
+  }
+  .md-row:first-child {
+    .md-cell {
+      border: none;
+    }
+  }
+}

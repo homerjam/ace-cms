@@ -59,7 +59,7 @@ gulp.task('watch', () => {
   });
 });
 
-// $ gulp component --name ComponentName [--parent parentfolder]
+// $ gulp component --name componentName [--parent parentfolder]
 gulp.task('component', () => {
   const name = yargs.argv.name;
   const parentPath = yargs.argv.parent || '';

@@ -12,7 +12,7 @@ class FieldRichTextController {
       buttonTitle: 'Insert Entity',
       buttonHtml: '<i class="mdi mdi-bookmark-outline"></i>',
       bookmarkHtml: selection => $q((resolve, reject) => {
-        EntityFactory.selectEntity(vm.fieldOptions.settings.schemas[0].slug)
+        EntityFactory.selectEntity(vm.fieldOptions.settings.schemas[0])
           .then((entities) => {
             resolve(`<a href="urn:entity:${entities[0]._id}">${selection}</a>`);
           }, reject);
@@ -24,7 +24,7 @@ class FieldRichTextController {
       buttonTitle: 'Create Entity',
       buttonHtml: '<i class="mdi mdi-bookmark-plus-outline"></i>',
       bookmarkHtml: selection => $q((resolve, reject) => {
-        EntityFactory.newEntity(vm.fieldOptions.settings.schemas[0].slug)
+        EntityFactory.newEntity(vm.fieldOptions.settings.schemas[0])
           .then((entity) => {
             resolve(`<a href="urn:entity:${entity._id}">${selection}</a>`);
           }, reject);
@@ -78,7 +78,7 @@ class FieldRichTextController {
       },
       {
         name: 'quote',
-        contentDefault: '<i class="mdi mdi-format-quote"></i>',
+        contentDefault: '<i class="mdi mdi-format-quote-open"></i>',
       },
       {
         name: 'unorderedlist',

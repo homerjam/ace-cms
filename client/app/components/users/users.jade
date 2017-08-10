@@ -1,0 +1,27 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 Users
+
+md-content
+
+  md-table-container
+    table(md-table)
+
+      thead(md-head)
+        tr(md-row)
+          th(md-column) First Name
+          th(md-column) Last Name
+          th(md-column) Email
+          th(md-column) Role
+          th(md-column) Active
+
+      tbody(md-body)
+        tr(md-row, ng-repeat="user in vm.users")
+          td(md-cell) {{user.firstName}}
+          td(md-cell) {{user.lastName}}
+          td(md-cell) {{user.email}}
+          td(md-cell) {{user.role | roleName}}
+          td(md-cell)
+            span(class="{{user.active | crossCheck}}")

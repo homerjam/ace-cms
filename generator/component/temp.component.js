@@ -4,6 +4,7 @@ import './<%= name %>.scss';
 
 const <%= name %>Component = function <%= name %>Component() {
   'ngInject';
+
   return {
     restrict: 'E',
     scope: {},

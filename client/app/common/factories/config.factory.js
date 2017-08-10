@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import ConfigModalController from '../controllers/config.modal.controller';
-import * as configModalTemplates from '../modal';
+import * as configModalTemplates from '../templates/modal';
 
 const ConfigFactory = ($rootScope, $http, $q, $window, ModalService, appConfig, $auth, SatellizerConfig) => {
   'ngInject';
@@ -71,6 +71,8 @@ const ConfigFactory = ($rootScope, $http, $q, $window, ModalService, appConfig, 
   service.getAction = (schemaSlug, actionSlug) => (service.getSchema(schemaSlug).actions || []).filter(action => action.slug === actionSlug)[0];
 
   service.getTaxonomy = taxonomySlug => Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0];
+
+  service.getRole = roleSlug => Config.roles.filter(role => role.slug === roleSlug)[0];
 
   service.authenticateWithProvider = provider => $q((resolve, reject) => {
     $http({

@@ -56,7 +56,7 @@
               tbody(md-body)
                 tr(md-row, ng-repeat="role in $admin.getRoles()")
                   td(md-cell) {{role.name}}
-                  td(md-cell) {{role.permissions.user ? '&check;' : '&times;'}}
+                  td(md-cell) {{role.permissions.users ? '&check;' : '&times;'}}
                   td(md-cell) {{role.permissions.fileCreate ? '&check;' : '&times;'}}
                   td(md-cell) {{role.permissions.taxonomyCreate ? '&check;' : '&times;'}}
                   td(md-cell) {{role.permissions.entityDelete ? '&check;' : '&times;'}}

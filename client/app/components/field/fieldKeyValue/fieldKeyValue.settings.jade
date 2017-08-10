@@ -11,7 +11,7 @@ div(layout="column", layout-margin)
         span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip}}
     br
 
-  md-input-container(ng-if="vm.item.settings.source === 'taxonomy'")
-    label Taxonomy
-    md-select(ng-model='vm.item.settings.taxonomy', required, placeholder="Taxonomy")
-      md-option(ng-repeat="item in $admin.get('taxonomy', true)", ng-value='item') {{item.name}}
+  //- md-input-container(ng-if="vm.item.settings.source === 'taxonomy'")
+  //-   label Taxonomy
+  //-   md-select(ng-model='vm.item.settings.taxonomy', required, placeholder="Taxonomy")
+  //-     md-option(ng-repeat="item in $admin.get('taxonomy', true)", ng-value='item') {{item.name}}
