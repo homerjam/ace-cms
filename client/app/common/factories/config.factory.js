@@ -3,7 +3,7 @@ import _ from 'lodash';
 import ConfigModalController from '../controllers/config.modal.controller';
 import * as configModalTemplates from '../modal';
 
-const ConfigFactory = ($rootScope, $http, $q, $log, ModalService, appConfig) => {
+const ConfigFactory = ($rootScope, $http, $q, $window, ModalService, appConfig, $auth, SatellizerConfig) => {
   'ngInject';
 
   const service = {};
@@ -23,32 +23,46 @@ const ConfigFactory = ($rootScope, $http, $q, $log, ModalService, appConfig) => 
   //   observerCallbacks.push(callback);
   // };
 
-  service.load = async () => {
-    const response = await $http.get(`${appConfig.apiUrl}/config`);
-
+  const update = (response) => {
     Config = response.data;
+    $rootScope.$config = Config;
 
     const userId = response.headers('x-user-id');
-    const role = response.headers('x-role');
-
     Config.users.forEach((user, i) => {
       if (user.id === userId) {
         User = Config.users[i];
       }
     });
-
-    $rootScope.$config = Config;
-
-    $rootScope.$isSuperUser = role === 'super';
-
     $rootScope.$user = User;
+
+    const role = response.headers('x-role');
+    $rootScope.$isSuperUser = role === 'super';
 
     return Config;
   };
 
-  service.config = () => Config;
+  service.load = async () => {
+    const response = await $http.get(`${appConfig.apiUrl}/config`);
+    return update(response);
+  };
 
-  service.user = () => User;
+  service.save = async (config) => {
+    const response = await $http.post(`${appConfig.apiUrl}/config`, { config });
+    return update(response);
+  };
+
+  service.getConfig = () => _.cloneDeep(Config);
+
+  service.setConfig = (config) => {
+    Config = config;
+  };
+
+  service.getUser = (userId = null) => {
+    if (userId) {
+      return Config.users.filter(user => user.id === userId)[0];
+    }
+    return _.cloneDeep(User);
+  };
 
   service.getSchema = schemaSlug => Config.schemas.filter(schema => schema.slug === schemaSlug)[0];
 
@@ -58,7 +72,26 @@ const ConfigFactory = ($rootScope, $http, $q, $log, ModalService, appConfig) => 
 
   service.getTaxonomy = taxonomySlug => Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0];
 
-  service.getUser = userId => Config.users.filter(user => user.id === userId)[0];
+  service.authenticateWithProvider = provider => $q((resolve, reject) => {
+    $http({
+      method: 'GET',
+      url: `${appConfig.apiUrl}/auth/${provider}/config`,
+      cache: true,
+    })
+      .then((response) => {
+        SatellizerConfig.providers[provider].clientId = response.data.clientId;
+        SatellizerConfig.providers[provider].redirectUri = `${$window.location.origin}${appConfig.apiUrl}/auth/${provider}`;
+        SatellizerConfig.providers[provider].url = `${appConfig.apiUrl}/auth/${provider}`;
+        SatellizerConfig.providers[provider].popupOptions = {};
+
+        $auth.authenticate(provider, {
+          clientSecret: response.data.clientSecret,
+        })
+          .then((response) => {
+            resolve(response.data);
+          }, reject);
+      }, reject);
+  });
 
   // service.loadCurrentUser = () => $q((resolve, reject) => {
   //   $http({

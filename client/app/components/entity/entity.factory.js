@@ -67,7 +67,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     const schema = ConfigFactory.getSchema(entity.schema);
 
     // Grab title template, fallback to first field
-    const titleTemplate = schema.titleTemplate && schema.titleTemplate !== '' ? schema.titleTemplate : schema.singular ? schema.name : `{{${schema.fields[0].slug}}}`;
+    const titleTemplate = schema.titleTemplate && schema.titleTemplate !== '' ? schema.titleTemplate : schema.settings.singular ? schema.name : `{{${schema.fields[0].slug}}}`;
 
     // Compile template
     title = Handlebars.compile(titleTemplate)(fields);
@@ -132,11 +132,11 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     }
 
     if (!entity.createdBy) {
-      entity.createdBy = ConfigFactory.user().id;
+      entity.createdBy = ConfigFactory.getUser().id;
       entity.created = now;
     }
 
-    entity.modifiedBy = ConfigFactory.user().id;
+    entity.modifiedBy = ConfigFactory.getUser().id;
     entity.modified = now;
 
     if (entity.published) {

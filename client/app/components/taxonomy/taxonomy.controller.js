@@ -1,12 +1,13 @@
+import _ from 'lodash';
 import angular from 'angular';
 import termTemplate from './taxonomy.term.jade';
 
 class TaxonomyController {
   /* @ngInject */
-  constructor($rootScope, $scope, $document, $state, $transitions, $timeout, $log, $q, $mdDialog, TaxonomyFactory, HelperFactory, Slug) {
+  constructor($rootScope, $scope, $document, $state, $stateParams, $transitions, $timeout, $log, $q, $mdDialog, ConfigFactory, TaxonomyFactory, HelperFactory, Slug) {
     const vm = this;
 
-    vm.taxonomy = $scope.$parent.$resolve.taxonomy;
+    vm.taxonomy = ConfigFactory.getTaxonomy($stateParams.taxonomySlug);
 
     vm.termTemplate = termTemplate;
 
@@ -19,7 +20,6 @@ class TaxonomyController {
     const isChanged = $transitions.onStart({ to: '*' }, (trans) => {
       if (!angular.equals(originalTerms, vm.taxonomy.terms)) {
         const confirm = $mdDialog.confirm()
-          // .title('Confirm Action')
           .textContent('You have unsaved changes, are you sure?')
           .cancel('Cancel')
           .ok('Confirm');
@@ -28,7 +28,6 @@ class TaxonomyController {
           .show(confirm)
           .then(() => {
             isChanged();
-
             $state.go(trans.to().name, trans.params('to'));
           });
 
@@ -39,7 +38,6 @@ class TaxonomyController {
     const editChild = (scope, prevTitle) => {
       const childNodes = scope.childNodes();
 
-      // var childScope = childNodes[childNodes.length - 1];
       const childScope = childNodes[0];
 
       childScope.prevTitle = prevTitle || childScope.$modelValue.title;
@@ -47,8 +45,8 @@ class TaxonomyController {
     };
 
     vm.newTerm = () => {
-      const term = TaxonomyFactory.newTerm();
-      term.terms = [];
+      const term = TaxonomyFactory.getNewTerm();
+
       vm.taxonomy.terms.unshift(term);
 
       $timeout(() => {
@@ -57,14 +55,12 @@ class TaxonomyController {
     };
 
     vm.newNode = ($event, scope) => {
-      const term = TaxonomyFactory.newTerm();
-      term.terms = [];
+      const term = TaxonomyFactory.getNewTerm();
 
       if (!scope.$modelValue.terms) {
         scope.$modelValue.terms = [];
       }
 
-      // scope.$modelValue.terms.push(term);
       scope.$modelValue.terms.unshift(term);
 
       $timeout(() => {
@@ -74,7 +70,6 @@ class TaxonomyController {
 
     vm.removeNode = ($event, scope) => {
       const confirm = $mdDialog.confirm()
-        // .title('Confirm Action')
         .textContent('Delete term?')
         .cancel('Cancel')
         .ok('Delete');
@@ -82,14 +77,19 @@ class TaxonomyController {
       $mdDialog
         .show(confirm)
         .then(() => {
-          TaxonomyFactory.removeTerm({
+          TaxonomyFactory.deleteTerm({
             id: scope.$modelValue.id,
           })
-            .catch(error => $q.reject($log.error(error)))
-            .then(() => {
-              scope.remove();
-              vm.save();
-            });
+            .then(
+              (response) => {
+                scope.remove();
+
+                vm.save();
+              },
+              (error) => {
+                $log.error(error);
+              }
+            );
         });
     };
 
@@ -127,13 +127,13 @@ class TaxonomyController {
         if (scope.$modelValue.id) {
           scope.$saving = true;
 
-          TaxonomyFactory.editTerm({
+          TaxonomyFactory.updateTerm({
             id: scope.$modelValue.id,
             title: scope.$modelValue.title,
             slug: Slug.slugify(scope.$modelValue.title),
           })
             .then(
-              () => {
+              (response) => {
                 scope.prevTitle = scope.$modelValue.title;
 
                 scope.$handleScope.$editTitle = false;
@@ -143,11 +143,13 @@ class TaxonomyController {
                 scope.$saving = false;
               },
               (error) => {
+                $log.error(error);
+
                 scope.$modelValue.title = scope.prevTitle;
 
                 scope.$saving = false;
               }
-          );
+            );
         }
       }
     };
@@ -155,7 +157,6 @@ class TaxonomyController {
     vm.treeOptions = {
       defaultCollapsed: true,
       accept() {
-        // return destNodes.$nodeScope;
         return true;
       },
       dropped() {
@@ -173,17 +174,34 @@ class TaxonomyController {
       $scope.$broadcast('angular-ui-tree:expand-all');
     };
 
+    const slugifyTerms = (term) => {
+      term.slug = Slug.slugify(term.title);
+
+      (term.terms || []).forEach((term) => {
+        slugifyTerms(term);
+      });
+    };
+
     vm.save = () => {
-      TaxonomyFactory.save(vm.taxonomy)
+      const taxonomy = angular.fromJson(angular.toJson(vm.taxonomy));
+
+      taxonomy.terms.forEach((term) => {
+        slugifyTerms(term);
+      });
+
+      TaxonomyFactory.updateTaxonomy(taxonomy)
         .then(
-          (result) => {
-            vm.taxonomy = result[0];
+          (response) => {
+            // vm.taxonomy = _.find(response.data.taxonomies, { slug: taxonomy.slug });
+
             originalTerms = angular.copy(vm.taxonomy.terms);
           },
           (error) => {
+            $log.error(error);
+
             vm.taxonomy.terms = originalTerms;
           }
-      );
+        );
     };
 
   }

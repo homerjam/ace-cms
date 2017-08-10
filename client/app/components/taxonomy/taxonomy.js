@@ -15,13 +15,6 @@ const taxonomyModule = angular.module('taxonomy', [
 
     $stateProvider.state('taxonomy', {
       url: '/taxonomy/{taxonomySlug:[a-zA-Z0-9_-]{2,200}}',
-      resolve: {
-        taxonomy: ($stateParams, TaxonomyFactory) => {
-          'ngInject';
-
-          return TaxonomyFactory.getByKey($stateParams.taxonomySlug);
-        },
-      },
       views: {
         content: {
           template: '<taxonomy></taxonomy>',

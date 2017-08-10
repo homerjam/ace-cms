@@ -18,14 +18,19 @@ const fieldRichTextModule = angular.module('fieldRichText', [])
         return $filter('cleanHTML')(value.html);
       },
       toDb(value, settings) {
-        let entities = [];
+        if (!value) {
+          value = {
+            html: '',
+            entities: [],
+          };
+        }
 
         const pattern = 'href=["\']urn:entity:(\\S+)["\']';
         let re = new RegExp(pattern, 'gim');
         const matchStrings = value.html.match(re);
 
         if (matchStrings) {
-          entities = matchStrings.map((matchString) => {
+          value.entities = matchStrings.map((matchString) => {
             re = new RegExp(pattern, 'gim');
 
             const match = re.exec(matchString);
@@ -35,8 +40,6 @@ const fieldRichTextModule = angular.module('fieldRichText', [])
             };
           });
         }
-
-        value.entities = entities;
 
         return value;
       },

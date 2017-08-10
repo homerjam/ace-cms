@@ -1,6 +1,6 @@
-import order from './ecommerce.order.jade';
-import discount from './ecommerce.discount.jade';
-import settings from './ecommerce.settings.jade';
+import order from './templates/order.jade';
+import discount from './templates/discount.jade';
+import settings from './templates/settings.jade';
 import controller from './ecommerce.controller';
 import './ecommerce.scss';
 

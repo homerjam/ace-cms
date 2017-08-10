@@ -3,7 +3,7 @@ import order from './order.jade';
 import refund from './refund.jade';
 
 export {
-discount,
-order,
-refund,
+  discount,
+  order,
+  refund,
 };

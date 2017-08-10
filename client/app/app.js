@@ -64,7 +64,7 @@ angular.module('app', [
 
   .directive('app', AppComponent)
 
-  .config(($compileProvider, $stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $httpProvider, $provide, $sceDelegateProvider, $sceProvider, $qProvider, $localeProvider, cfpLoadingBarProvider, tmhDynamicLocaleProvider, $mdDateLocaleProvider, $mdThemingProvider, $mdIconProvider, appConfig) => {
+  .config(($compileProvider, $stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $httpProvider, $provide, $sceDelegateProvider, $sceProvider, $qProvider, $localeProvider, cfpLoadingBarProvider, tmhDynamicLocaleProvider, $mdDateLocaleProvider, $mdThemingProvider, $mdIconProvider, $authProvider, appConfig) => {
     'ngInject';
 
     // Compilation
@@ -213,6 +213,37 @@ angular.module('app', [
           return $q.reject(response);
         },
       };
+    });
+
+    // Providers
+    $authProvider.instagram({
+      scope: ['basic', 'public_content'],
+    });
+
+    $authProvider.oauth2({
+      name: 'vimeo',
+      authorizationEndpoint: 'https://api.vimeo.com/oauth/authorize',
+      scope: ['public', 'private', 'video_files'],
+      defaultUrlParams: ['response_type', 'client_id', 'redirect_uri'],
+      responseType: 'code',
+      responseParams: {
+        code: 'code',
+        clientId: 'clientId',
+        redirectUri: 'redirectUri',
+      },
+    });
+
+    $authProvider.oauth2({
+      name: 'stripe',
+      authorizationEndpoint: 'https://connect.stripe.com/oauth/authorize',
+      scope: ['read_write'],
+      defaultUrlParams: ['response_type', 'client_id', 'redirect_uri'],
+      responseType: 'code',
+      responseParams: {
+        code: 'code',
+        clientId: 'clientId',
+        redirectUri: 'redirectUri',
+      },
     });
   })
 

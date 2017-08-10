@@ -2,19 +2,12 @@
 	// box-sizing: border-box !important;
 }
 
-html {
-  @include scrollbars($bar: rgb(250, 250, 250), $handle: lightgrey, $width: 10px, $radius: 0, $border: 0);
-}
-
 body {
   overflow: hidden;
 }
 
 textarea {
 	min-height: 10rem;
-}
-
-textarea {
 	resize: vertical;
 }
 

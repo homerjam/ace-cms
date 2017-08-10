@@ -5,7 +5,7 @@ class DashboardController {
   constructor($rootScope, $window, ConfigFactory, HelperFactory) {
     const vm = this;
 
-    const config = ConfigFactory.config();
+    const config = ConfigFactory.getConfig();
 
     if (!config.client.baseUrl || config.client.baseUrl === '') {
       return;

@@ -4,42 +4,12 @@ md-toolbar
       md-icon(md-icon-set="material-icons") menu
     h2 Settings
     span(flex)
-    md-button(ng-click='vm.saveSettings()', ng-disabled='vm.settingsForm.$invalid') Save
+    md-button(ng-click='vm.save()', ng-disabled='vm.form.$invalid') Save
 
 md-content
 
-  form(name='vm.settingsForm', role='form', novalidate)
+  form(name='vm.form', role='form', novalidate)
 
-    span(ng-if='::$root.$isSuperUser')
-
-      md-subheader.md-no-sticky.field-toolbar
-        md-toolbar.md-menu-toolbar
-          .md-toolbar-tools
-            h3 Super User
-
-      div(flex, layout="column", layout-margin)
-        br
-
-        md-input-container
-          label Client Name
-          input(ng-model='vm.settings.client.name', aria-label="Client Name")
-
-        md-input-container
-          label Website URL
-          input(ng-model='vm.settings.url', aria-label="Website URL")
-
-        md-input-container
-          label Google Analytics View ID
-          input(ng-model='vm.settings.ga.view', aria-label="Google Analytics View ID")
-
-        md-input-container
-          md-checkbox(ng-model='vm.settings.ecommerce.enabled', aria-label='E-commerce enabled?') E-commerce module enabled?
-
-        md-input-container
-          md-checkbox(ng-model='vm.settings.providers.instagram', aria-label='Instagram enabled?') Connect Instagram enabled?
-
-        md-input-container
-          md-checkbox(ng-model='vm.settings.providers.vimeo', aria-label='Vimeo enabled?') Connect Vimeo enabled?
 
     md-subheader.md-no-sticky.field-toolbar
       md-toolbar.md-menu-toolbar
@@ -49,47 +19,77 @@ md-content
     div(flex, layout="column", layout-margin)
       br
 
+      md-input-container(ng-if='::$root.$isSuperUser')
+        label Client Name
+        input(ng-model='vm.config.client.name', aria-label="Client Name")
+
+      md-input-container(ng-if='::$root.$isSuperUser')
+        label Website URL
+        input(ng-model='vm.config.client.baseUrl', aria-label="Website URL")
+
+      md-input-container(ng-if='::$root.$isSuperUser')
+        label Google Analytics View ID
+        input(ng-model='vm.config.client.gaView', aria-label="Google Analytics View ID")
+
       md-input-container
         label Metadata Description
-        textarea(ng-model='vm.settings.metadata.description')
+        textarea(ng-model='vm.config.client.metadata.description')
 
-    span(ng-show="vm.settings.providers.instagram")
+    span(ng-if='::$root.$isSuperUser')
+
+      md-subheader.md-no-sticky.field-toolbar
+        md-toolbar.md-menu-toolbar
+          .md-toolbar-tools
+            h3 Modules / Providers
+
+      div(flex, layout="column", layout-margin)
+
+        md-input-container
+          md-checkbox(ng-model='vm.config.moduleEnabled.ecommerce', aria-label='E-commerce module') E-commerce module
+
+        md-input-container
+          md-checkbox(ng-model='vm.config.providerEnabled.instagram', aria-label='Instagram') Instagram provider
+
+        md-input-container
+          md-checkbox(ng-model='vm.config.providerEnabled.vimeo', aria-label='Vimeo') Vimeo provider
+
+    span(ng-show="vm.config.providerEnabled.instagram")
 
       md-subheader.md-no-sticky.field-toolbar
         md-toolbar.md-menu-toolbar
           .md-toolbar-tools
             h3 Instagram
             span(flex)
-            md-button(ng-click="vm.authenticateWithProvider('instagram')") {{ vm.settings.instagram.access_token ? 'Reconnect' : 'Connect' }}
-            span(ng-show="vm.settings.instagram.access_token")
-              md-button(ng-click="vm.settings.instagram.access_token = null; vm.settings.instagram.user = null;") Disconnect
+            md-button(ng-click="vm.authenticateWithProvider('instagram')") {{ vm.config.provider.instagram.access_token ? 'Reconnect' : 'Connect' }}
+            span(ng-show="vm.config.provider.instagram.access_token")
+              md-button(ng-click="vm.config.provider.instagram.access_token = null; vm.config.provider.instagram.user = null;") Disconnect
 
       div(flex, layout="row", layout-margin)
 
-        .md-subhead(ng-show="!vm.settings.instagram.access_token") Connect your Instagram account
+        .md-subhead(ng-show="!vm.config.provider.instagram.access_token") Connect your Instagram account
 
-        md-list-item(ng-show="vm.settings.instagram.user")
-          img.md-avatar(ng-src="{{vm.settings.instagram.user.profile_picture}}")
+        md-list-item(ng-show="vm.config.provider.instagram.user")
+          img.md-avatar(ng-src="{{vm.config.provider.instagram.user.profile_picture}}")
           .md-list-item-text
-            a(href="https://instagram.com/{{vm.settings.instagram.user.username}}", target="_blank") @{{vm.settings.instagram.user.username}}
+            a(href="https://instagram.com/{{vm.config.provider.instagram.user.username}}", target="_blank") @{{vm.config.provider.instagram.user.username}}
 
-    span(ng-show="vm.settings.providers.vimeo")
+    span(ng-show="vm.config.providerEnabled.vimeo")
 
       md-subheader.md-no-sticky.field-toolbar
         md-toolbar.md-menu-toolbar
           .md-toolbar-tools
             h3 Vimeo
             span(flex)
-            md-button(ng-click="vm.authenticateWithProvider('vimeo')") {{ vm.settings.vimeo.access_token ? 'Reconnect' : 'Connect' }}
-            span(ng-show="vm.settings.vimeo.access_token")
-              md-button(ng-click="vm.settings.vimeo.access_token = null") Disconnect
+            md-button(ng-click="vm.authenticateWithProvider('vimeo')") {{ vm.config.provider.vimeo.access_token ? 'Reconnect' : 'Connect' }}
+            span(ng-show="vm.config.provider.vimeo.access_token")
+              md-button(ng-click="vm.config.provider.vimeo.access_token = null") Disconnect
 
       div(flex, layout="row", layout-margin)
 
-        .md-subhead(ng-show="!vm.settings.vimeo.access_token") Connect your Vimeo account
+        .md-subhead(ng-show="!vm.config.provider.vimeo.access_token") Connect your Vimeo account
 
-        md-list-item(ng-show="vm.settings.vimeo.user")
-          img.md-avatar(ng-src="{{vm.settings.vimeo.user.pictures[3].link}}")
+        md-list-item(ng-show="vm.config.provider.vimeo.user")
+          img.md-avatar(ng-src="{{vm.config.provider.vimeo.user.pictures[3].link}}")
           .md-list-item-text
-            a(href="{{vm.settings.vimeo.user.link}}", target="_blank") {{vm.settings.vimeo.user.name}}
+            a(href="{{vm.config.provider.vimeo.user.link}}", target="_blank") {{vm.config.provider.vimeo.user.name}}
 

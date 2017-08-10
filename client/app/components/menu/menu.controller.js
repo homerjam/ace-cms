@@ -4,7 +4,7 @@ class MenuController {
     const vm = this;
 
     vm.preview = () => {
-      $window.open(`${ConfigFactory.config().client.baseUrl}?apiToken=${$rootScope.apiToken}`);
+      $window.open(`${ConfigFactory.getConfig().client.baseUrl}?apiToken=${$rootScope.apiToken}`);
     };
   }
 }

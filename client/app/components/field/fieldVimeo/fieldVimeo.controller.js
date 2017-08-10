@@ -8,7 +8,7 @@ class FieldVimeoController {
     let accessToken;
 
     try {
-      accessToken = ConfigFactory.config().provider.vimeo.access_token;
+      accessToken = ConfigFactory.getConfig().provider.vimeo.access_token;
     } catch (error) {
       //
     }

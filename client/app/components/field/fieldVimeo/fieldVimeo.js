@@ -25,7 +25,7 @@ const fieldVimeoModule = angular.module('fieldVimeo', [])
         return value.url;
       },
       thumbnail(value) {
-        if (!value.video) {
+        if (!value || !value.video) {
           return null;
         }
 

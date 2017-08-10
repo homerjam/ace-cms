@@ -4,8 +4,8 @@ md-toolbar(ng-if="::!vm.entity.trashed")
       md-icon(md-icon-set="material-icons") menu
     h2
       span(ng-show="::vm.modeBreadcrumb", hide-xs, hide-sm) {{::vm.modeBreadcrumb}}
-      a(ng-if=":: !vm.schema.singular && vm.mode !== 'new'" ui-sref="entityGrid({schemaSlug: vm.schema.slug})", hide-xs, hide-sm) {{::vm.schema.name | pluralize}}
-      span(ng-if=":: vm.schema.singular || vm.mode === 'new'") {{::vm.schema.name}}
+      a(ng-if=":: !vm.schema.settings.singular && vm.mode !== 'new'" ui-sref="entityGrid({schemaSlug: vm.schema.slug})", hide-xs, hide-sm) {{::vm.schema.name | pluralize}}
+      span(ng-if=":: vm.schema.settings.singular || vm.mode === 'new'") {{::vm.schema.name}}
       span(ng-if="vm.title", ng-bind-html="vm.title")
     span(flex)
 

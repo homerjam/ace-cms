@@ -58,7 +58,7 @@ const FileFactory = ($http, $q, $log, ConfigFactory, appConfig) => {
     file = angular.copy(file);
 
     file.type = 'file';
-    file.uploadedBy = ConfigFactory.user().id;
+    file.uploadedBy = ConfigFactory.getUser().id;
     file.uploaded = JSON.stringify(new Date()).replace(/"/g, '');
 
     $http({

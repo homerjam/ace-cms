@@ -17,6 +17,7 @@ class FieldTaxonomyController {
     }
 
     let options = [];
+
     const taxonomy = ConfigFactory.getTaxonomy(vm.fieldOptions.settings.taxonomy);
 
     const buildTaxonomy = (term, parents, options) => {
@@ -95,13 +96,14 @@ class FieldTaxonomyController {
         return chip;
       }
 
-      const term = TaxonomyFactory.newTerm();
+      const term = TaxonomyFactory.getNewTerm();
 
       term.title = chip;
       term.slug = Slug.slugify(chip);
-      term.parents = [];
 
-      TaxonomyFactory.addTerm(vm.fieldOptions.settings.taxonomy.slug, term);
+      TaxonomyFactory.createTerm(vm.fieldOptions.settings.taxonomy, term);
+
+      options.push(term);
 
       return term;
     };

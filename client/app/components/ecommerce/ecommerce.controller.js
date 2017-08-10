@@ -2,47 +2,43 @@ import angular from 'angular';
 
 class EcommerceController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $window, $http, $timeout, $q, $log, $mdDialog, EcommerceFactory, SettingsFactory, HelperFactory, ModalService, uiGridConstants, appConfig) {
+  constructor ($rootScope, $scope, $state, $window, $http, $timeout, $q, $log, $mdDialog, EcommerceFactory, ConfigFactory, HelperFactory, ModalService, uiGridConstants, appConfig) {
     const vm = this;
 
-    const type = $state.current.data.ecommerceType;
-    const ecommerceSettings = EcommerceFactory.settings();
+    const ecommerceType = $state.current.data.ecommerceType;
+    $scope.template = ecommerceType;
 
-    $scope.template = type;
-
-    vm.type = type;
-    vm.selected = [];
+    vm.config = ConfigFactory.getConfig();
 
     /* Settings */
 
-    vm.ecommerceSettings = ecommerceSettings;
-
-    vm.saveSettings = () => {
-      EcommerceFactory.saveSettings(vm.ecommerceSettings).then((settings) => {
-        vm.ecommerceSettings = settings;
-      });
+    vm.save = () => {
+      ConfigFactory.save(vm.config);
     };
 
     vm.authenticateWithProvider = (provider) => {
-      SettingsFactory.authenticateWithProvider(provider)
+      ConfigFactory.authenticateWithProvider(provider)
         .then((providerSettings) => {
           if (provider === 'stripe') {
             $http.get(`${appConfig.apiUrl}/stripe/account`)
               .then((response) => {
                 providerSettings.account = response.data;
-                vm.ecommerceSettings[provider] = providerSettings;
+                vm.config.provider[provider] = providerSettings;
+                ConfigFactory.save(vm.config);
               });
             return;
           }
-          vm.ecommerceSettings[provider] = providerSettings;
+          vm.config.provider[provider] = providerSettings;
+          ConfigFactory.save(vm.config);
         });
     };
 
     /* Shared */
 
+    vm.selected = [];
     vm.items = [];
 
-    vm.options = {
+    const options = {
       page: 0,
     };
 
@@ -51,12 +47,12 @@ class EcommerceController {
 
     const sort = (sortColumns) => {
       if (sortColumns.length) {
-        vm.options.sort = sortColumns.map((column) => {
+        options.sort = sortColumns.map((column) => {
           const direction = column.sort.direction === uiGridConstants.ASC ? '-' : '';
 
           let dataType = '';
 
-          columnDefs[type].forEach((columnDef) => {
+          columnDefs[ecommerceType].forEach((columnDef) => {
             if (columnDef.sortType) {
               dataType = `<${columnDef.sortType}>`;
             }
@@ -65,27 +61,44 @@ class EcommerceController {
           return `${direction}sort.${column.name}${dataType}`;
         })[0];
       }
+
+      getResults(ecommerceType, true);
     };
 
-    const search = (type, reset) => {
+    const getResults = (type, reset) => {
       const deferred = $q.defer();
 
       if (reset) {
-        vm.options.page = 0;
+        options.page = 0;
         bookmarks = {};
       }
 
-      // vm.selectNone()
+      const query = [];
 
-      const options = angular.copy(vm.options);
+      if (ecommerceType === 'order') {
+        query.push(`test:${vm.config.module.ecommerce.testMode ? 'true' : 'false'}`);
+      }
+
+      if (vm.searchTerm && vm.searchTerm !== '') {
+        const fieldTerms = [];
+
+        if (ecommerceType === 'order') {
+          fieldTerms.push(`orderId:${vm.searchTerm}*`);
+          fieldTerms.push(`customer.email:${vm.searchTerm}*`);
+          fieldTerms.push(`customer.name:${vm.searchTerm}*`);
+        }
+
+        if (ecommerceType === 'discount') {
+          fieldTerms.push(`name:${vm.searchTerm}*`);
+          fieldTerms.push(`code:${vm.searchTerm}*`);
+        }
+
+        query.push(`(${fieldTerms.join(' OR ')})`);
+      }
 
       options.bookmark = bookmarks[options.page - 1] || null;
 
-      // options.filters.forEach(function(filter) {
-      //     options.q.push(filter)
-      // })
-
-      options.q = (options.q || []).join(' AND ');
+      options.q = query.join(' AND ');
 
       vm.searching = true;
 
@@ -121,30 +134,7 @@ class EcommerceController {
 
       vm.searchTerm = term || '';
 
-      const q = [];
-
-      if (type === 'order') {
-        q.push(`test:${ecommerceSettings.testMode ? 'true' : 'false'}`);
-      }
-
-      if (vm.searchTerm !== '') {
-        const fieldTerms = [];
-
-        if (type === 'order') {
-          fieldTerms.push(`orderId:${vm.searchTerm}*`);
-          fieldTerms.push(`customer.email:${vm.searchTerm}*`);
-          fieldTerms.push(`customer.name:${vm.searchTerm}*`);
-        }
-
-        if (type === 'discount') {
-          fieldTerms.push(`name:${vm.searchTerm}*`);
-          fieldTerms.push(`code:${vm.searchTerm}*`);
-        }
-
-        q.push(`(${fieldTerms.join(' OR ')})`);
-      }
-
-      vm.options.q = q;
+      getResults(ecommerceType, true);
     };
 
     const updateItems = (items, updatedItems, key) => {
@@ -316,7 +306,7 @@ class EcommerceController {
       enableSorting: true,
       useExternalSorting: true,
       enableColumnMenus: false,
-      columnDefs: columnDefs[type],
+      columnDefs: columnDefs[ecommerceType],
       infiniteScrollPercentage: 10,
       enableRowHeaderSelection: false,
       enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
@@ -334,10 +324,10 @@ class EcommerceController {
 
         gridApi.selection.on.rowSelectionChanged(null, (row, event) => {
           if (event.timeStamp - lastClick < 300 && row === lastRow) {
-            if (type === 'order') {
+            if (ecommerceType === 'order') {
               vm.editOrder(row.entity);
             }
-            if (type === 'discount') {
+            if (ecommerceType === 'discount') {
               vm.editDiscount(row.entity);
             }
           }
@@ -353,9 +343,9 @@ class EcommerceController {
 
         gridApi.infiniteScroll.on.needLoadMoreData(null, () => {
           if (vm.items.length < vm.total) {
-            vm.options.page++;
+            options.page++;
 
-            search(type).then(() => {
+            getResults(ecommerceType).then(() => {
               gridApi.infiniteScroll.dataLoaded();
             });
           }
@@ -363,8 +353,8 @@ class EcommerceController {
       },
     };
 
-    if (/orders|customers|discounts/.test($state.current.name)) {
-      if (type === 'order') {
+    if (/orders|discounts/i.test($state.current.name)) {
+      if (ecommerceType === 'order') {
         sort([
           {
             name: 'created',
@@ -373,7 +363,7 @@ class EcommerceController {
             },
           },
         ]);
-      } else if (type === 'discount') {
+      } else if (ecommerceType === 'discount') {
         sort([
           {
             name: 'dateEnd',
@@ -393,12 +383,6 @@ class EcommerceController {
           },
         ]);
       }
-
-      vm.search();
-
-      $scope.$watch(() => vm.options, () => {
-        search(type, true);
-      }, true);
     }
   }
 }

@@ -1,20 +1,19 @@
-import angular from 'angular';
-
 class SettingsController {
   /* @ngInject */
-  constructor($window, SettingsFactory) {
+  constructor(ConfigFactory) {
     const vm = this;
 
-    vm.settings = SettingsFactory.settings();
+    vm.config = ConfigFactory.getConfig();
 
-    vm.saveSettings = () => {
-      SettingsFactory.saveSettings(vm.settings);
+    vm.save = () => {
+      ConfigFactory.save(vm.config);
     };
 
     vm.authenticateWithProvider = (provider) => {
-      SettingsFactory.authenticateWithProvider(provider)
+      ConfigFactory.authenticateWithProvider(provider)
         .then((providerSettings) => {
-          vm.settings[provider] = providerSettings;
+          vm.config.provider[provider] = providerSettings;
+          ConfigFactory.save(vm.config);
         });
     };
   }

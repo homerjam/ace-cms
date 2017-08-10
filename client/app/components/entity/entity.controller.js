@@ -115,7 +115,7 @@ class EntityController {
 
     // Title
 
-    if (!vm.schema.singular && vm.mode !== 'batchEdit') {
+    if (!vm.schema.settings.singular && vm.mode !== 'batchEdit') {
       $scope.$watch(() => vm.entity.fields, () => {
         vm.title = EntityFactory.getTitleSlug(vm.entity).title;
       }, true);
@@ -129,7 +129,7 @@ class EntityController {
 
         let compiledUrlTemplate = urlTemplate(vm.entity);
 
-        const settingsUrl = ConfigFactory.config().client.baseUrl || '';
+        const settingsUrl = ConfigFactory.getConfig().client.baseUrl || '';
 
         if (!/https?:\/\//.test(compiledUrlTemplate) && settingsUrl) {
           compiledUrlTemplate = settingsUrl + compiledUrlTemplate;
@@ -161,7 +161,7 @@ class EntityController {
         .then((entity) => {
           vm.entityForm.$setPristine();
 
-          if (!vm.schema.singular) {
+          if (!vm.schema.settings.singular) {
             $state.go('entity', {
               id: entity._id,
             });
@@ -306,7 +306,7 @@ class EntityController {
       },
     }));
 
-    if (!vm.schema.singular) {
+    if (!vm.schema.settings.singular) {
       vm.dropdownMore.push({
         text: 'Clone',
         click() {

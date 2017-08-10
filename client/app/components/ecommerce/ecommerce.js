@@ -7,30 +7,13 @@ const ecommerceModule = angular.module('ecommerce', [
   uiRouter,
 ])
 
-  .config(($stateProvider, $authProvider) => {
+  .config(($stateProvider) => {
     'ngInject';
 
-    $authProvider.oauth2({
-      name: 'stripe',
-      authorizationEndpoint: 'https://connect.stripe.com/oauth/authorize',
-      scope: ['read_write'],
-      defaultUrlParams: ['response_type', 'client_id', 'redirect_uri'],
-      responseType: 'code',
-      responseParams: {
-        code: 'code',
-        clientId: 'clientId',
-        redirectUri: 'redirectUri',
-      },
-    });
-
-    $stateProvider.state('ecommerce', {
-      abstract: true,
-    });
-
-    $stateProvider.state('ecommerce.orders', {
+    $stateProvider.state('ecommerceOrders', {
       url: '/ecommerce/orders',
       views: {
-        'content@': {
+        content: {
           template: '<ecommerce></ecommerce>',
         },
       },
@@ -40,10 +23,10 @@ const ecommerceModule = angular.module('ecommerce', [
       },
     });
 
-    $stateProvider.state('ecommerce.discounts', {
+    $stateProvider.state('ecommerceDiscounts', {
       url: '/ecommerce/discounts',
       views: {
-        'content@': {
+        content: {
           template: '<ecommerce></ecommerce>',
         },
       },
@@ -53,10 +36,10 @@ const ecommerceModule = angular.module('ecommerce', [
       },
     });
 
-    $stateProvider.state('ecommerce.settings', {
+    $stateProvider.state('ecommerceSettings', {
       url: '/ecommerce/settings',
       views: {
-        'content@': {
+        content: {
           template: '<ecommerce></ecommerce>',
         },
       },
@@ -68,23 +51,23 @@ const ecommerceModule = angular.module('ecommerce', [
 
   })
 
-  .filter('currency', ($filter, EcommerceFactory) => {
+  .filter('currency', ($filter, $rootScope) => {
     'ngInject';
 
     return (input, currencySymbol) => {
-      currencySymbol = currencySymbol || EcommerceFactory.currencySymbol;
+      currencySymbol = currencySymbol || $rootScope.$config.module.ecommerce.currencySymbol;
       return currencySymbol + $filter('toFixed')(input);
     };
   })
 
-  .filter('chargeStatus', ($filter, EcommerceFactory) => {
+  .filter('chargeStatus', ($filter, $rootScope) => {
     'ngInject';
 
     return (charge) => {
       if (!charge) {
         return '';
       }
-      const currencySymbol = EcommerceFactory.currencySymbol;
+      const currencySymbol = $rootScope.$config.module.ecommerce.currencySymbol;
       if (charge.status === 'failed') {
         return 'Unpaid';
       }

@@ -1,54 +1,10 @@
 import angular from 'angular';
-import * as modalTemplates from './modal';
+import * as modalTemplates from './templates/modal';
 
 const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, ConfigFactory, HelperFactory, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
-
-  $rootScope.$ecom = service;
-
-  let settings = {};
-
-  service.currencySymbol = '';
-
-  service.settings = (_settings) => {
-    if (_settings) {
-      settings = _settings;
-    }
-
-    service.currencySymbol = settings.currencySymbol;
-
-    return settings;
-  };
-
-  service.loadSettings = () => $q((resolve, reject) => {
-    $http({
-      method: 'GET',
-      url: `${appConfig.apiUrl}/ecommerce/settings`,
-    })
-      .then((response) => {
-        resolve(service.settings(response.data));
-      }, reject);
-  });
-
-  service.saveSettings = obj => $q((resolve, reject) => {
-    obj = angular.fromJson(angular.toJson(obj));
-
-    obj.modifiedBy = ConfigFactory.user().id;
-    obj.modified = HelperFactory.now();
-
-    $http({
-      method: 'PUT',
-      url: `${appConfig.apiUrl}/ecommerce/settings`,
-      data: {
-        settings: obj,
-      },
-    })
-      .then((response) => {
-        resolve(service.settings(response.data));
-      }, reject);
-  });
 
   service.search = (type, options) => $q((resolve, reject) => {
     const params = {
@@ -85,7 +41,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Confi
   service.save = (type, obj) => $q((resolve, reject) => {
     obj = angular.fromJson(angular.toJson(obj));
 
-    obj.modifiedBy = ConfigFactory.user().id;
+    obj.modifiedBy = ConfigFactory.getUser().id;
     obj.modified = HelperFactory.now();
 
     $http({
@@ -120,8 +76,6 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Confi
         $modal,
         HelperFactory,
         EcommerceFactory,
-        settings,
-        ecommerceSettings,
         order
       ) {
         'ngInject';

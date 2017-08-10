@@ -33,21 +33,21 @@ md-content
             // md-icon(md-font-set="material-icons") dashboard
             span {{ taxonomy.name }}
 
-    md-menu(md-offset="220 0", ng-show="($root.$user.permissions.ecommerce || $root.$isSuperUser) && $root.$settings.settings().ecommerce.enabled")
+    md-menu(md-offset="220 0", ng-show="($root.$user.permissions.ecommerce || $root.$isSuperUser) && $root.$config.moduleEnabled.ecommerce")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('ecommerce', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") shopping_cart
         p E-commerce
       md-menu-content(width="4")
         md-menu-item
-          md-button(ui-sref="ecommerce.orders")
+          md-button(ui-sref="ecommerceOrders")
             // md-icon(md-font-set="material-icons") dashboard
             span Orders
         md-menu-item
-          md-button(ui-sref="ecommerce.discounts")
+          md-button(ui-sref="ecommerceDiscounts")
             // md-icon(md-font-set="material-icons") dashboard
             span Discounts
         md-menu-item
-          md-button(ui-sref="ecommerce.settings")
+          md-button(ui-sref="ecommerceSettings")
             // md-icon(md-font-set="material-icons") dashboard
             span Settings
 
@@ -81,7 +81,7 @@ md-content
 
     hr
 
-    md-list-item(ng-show="$root.$settings.settings().url", ng-click="vm.preview()")
+    md-list-item(ng-show="$root.$config.client.baseUrl", ng-click="vm.preview()")
       md-icon(md-font-set="material-icons") desktop_mac
       p Preview
 

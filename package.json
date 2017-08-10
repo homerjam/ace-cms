@@ -17,7 +17,7 @@
     "release": "npm run build && gulp bump"
   },
   "engines": {
-    "node": "6.x"
+    "node": "8.x"
   },
   "dependencies": {
     "ace-api": "^0.4.9",

@@ -33,7 +33,7 @@ class EntityGridController {
     let hasImageColumn = false;
     let bookmarks = {};
 
-    const schemas = ConfigFactory.config().schemas.filter(schema => schemaSlugs.indexOf(schema.slug) > -1);
+    const schemas = ConfigFactory.getConfig().schemas.filter(schema => schemaSlugs.indexOf(schema.slug) > -1);
 
     if (vm.mode !== 'trash' && !schemas[0]) {
       throw Error('Schema not found');
