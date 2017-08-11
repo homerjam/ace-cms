@@ -60,20 +60,20 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
 
   service.getUser = (userId = null) => {
     if (userId) {
-      return _.cloneDeep(Config.users.filter(user => user.id === userId)[0]);
+      return Config.users.filter(user => user.id === userId)[0];
     }
     return _.cloneDeep(User);
   };
 
-  service.getSchema = schemaSlug => _.cloneDeep(Config.schemas.filter(schema => schema.slug === schemaSlug)[0]);
+  service.getSchema = schemaSlug => Config.schemas.filter(schema => schema.slug === schemaSlug)[0];
 
-  service.getField = (schemaSlug, fieldSlug) => _.cloneDeep((service.getSchema(schemaSlug).fields || []).filter(field => field.slug === fieldSlug)[0]);
+  service.getField = (schemaSlug, fieldSlug) => (service.getSchema(schemaSlug).fields || []).filter(field => field.slug === fieldSlug)[0];
 
-  service.getAction = (schemaSlug, actionSlug) => _.cloneDeep((service.getSchema(schemaSlug).actions || []).filter(action => action.slug === actionSlug)[0]);
+  service.getAction = (schemaSlug, actionSlug) => (service.getSchema(schemaSlug).actions || []).filter(action => action.slug === actionSlug)[0];
 
-  service.getTaxonomy = taxonomySlug => _.cloneDeep(Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0]);
+  service.getTaxonomy = taxonomySlug => Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0];
 
-  service.getRole = roleSlug => _.cloneDeep(Config.roles.filter(role => role.slug === roleSlug)[0]);
+  service.getRole = roleSlug => Config.roles.filter(role => role.slug === roleSlug)[0];
 
   service.authenticateWithProvider = provider => $q((resolve, reject) => {
     $http({

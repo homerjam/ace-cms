@@ -4,6 +4,11 @@ import userModalTemplate from './user.modal.jade';
 const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, HelperFactory, appConfig) {
   'ngInject';
 
+  const defaultUser = {
+    active: true,
+    role: 'admin',
+  };
+
   const service = {};
 
   function DialogController ($mdDialog) {
@@ -16,11 +21,6 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
   }
 
   service.editUser = async (userId, event) => {
-    const defaultUser = {
-      active: true,
-      role: 'admin',
-    };
-
     let user = userId ? ConfigFactory.getUser(userId) : defaultUser;
 
     let config = ConfigFactory.getConfig();
@@ -35,7 +35,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
       targetEvent: event,
       clickOutsideToClose: true,
       locals: {
-        user,
+        user: _.clone(user),
         // existingPattern: ((() => ({
         //   test(value) {
         //     return !existing.test(value) || value === userId;

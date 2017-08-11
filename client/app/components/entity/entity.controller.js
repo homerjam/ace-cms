@@ -116,9 +116,9 @@ class EntityController {
     // Title
 
     if (!vm.schema.settings.singular && vm.mode !== 'batchEdit') {
-      $scope.$watch(() => vm.entity.fields, () => {
+      // $scope.$watch(() => vm.entity.fields, () => {
         vm.title = EntityFactory.getTitleSlug(vm.entity).title;
-      }, true);
+      // }, true);
     }
 
     // Functions
