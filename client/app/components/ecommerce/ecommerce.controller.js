@@ -13,7 +13,7 @@ class EcommerceController {
     /* Settings */
 
     vm.save = () => {
-      ConfigFactory.save(vm.config);
+      ConfigFactory.saveConfig(vm.config);
     };
 
     vm.authenticateWithProvider = (provider) => {
@@ -24,12 +24,12 @@ class EcommerceController {
               .then((response) => {
                 providerSettings.account = response.data;
                 vm.config.provider[provider] = providerSettings;
-                ConfigFactory.save(vm.config);
+                ConfigFactory.saveConfig(vm.config);
               });
             return;
           }
           vm.config.provider[provider] = providerSettings;
-          ConfigFactory.save(vm.config);
+          ConfigFactory.saveConfig(vm.config);
         });
     };
 

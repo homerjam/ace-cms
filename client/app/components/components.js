@@ -3,7 +3,7 @@ import Menu from './menu/menu';
 import Dashboard from './dashboard/dashboard';
 import Settings from './settings/settings';
 // import Admin from './admin/admin';
-import Users from './users/users';
+import User from './user/user';
 import Ecommerce from './ecommerce/ecommerce';
 import Taxonomy from './taxonomy/taxonomy';
 import Entity from './entity/entity';
@@ -19,7 +19,7 @@ const componentModule = angular.module('app.components', [
   Dashboard.name,
   Settings.name,
   // Admin.name,
-  Users.name,
+  User.name,
   Ecommerce.name,
   Taxonomy.name,
   Entity.name,

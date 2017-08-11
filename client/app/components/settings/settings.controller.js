@@ -6,14 +6,14 @@ class SettingsController {
     vm.config = ConfigFactory.getConfig();
 
     vm.save = () => {
-      ConfigFactory.save(vm.config);
+      ConfigFactory.saveConfig(vm.config);
     };
 
     vm.authenticateWithProvider = (provider) => {
       ConfigFactory.authenticateWithProvider(provider)
         .then((providerSettings) => {
           vm.config.provider[provider] = providerSettings;
-          ConfigFactory.save(vm.config);
+          ConfigFactory.saveConfig(vm.config);
         });
     };
   }

@@ -310,7 +310,7 @@ angular.module('app', [
     let dependenciesLoaded = false;
 
     const dependencies = [
-      ConfigFactory.load(),
+      ConfigFactory.loadConfig(),
     ];
 
     $transitions.onStart({ to: '*' }, (trans) => {

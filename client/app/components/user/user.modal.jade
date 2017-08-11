@@ -1,0 +1,64 @@
+md-dialog(aria-label="User")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 User
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
+
+        md-input-container.md-block
+          label Email
+          //- input(type="email", ng-model="vm.user.email", required, ng-pattern="vm.existingPattern")
+          input(type="email", ng-model="vm.user.email", required)
+
+        br
+
+        md-input-container
+          label First Name
+          input(ng-model="vm.user.firstName", required, ng-minlength="2", ng-maxlength="20", ng-pattern="/^[a-zA-Z\u00C0-\u017F\s-]*$/")
+
+        md-input-container
+          label Last Name
+          input(ng-model="vm.user.lastName", required, ng-minlength="2", ng-maxlength="20", ng-pattern="/^[a-zA-Z\u00C0-\u017F\s-]*$/")
+
+        br
+
+        md-input-container
+          md-checkbox(ng-model="vm.user.active", aria-label="Active?") Active
+
+        br
+
+        md-input-container
+          label Role
+          md-select(ng-model="vm.user.role")
+            md-option(ng-repeat="role in $root.$config.roles", value="{{role.slug}}") {{role.name}}
+
+          //- md-toolbar.md-table-toolbar.md-primary
+          //-   .md-toolbar-tools Roles
+
+          //- md-table-container
+          //-   table(md-table)
+
+          //-     thead(md-head)
+          //-       tr(md-row)
+          //-         th(md-column)
+          //-         th(md-column) Users
+          //-         th(md-column) Files
+          //-         th(md-column) Taxonomy
+          //-         th(md-column) Delete
+
+          //-     tbody(md-body)
+          //-       tr(md-row, ng-repeat="role in $root.$config.roles")
+          //-         td(md-cell) {{role.name}}
+          //-         td(md-cell) {{role.permissions.users ? "&check;" : "&times;"}}
+          //-         td(md-cell) {{role.permissions.fileCreate ? "&check;" : "&times;"}}
+          //-         td(md-cell) {{role.permissions.taxonomyCreate ? "&check;" : "&times;"}}
+          //-         td(md-cell) {{role.permissions.entityDelete ? "&check;" : "&times;"}}
+
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.user)" ng-disabled="vm.form.$invalid") Save

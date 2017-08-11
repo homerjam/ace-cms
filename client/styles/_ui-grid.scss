@@ -79,16 +79,16 @@
   }
 }
 
-.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+.ui-grid-row-selected .ui-grid-cell {
 	background: steelblue !important;
 
-	&:not(.ui-grid-col0) {
-		color: white;
-	}
+  .ui-grid-cell-contents {
+    color: white;
 
-	button {
-		color: white;
-	}
+    button {
+      color: white;
+    }
+  }
 }
 
 .ui-grid-cell--image {

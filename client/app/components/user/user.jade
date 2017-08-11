@@ -1,0 +1,34 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 Users
+    span(flex)
+    md-button.md-icon-button(ng-click="vm.delete($event, vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Delete")
+      md-icon(md-font-set="material-icons") delete
+    md-button.md-icon-button(ng-click="vm.edit($event, vm.selected)", ng-disabled="vm.selected.length !== 1", aria-label="Edit")
+      md-icon(md-font-set="material-icons") create
+    md-button.md-fab.md-mini(ng-click="vm.new($event)", aria-label="New")
+      md-icon(md-font-set="material-icons") add
+
+md-content
+
+  md-table-container
+    table.md-table-expanded(md-table md-row-select multiple ng-model="vm.selected")
+
+      thead(md-head md-order="vm.order" md-on-reorder="vm.changeOrder")
+        tr(md-row)
+          th(md-column md-order-by="firstName") First Name
+          th(md-column md-order-by="lastName") Last Name
+          th(md-column md-order-by="email" flex="20") Email
+          th(md-column md-order-by="role") Role
+          th(md-column md-order-by="active") Active
+
+      tbody(md-body)
+        tr(md-row md-select="user" md-select-id="id" md-auto-select ng-repeat="user in vm.users")
+          td(md-cell) {{user.firstName}}
+          td(md-cell) {{user.lastName}}
+          td(md-cell flex="20") {{user.email}}
+          td(md-cell) {{user.role | roleName}}
+          td(md-cell)
+            span(class="{{user.active | crossCheck}}")

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import angular from 'angular';
-import * as modalTemplates from '../modal';
+import * as modalTemplates from '../templates/modal';
 
 const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, FieldFactory, ModalService, appConfig) => {
   'ngInject';
@@ -15,6 +15,12 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
 
   service.move = function (from, to) {
     this.splice(to, 0, this.splice(from, 1)[0]);
+  };
+
+  service.replace = (array, replacementObject, key) => {
+    const index = _.findIndex(array, [key, replacementObject[key]]);
+    array.splice(index, 1, replacementObject);
+    return array;
   };
 
   service.getThumbnailUrl = (thumbnail, transformSettings = 'h:200;q:60') => {

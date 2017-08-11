@@ -1,9 +1,10 @@
 import _ from 'lodash';
+// import angular from 'angular';
 
 import ConfigModalController from '../controllers/config.modal.controller';
 import * as configModalTemplates from '../templates/modal';
 
-const ConfigFactory = ($rootScope, $http, $q, $window, ModalService, appConfig, $auth, SatellizerConfig) => {
+const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, HelperFactory, ModalService, appConfig, $auth, SatellizerConfig) => {
   'ngInject';
 
   const service = {};
@@ -23,7 +24,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, ModalService, appConfig, 
   //   observerCallbacks.push(callback);
   // };
 
-  const update = (response) => {
+  const updateConfig = (response) => {
     Config = response.data;
     $rootScope.$config = Config;
 
@@ -41,14 +42,14 @@ const ConfigFactory = ($rootScope, $http, $q, $window, ModalService, appConfig, 
     return Config;
   };
 
-  service.load = async () => {
+  service.loadConfig = async () => {
     const response = await $http.get(`${appConfig.apiUrl}/config`);
-    return update(response);
+    return updateConfig(response);
   };
 
-  service.save = async (config) => {
+  service.saveConfig = async (config) => {
     const response = await $http.post(`${appConfig.apiUrl}/config`, { config });
-    return update(response);
+    return updateConfig(response);
   };
 
   service.getConfig = () => _.cloneDeep(Config);
@@ -59,20 +60,20 @@ const ConfigFactory = ($rootScope, $http, $q, $window, ModalService, appConfig, 
 
   service.getUser = (userId = null) => {
     if (userId) {
-      return Config.users.filter(user => user.id === userId)[0];
+      return _.cloneDeep(Config.users.filter(user => user.id === userId)[0]);
     }
     return _.cloneDeep(User);
   };
 
-  service.getSchema = schemaSlug => Config.schemas.filter(schema => schema.slug === schemaSlug)[0];
+  service.getSchema = schemaSlug => _.cloneDeep(Config.schemas.filter(schema => schema.slug === schemaSlug)[0]);
 
-  service.getField = (schemaSlug, fieldSlug) => (service.getSchema(schemaSlug).fields || []).filter(field => field.slug === fieldSlug)[0];
+  service.getField = (schemaSlug, fieldSlug) => _.cloneDeep((service.getSchema(schemaSlug).fields || []).filter(field => field.slug === fieldSlug)[0]);
 
-  service.getAction = (schemaSlug, actionSlug) => (service.getSchema(schemaSlug).actions || []).filter(action => action.slug === actionSlug)[0];
+  service.getAction = (schemaSlug, actionSlug) => _.cloneDeep((service.getSchema(schemaSlug).actions || []).filter(action => action.slug === actionSlug)[0]);
 
-  service.getTaxonomy = taxonomySlug => Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0];
+  service.getTaxonomy = taxonomySlug => _.cloneDeep(Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0]);
 
-  service.getRole = roleSlug => Config.roles.filter(role => role.slug === roleSlug)[0];
+  service.getRole = roleSlug => _.cloneDeep(Config.roles.filter(role => role.slug === roleSlug)[0]);
 
   service.authenticateWithProvider = provider => $q((resolve, reject) => {
     $http({

@@ -1,23 +1,24 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
-import usersComponent from './users.component';
+import userComponent from './user.component';
+import UserFactory from './user.factory';
 
-const usersModule = angular.module('users', [
+const usersModule = angular.module('user', [
   uiRouter,
 ])
 
   .config(($stateProvider) => {
     'ngInject';
 
-    $stateProvider.state('users', {
+    $stateProvider.state('user', {
       url: '/users',
       views: {
         content: {
-          template: '<users></users>',
+          template: '<user></user>',
         },
       },
       data: {
-        permissions: 'users',
+        permissions: 'user',
       },
     });
   })
@@ -34,6 +35,8 @@ const usersModule = angular.module('users', [
     };
   })
 
-  .directive('users', usersComponent);
+  .factory('UserFactory', UserFactory)
+
+  .directive('user', userComponent);
 
 export default usersModule;
