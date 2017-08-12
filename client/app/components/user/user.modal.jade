@@ -11,10 +11,7 @@ md-dialog(aria-label="User")
 
         md-input-container.md-block
           label Email
-          //- input(type="email", ng-model="vm.user.email", required, ng-pattern="vm.existingPattern")
           input(type="email", ng-model="vm.user.email", required)
-
-        br
 
         md-input-container
           label First Name
@@ -24,17 +21,13 @@ md-dialog(aria-label="User")
           label Last Name
           input(ng-model="vm.user.lastName", required, ng-minlength="2", ng-maxlength="20", ng-pattern="/^[a-zA-Z\u00C0-\u017F\s-]*$/")
 
-        br
-
-        md-input-container
-          md-checkbox(ng-model="vm.user.active", aria-label="Active?") Active
-
-        br
-
-        md-input-container
+        md-input-container.md-block
           label Role
           md-select(ng-model="vm.user.role")
             md-option(ng-repeat="role in $root.$config.roles", value="{{role.slug}}") {{role.name}}
+
+        md-input-container
+          md-checkbox(ng-model="vm.user.active", aria-label="Active?") Active
 
           //- md-toolbar.md-table-toolbar.md-primary
           //-   .md-toolbar-tools Roles

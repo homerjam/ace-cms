@@ -1,0 +1,23 @@
+md-dialog(aria-label="Field")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Field
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
+
+        md-input-container.md-block
+          label Name
+          input(ng-model="vm.field.name", required, ng-minlength="2", ng-maxlength="50", ng-pattern="/^[^\"]*$/")
+
+        md-input-container.md-block
+          label Slug
+          input(type="email", ng-model="vm.field.slug", required, ng-pattern="vm.existingPattern")
+
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.field)" ng-disabled="vm.form.$invalid") Save

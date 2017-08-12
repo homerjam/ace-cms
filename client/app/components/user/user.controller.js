@@ -27,7 +27,7 @@ class UserController {
     };
 
     vm.edit = async (event, selected) => {
-      const user = await UserFactory.editUser(selected[0].id, event);
+      const user = await UserFactory.editUser((selected[0] || selected).id, event);
 
       if (user) {
         vm.users = HelperFactory.replace(vm.users, user, 'id');

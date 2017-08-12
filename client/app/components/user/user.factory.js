@@ -5,6 +5,9 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
   'ngInject';
 
   const defaultUser = {
+    email: '',
+    firstName: '',
+    lastName: '',
     active: true,
     role: 'admin',
   };
@@ -21,11 +24,11 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
   }
 
   service.editUser = async (userId, event) => {
+    const createNew = !!userId;
+
     let user = userId ? ConfigFactory.getUser(userId) : defaultUser;
 
     let config = ConfigFactory.getConfig();
-
-    // const existing = new RegExp(`^(${config.users.map(user => user.email).join('|')})$`);
 
     const userDialog = {
       controller: DialogController,
@@ -36,11 +39,6 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
       clickOutsideToClose: true,
       locals: {
         user: _.clone(user),
-        // existingPattern: ((() => ({
-        //   test(value) {
-        //     return !existing.test(value) || value === userId;
-        //   },
-        // })))(),
       },
     };
 
@@ -50,8 +48,8 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
       return false;
     }
 
-    if (!user.id) {
-      user.id = user.email;
+    if (createNew) {
+      user.id = user.email; // TODO: replace with uuid?
       config = (await $http.post(`${appConfig.apiUrl}/user`, { user })).data;
     } else {
       config = (await $http.put(`${appConfig.apiUrl}/user`, { user })).data;

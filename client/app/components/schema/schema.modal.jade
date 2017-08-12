@@ -1,0 +1,41 @@
+md-dialog(aria-label="Schema")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Schema
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
+
+        md-input-container.md-block
+          label Name
+          input(ng-model="vm.schema.name", required, ng-minlength="2", ng-maxlength="50", ng-pattern="/^[^\"]*$/")
+
+        md-input-container.md-block
+          label Slug
+          input(type="email", ng-model="vm.schema.slug", required, ng-pattern="vm.existingPattern")
+
+        .md-subhead Fields
+
+        md-table-container
+          table(md-table)
+            thead(md-head)
+              tr(md-row)
+                th(md-column) Name
+                th(md-column) Slug
+                th(md-column) Type
+            tbody(md-body)
+              tr(md-row, ng-repeat="field in vm.schema.fields")
+                td(md-cell) {{ field.name }}
+                td(md-cell) {{ field.slug }}
+                td(md-cell) {{ field.type }}
+
+        md-button.md-fab.md-mini(ng-click="vm.editField(null, vm.schema, $event)" aria-label="Add field")
+          md-icon(md-font-set="material-icons") add
+
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.schema)" ng-disabled="vm.form.$invalid") Save

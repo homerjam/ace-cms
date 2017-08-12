@@ -92,26 +92,26 @@ md-content
     hr
 
     md-menu(md-offset="220 0", ng-if="::$root.$isSuperUser")
-      md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
+      md-list-item(ng-click="$mdMenu.open()", ui-sref-active, ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
         md-icon(md-font-set="material-icons") settings_applications
         p Admin
       md-menu-content(width="4")
+        //- md-menu-item
+        //-   md-button(ui-sref="admin({adminType: 'field'})")
+        //-     // md-icon(md-font-set="material-icons") dashboard
+        //-     span Fields
         md-menu-item
-          md-button(ui-sref="admin({adminType: 'field'})")
-            // md-icon(md-font-set="material-icons") dashboard
-            span Fields
-        md-menu-item
-          md-button(ui-sref="admin({adminType: 'schema'})")
+          md-button(ui-sref="schema")
             // md-icon(md-font-set="material-icons") dashboard
             span Schemas
         md-menu-item
           md-button(ui-sref="admin({adminType: 'taxonomy'})")
             // md-icon(md-font-set="material-icons") dashboard
             span Taxonomy
-        md-menu-item
-          md-button(ui-sref="admin({adminType: 'action'})")
-            // md-icon(md-font-set="material-icons") dashboard
-            span Actions
+        //- md-menu-item
+        //-   md-button(ui-sref="admin({adminType: 'action'})")
+        //-     // md-icon(md-font-set="material-icons") dashboard
+        //-     span Actions
         md-menu-item
           md-button(ui-sref="tools")
             // md-icon(md-font-set="material-icons") dashboard

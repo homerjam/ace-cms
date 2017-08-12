@@ -39,9 +39,13 @@ md-chip [ace-sortable] * {
 }
 
 .md-table.md-table-expanded {
+  padding-top: 56px;
+
   .md-head {
+    margin-top: -56px;
     position: fixed;
     z-index: 1;
+    background: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 6px 10px rgba(0, 0, 0, 0.05);
     height: 56px;
     width: 100%;
@@ -73,7 +77,7 @@ md-chip [ace-sortable] * {
       display: flex;
 
       &:first-child {
-        margin-top: 56px;
+        // margin-top: 56px;
       }
 
       &:not(:first-child) {

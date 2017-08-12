@@ -2,11 +2,11 @@ md-toolbar
   .md-toolbar-tools
     md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
       md-icon(md-icon-set="material-icons") menu
-    h2 Users
+    h2 Schemas
     span(flex)
     md-button.md-icon-button(ng-click="vm.delete($event, vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Delete")
       md-icon(md-font-set="material-icons") delete
-    //- md-button.md-icon-button(ng-click="vm.edit($event, vm.selected)", ng-disabled="vm.selected.length !== 1", aria-label="Edit")
+    //- md-button.md-icon-button(ng-click="vm.edit($event, vm.selected[0])", ng-disabled="vm.selected.length !== 1", aria-label="Edit")
     //-   md-icon(md-font-set="material-icons") create
     md-button.md-fab.md-mini(ng-click="vm.new($event)", aria-label="New")
       md-icon(md-font-set="material-icons") add
@@ -18,17 +18,10 @@ md-content
 
       thead(md-head md-order="vm.order" md-on-reorder="vm.changeOrder")
         tr(md-row)
-          th(md-column md-order-by="firstName") First Name
-          th(md-column md-order-by="lastName") Last Name
-          th(md-column md-order-by="email" flex="20") Email
-          th(md-column md-order-by="role") Role
-          th(md-column md-order-by="active") Active
+          th(md-column md-order-by="name") Name
+          th(md-column md-order-by="slug") Slug
 
       tbody(md-body)
-        tr(md-row md-select="user" md-select-id="id" ng-click="vm.edit($event, user)" ng-repeat="user in vm.users")
-          td(md-cell) {{user.firstName}}
-          td(md-cell) {{user.lastName}}
-          td(md-cell flex="20") {{user.email}}
-          td(md-cell) {{user.role | roleName}}
-          td(md-cell)
-            span(class="{{user.active | crossCheck}}")
+        tr(md-row md-select="schema" md-select-id="slug" ng-click="vm.edit($event, schema)" ng-repeat="schema in vm.schemas")
+          td(md-cell) {{schema.name}}
+          td(md-cell) {{schema.slug}}
