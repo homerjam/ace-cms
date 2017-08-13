@@ -22,6 +22,6 @@ div(flex, layout="row", layout-margin)
           .md-caption(md-highlight-text="vm.searchText") {{vm.getParents(item)}}
           .md-body-1(md-highlight-text="vm.searchText") {{item.title}}
         md-chip-template
-          div(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'")
+          div(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'")
             .md-caption {{vm.getParents($chip)}}
             .md-body-1 {{$chip.title}}

@@ -4,20 +4,25 @@ export default angular.module('ace.sortable', [])
   .directive('aceSortable', () => ({
     restrict: 'A',
 
-    scope: {
-      collectionFn: '=',
-      indexFn: '=',
-      axis: '=?',
-      draggableSelector: '=?',
-      handleSelector: '=?',
-    },
+    // scope: {
+    //   collection: '=',
+    //   index: '=',
+    //   axis: '=?',
+    //   draggableSelector: '=?',
+    //   handleSelector: '=?',
+    // },
 
-    bindToController: true,
-    controllerAs: 'vm',
+    // bindToController: true,
+    // controllerAs: 'vm',
 
-    controller: ['$document', '$scope', '$element', '$timeout',
-    function ($document, $scope, $element, $timeout) {
+    controller ($document, $scope, $element, $timeout, $attrs, $parse) {
       const vm = this;
+
+      vm.collection = $parse($attrs.collection)($scope);
+      vm.index = $parse($attrs.index)($scope);
+      vm.axis = $parse($attrs.axis)($scope);
+      vm.draggableSelector = $parse($attrs.draggableSelector)($scope);
+      vm.handleSelector = $parse($attrs.handleSelector)($scope);
 
       let $draggable;
       let $handle;
@@ -44,14 +49,16 @@ export default angular.module('ace.sortable', [])
 
       $draggable.on('mousedown', (event) => {
         if (vm.handleSelector) {
-          $handle = angular.element($element[0].querySelector(vm.handleSelector));
+          $handle = angular.element($element[0].querySelectorAll(vm.handleSelector));
         } else {
           $handle = $element;
         }
-
-        if (event.target !== $handle[0]) {
-          preventDrag = true;
-        }
+        preventDrag = true;
+        angular.forEach($handle, (el) => {
+          if (event.target === el) {
+            preventDrag = false;
+          }
+        });
       });
 
       $document.on('mouseup', () => {
@@ -69,7 +76,7 @@ export default angular.module('ace.sortable', [])
 
           const dataTransfer = event.dataTransfer || event.originalEvent.dataTransfer;
 
-          const index = vm.indexFn($scope);
+          const index = angular.isFunction(vm.index) ? vm.index($scope) : $parse($attrs.index)($scope);
 
           dataTransfer.effectAllowed = 'copyMove';
           dataTransfer.dropEffect = 'move';
@@ -120,7 +127,7 @@ export default angular.module('ace.sortable', [])
         event.preventDefault();
 
         const droppedItemIndex = parseInt((event.dataTransfer || event.originalEvent.dataTransfer).getData('text/plain'), 10);
-        const currentIndex = vm.indexFn($scope);
+        const currentIndex = angular.isFunction(vm.index) ? vm.index($scope) : $parse($attrs.index)($scope);
         let newIndex = null;
 
         if (dropPosition === 'before') {
@@ -143,9 +150,11 @@ export default angular.module('ace.sortable', [])
           dropPosition = null;
 
           $scope.$apply(() => {
+            const collection = angular.isFunction(vm.collection) ? vm.collection($scope) : vm.collection;
+
             const changeEvent = $scope.$emit('aceSortable:change', {
-              collection: vm.collectionFn($scope),
-              item: vm.collectionFn($scope)[droppedItemIndex],
+              collection,
+              item: collection[droppedItemIndex],
               from: droppedItemIndex,
               to: newIndex,
             });
@@ -154,7 +163,7 @@ export default angular.module('ace.sortable', [])
               return;
             }
 
-            move.apply(vm.collectionFn($scope), [droppedItemIndex, newIndex]);
+            move.apply(collection, [droppedItemIndex, newIndex]);
           });
 
           $draggable.removeClass(droppingClassName);
@@ -183,5 +192,5 @@ export default angular.module('ace.sortable', [])
         $draggable.removeClass(droppingAfterClassName);
       });
 
-    }],
+    },
   }));

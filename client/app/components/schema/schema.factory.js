@@ -2,7 +2,7 @@ import _ from 'lodash';
 import schemaModalTemplate from './schema.modal.jade';
 import fieldModalTemplate from '../field/field.modal.jade';
 
-const SchemaFactory = function SchemaFactory ($http, $mdDialog, ConfigFactory, HelperFactory, appConfig) {
+const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDialog, ConfigFactory, HelperFactory, appConfig) {
   'ngInject';
 
   const defaultSchema = {
@@ -28,15 +28,21 @@ const SchemaFactory = function SchemaFactory ($http, $mdDialog, ConfigFactory, H
     vm.ok = item => $mdDialog.hide(item);
   }
 
-  const existingPattern = (existing, slug) => (({
+  const slugPattern = (existing, slug) => (({
     test: function (existing, slug, value) {
-      const existingRegExp = new RegExp(`^(${existing.join('|')})$`);
-      const exists = !existingRegExp.test(value) || value === slug;
-      return exists;
+      const validRegExp = /^[^\d][a-zA-Z0-9]*$/;
+      const existsRegExp = new RegExp(`^(${existing.join('|')})$`);
+      return validRegExp.test(value)  && (!existsRegExp.test(value) || value === slug);
     }.bind(null, existing, slug),
   }));
 
+  const slugify = (item) => {
+    item.slug = _.camelCase(item.name);
+  };
+
   const editField = async (field, schema, event) => {
+    const createNew = !field;
+
     if (!field) {
       field = defaultField;
     }
@@ -48,9 +54,12 @@ const SchemaFactory = function SchemaFactory ($http, $mdDialog, ConfigFactory, H
       template: fieldModalTemplate,
       targetEvent: event,
       clickOutsideToClose: true,
+      multiple: true,
       locals: {
         field: _.clone(field),
-        existingPattern: existingPattern(schema.fields.map(field => field.slug), field.slug),
+        createNew,
+        slugPattern: slugPattern(schema.fields.map(field => field.slug), field.slug),
+        slugify,
       },
     };
 
@@ -60,13 +69,19 @@ const SchemaFactory = function SchemaFactory ($http, $mdDialog, ConfigFactory, H
       return false;
     }
 
-    console.log(field);
+    if (createNew) {
+      schema.fields.push(field);
+    } else {
+      HelperFactory.replace(schema.fields, field, 'slug');
+    }
+
+    $rootScope.$apply();
 
     return field;
   };
 
   service.editSchema = async (schema, event) => {
-    const createNew = !!schema;
+    const createNew = !schema;
 
     if (!schema) {
       schema = defaultSchema;
@@ -83,7 +98,9 @@ const SchemaFactory = function SchemaFactory ($http, $mdDialog, ConfigFactory, H
       clickOutsideToClose: true,
       locals: {
         schema: _.clone(schema),
-        existingPattern: existingPattern(config.schemas.map(schema => schema.slug), schema.slug),
+        createNew,
+        slugPattern: slugPattern(config.schemas.map(schema => schema.slug), schema.slug),
+        slugify,
         editField,
       },
     };

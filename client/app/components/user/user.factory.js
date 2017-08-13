@@ -24,7 +24,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
   }
 
   service.editUser = async (userId, event) => {
-    const createNew = !!userId;
+    const createNew = !userId;
 
     let user = userId ? ConfigFactory.getUser(userId) : defaultUser;
 

@@ -9,7 +9,7 @@ class SchemaController {
 
     vm.selected = [];
 
-    vm.order = 'name';
+    // vm.order = 'name';
 
     vm.changeOrder = (order) => {
       const desc = /-/.test(order);

@@ -29,7 +29,7 @@ md-subheader.md-no-sticky.field-toolbar
 
 div(flex, layout="row", layout-padding, layout-wrap)
 
-  div.tile(flex, layout="column", ng-repeat="item in vm.fieldModel.value", ace-sortable, index-fn="vm.getIndex", collection-fn="vm.getCollection", handle-selector="'[ace-sortable-handle]'")
+  div.tile(flex, layout="column", ng-repeat="item in vm.fieldModel.value", ace-sortable, index="vm.getIndex", collection="vm.getCollection", handle-selector="'[ace-sortable-handle]'")
 
     md-card(flex, ng-click="vm.clickItem($event, item)", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch)
 

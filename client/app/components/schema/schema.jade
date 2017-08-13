@@ -22,6 +22,13 @@ md-content
           th(md-column md-order-by="slug") Slug
 
       tbody(md-body)
-        tr(md-row md-select="schema" md-select-id="slug" ng-click="vm.edit($event, schema)" ng-repeat="schema in vm.schemas")
+        tr(
+          md-row
+          md-select="schema"
+          md-select-id="slug"
+          ng-click="vm.edit($event, schema)"
+          ng-repeat="schema in vm.schemas"
+          ace-sortable collection="vm.schemas" index="$index" axis="'y'"
+        )
           td(md-cell) {{schema.name}}
           td(md-cell) {{schema.slug}}

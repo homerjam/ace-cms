@@ -11,11 +11,28 @@ md-dialog(aria-label="Field")
 
         md-input-container.md-block
           label Name
-          input(ng-model="vm.field.name", required, ng-minlength="2", ng-maxlength="50", ng-pattern="/^[^\"]*$/")
+          input(
+            ng-model="vm.field.name"
+            required
+            ng-minlength="2"
+            ng-maxlength="50"
+            ng-pattern="/^[^\"]*$/"
+            ng-change="vm.createNew && vm.slugify(vm.field)"
+          )
 
         md-input-container.md-block
           label Slug
-          input(type="email", ng-model="vm.field.slug", required, ng-pattern="vm.existingPattern")
+          input(
+            ng-model="vm.field.slug"
+            required
+            ng-pattern="vm.slugPattern"
+            ng-disabled="!vm.createNew"
+          )
+
+        md-input-container.md-block
+          label Type
+          md-select(ng-model="vm.field.type" required)
+            md-option(ng-repeat="(type, field) in $root.$field.fields()" value="{{type}}") {{field.name}}
 
     md-dialog-actions(layout="row")
       span(flex)

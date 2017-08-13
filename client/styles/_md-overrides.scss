@@ -26,15 +26,28 @@ md-chip [ace-sortable] * {
   pointer-events: none;
 }
 
+md-dialog md-table-container {
+  margin: 0 -23px;
+  max-width: none;
+}
+
 .md-table {
   .md-column {
     font-weight: 500 !important;
   }
-
+  .md-row {
+    outline: none;
+  }
   md-icon {
     margin-top: -4px;
     min-width: 0;
     min-height: 0;
+  }
+}
+
+.md-table.md-table-sortable {
+  .md-cell {
+    background: white;
   }
 }
 
@@ -76,6 +89,10 @@ md-chip [ace-sortable] * {
       width: 100%;
       display: flex;
 
+      > *:not(.md-checkbox-cell) {
+        pointer-events: none;
+      }
+
       &:first-child {
         // margin-top: 56px;
       }
@@ -100,8 +117,11 @@ md-chip [ace-sortable] * {
     }
   }
 
+  [flex] {
+    max-width: none !important;
+  }
+
   [flex="20"] {
     flex-basis: 20% !important;
-    max-width: none !important;
   }
 }

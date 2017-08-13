@@ -5,7 +5,7 @@ div(layout="column", layout-margin)
       md-autocomplete(md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="item in $admin.get('schema', true)", md-item-text="item.name", placeholder="Schema(s)", md-min-length="0")
         span(md-highlight-text="vm.searchText") {{item.name}}
       md-chip-template
-        span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
+        span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
 
     md-button.md-icon-button(aria-label="New schema", ng-click="vm.newItem('schema', vm.item.settings.schemas)")
       md-icon(md-font-set="material-icons") add

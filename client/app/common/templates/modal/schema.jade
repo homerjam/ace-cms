@@ -30,7 +30,7 @@
                 md-autocomplete(md-selected-item="vm.selectedField", md-search-text="vm.searchField", md-items="item in $admin.get('field', true)", md-item-text="item.name", placeholder="Fields(s)", md-min-length="0")
                   span(md-highlight-text="vm.searchField") {{item.name}}
                 md-chip-template
-                  span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}&nbsp;
+                  span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}&nbsp;
                     code {{$chip.slug}}
 
               md-button.md-icon-button(aria-label="New field", ng-click="vm.newItem('field', vm.item.fields)")
@@ -43,7 +43,7 @@
                 md-autocomplete(md-selected-item="vm.selectedAction", md-search-text="vm.searchAction", md-items="item in $admin.get('action', true)", md-item-text="item.name", placeholder="Actions(s)", md-min-length="0")
                   span(md-highlight-text="vm.searchAction") {{item.name}}
                 md-chip-template
-                  span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
+                  span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
 
               md-button.md-icon-button(aria-label="New action", ng-click="vm.newItem('action', vm.item.actions)")
                 md-icon(md-font-set="material-icons") add
@@ -80,7 +80,7 @@
                 md-autocomplete(md-selected-item="vm.selectedSortField", md-search-text="vm.searchSortField", md-items="item in vm.item.fields", md-item-text="item.name", placeholder="Sort Fields(s)", md-min-length="0")
                   span(md-highlight-text="vm.searchSortField") {{item.name}}
                 md-chip-template
-                  span(ace-sortable, index-fn="$root.$helper.getMdChipIndex", collection-fn="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
+                  span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
 
             br
 

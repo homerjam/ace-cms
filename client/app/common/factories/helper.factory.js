@@ -19,7 +19,9 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
 
   service.replace = (array, replacementObject, key) => {
     const index = _.findIndex(array, [key, replacementObject[key]]);
-    array.splice(index, 1, replacementObject);
+    if (index !== -1) {
+      array.splice(index, 1, replacementObject);
+    }
     return array;
   };
 
