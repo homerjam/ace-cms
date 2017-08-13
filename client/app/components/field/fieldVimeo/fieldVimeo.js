@@ -1,6 +1,5 @@
 import angular from 'angular';
 import fieldVimeoComponent from './fieldVimeo.component';
-import settingsTemplate from './fieldVimeo.settings.jade';
 
 const fieldVimeoModule = angular.module('fieldVimeo', [])
 
@@ -13,7 +12,6 @@ const fieldVimeoModule = angular.module('fieldVimeo', [])
 
     FieldFactory.registerField('vimeo', {
       name: 'Vimeo',
-      settingsTemplate,
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',

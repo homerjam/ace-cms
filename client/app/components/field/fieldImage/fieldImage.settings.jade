@@ -10,11 +10,6 @@ md-dialog(aria-label="Field Settings")
       .md-dialog-content
 
         md-input-container
-          md-checkbox(ng-model="vm.settings.required", aria-label="Required?") Required
-
-        br
-
-        md-input-container
           label Min. Width
           input(type="number", ng-model="vm.settings.minWidth", ng-init="vm.settings.minWidth = vm.settings.minWidth || 0")
 
@@ -32,12 +27,8 @@ md-dialog(aria-label="Field Settings")
           label Max. Height
           input(type="number", required, ng-model="vm.settings.maxHeight", ng-init="vm.settings.maxHeight = vm.settings.maxHeight || 2000")
 
-        br
-
-        md-input-container
+        md-input-container.md-block
           md-checkbox(ng-model="vm.settings.dzi", aria-label="Deep Zoom Image?") Deep Zoom Image
-
-        br
 
         md-toolbar.md-table-toolbar.md-primary
           .md-toolbar-tools Crops

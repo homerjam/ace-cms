@@ -1,6 +1,6 @@
 import angular from 'angular';
 import fieldVideoComponent from './fieldVideo.component';
-import settingsTemplate from './fieldVideo.settings.jade';
+import FieldVideoSettingsFactory from './fieldVideo.settings.factory';
 
 const fieldVideoModule = angular.module('fieldVideo', [])
 
@@ -8,12 +8,12 @@ const fieldVideoModule = angular.module('fieldVideo', [])
     'ngInject';
   })
 
-  .run((FieldFactory) => {
+  .run((FieldFactory, FieldVideoSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('video', {
       name: 'Video',
-      settingsTemplate,
+      editSettings: FieldVideoSettingsFactory.edit,
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
@@ -46,6 +46,8 @@ const fieldVideoModule = angular.module('fieldVideo', [])
     });
 
   })
+
+  .factory('FieldVideoSettingsFactory', FieldVideoSettingsFactory)
 
   .directive('fieldVideo', fieldVideoComponent);
 

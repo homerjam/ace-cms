@@ -15,6 +15,7 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
   const defaultField = {
     name: '',
     slug: '',
+    settings: {},
   };
 
   const service = {};
