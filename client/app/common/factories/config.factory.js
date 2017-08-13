@@ -52,7 +52,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
     return updateConfig(response);
   };
 
-  service.getConfig = () => _.cloneDeep(Config);
+  service.getConfig = () => _.merge({}, Config);
 
   service.setConfig = (config) => {
     Config = config;
@@ -62,7 +62,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
     if (userId) {
       return Config.users.filter(user => user.id === userId)[0];
     }
-    return _.cloneDeep(User);
+    return _.merge({}, User);
   };
 
   service.getSchema = schemaSlug => Config.schemas.filter(schema => schema.slug === schemaSlug)[0];

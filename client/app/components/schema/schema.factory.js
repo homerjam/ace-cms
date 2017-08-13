@@ -47,7 +47,7 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
       clickOutsideToClose: true,
       multiple: true,
       locals: {
-        field: _.clone(field),
+        field: _.merge({}, field),
         createNew,
         slugPattern: slugPattern(schema.fields.map(field => field.slug), field.slug),
         slugify,
@@ -96,7 +96,7 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
       targetEvent: event,
       clickOutsideToClose: true,
       locals: {
-        schema: _.clone(schema),
+        schema: _.merge({}, schema),
         createNew,
         slugPattern: slugPattern(config.schemas.map(schema => schema.slug), schema.slug),
         slugify,

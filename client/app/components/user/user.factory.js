@@ -29,7 +29,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
       targetEvent: event,
       clickOutsideToClose: true,
       locals: {
-        user: _.clone(user),
+        user: _.merge({}, user),
       },
     };
 
