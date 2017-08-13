@@ -1,7 +1,7 @@
 import angular from 'angular';
 import angularCropify from 'angular-cropify';
 import fieldImageComponent from './fieldImage.component';
-import settingsTemplate from './fieldImage.settings.jade';
+import FieldImageSettingsFactory from './fieldImage.settings.factory';
 
 const fieldImageModule = angular.module('fieldImage', [
   angularCropify,
@@ -11,12 +11,12 @@ const fieldImageModule = angular.module('fieldImage', [
     'ngInject';
   })
 
-  .run(($rootScope, FieldFactory) => {
+  .run(($rootScope, FieldFactory, FieldImageSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('image', {
       name: 'Image',
-      settingsTemplate,
+      editSettings: FieldImageSettingsFactory.edit,
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
@@ -48,6 +48,8 @@ const fieldImageModule = angular.module('fieldImage', [
     });
 
   })
+
+  .factory('FieldImageSettingsFactory', FieldImageSettingsFactory)
 
   .directive('fieldImage', fieldImageComponent);
 

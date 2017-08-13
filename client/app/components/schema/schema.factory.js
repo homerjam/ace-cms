@@ -2,7 +2,7 @@ import _ from 'lodash';
 import schemaModalTemplate from './schema.modal.jade';
 import fieldModalTemplate from '../field/field.modal.jade';
 
-const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDialog, ConfigFactory, HelperFactory, appConfig) {
+const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDialog, ConfigFactory, FieldFactory, HelperFactory, appConfig) {
   'ngInject';
 
   const defaultSchema = {
@@ -19,20 +19,11 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
 
   const service = {};
 
-  function DialogController ($mdDialog) {
-    'ngInject';
-
-    const vm = this;
-
-    vm.cancel = () => $mdDialog.cancel();
-    vm.ok = item => $mdDialog.hide(item);
-  }
-
   const slugPattern = (existing, slug) => (({
     test: function (existing, slug, value) {
       const validRegExp = /^[^\d][a-zA-Z0-9]*$/;
       const existsRegExp = new RegExp(`^(${existing.join('|')})$`);
-      return validRegExp.test(value)  && (!existsRegExp.test(value) || value === slug);
+      return validRegExp.test(value) && (!existsRegExp.test(value) || value === slug);
     }.bind(null, existing, slug),
   }));
 
@@ -48,7 +39,7 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
     }
 
     const fieldDialog = {
-      controller: DialogController,
+      controller: 'DefaultModalController',
       bindToController: true,
       controllerAs: 'vm',
       template: fieldModalTemplate,
@@ -80,6 +71,14 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
     return field;
   };
 
+  const editFieldSettings = async (field, schema, event) => {
+    const settings = await FieldFactory.field(field.type).editSettings(field, event);
+
+    if (settings) {
+      field.settings = settings;
+    }
+  };
+
   service.editSchema = async (schema, event) => {
     const createNew = !schema;
 
@@ -90,7 +89,7 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
     let config = ConfigFactory.getConfig();
 
     const schemaDialog = {
-      controller: DialogController,
+      controller: 'DefaultModalController',
       bindToController: true,
       controllerAs: 'vm',
       template: schemaModalTemplate,
@@ -102,6 +101,7 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
         slugPattern: slugPattern(config.schemas.map(schema => schema.slug), schema.slug),
         slugify,
         editField,
+        editFieldSettings,
       },
     };
 

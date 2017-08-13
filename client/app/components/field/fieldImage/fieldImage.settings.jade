@@ -1,56 +1,74 @@
-div(layout="column", layout-margin)
+md-dialog(aria-label="Field Settings")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Field Settings
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
 
-  md-input-container
-    md-checkbox(ng-model="vm.item.settings.required", aria-label="Required?") Required
+        md-input-container
+          md-checkbox(ng-model="vm.settings.required", aria-label="Required?") Required
 
-  br
+        br
 
-  md-input-container
-    label Min. Width
-    input(type="number", ng-model="vm.item.settings.minWidth", ng-init="vm.item.settings.minWidth = vm.item.settings.minWidth || 0")
+        md-input-container
+          label Min. Width
+          input(type="number", ng-model="vm.settings.minWidth", ng-init="vm.settings.minWidth = vm.settings.minWidth || 0")
 
-  md-input-container
-    label Min. Height
-    input(type="number", ng-model="vm.item.settings.minHeight", ng-init="vm.item.settings.minHeight = vm.item.settings.minHeight || 0")
+        md-input-container
+          label Min. Height
+          input(type="number", ng-model="vm.settings.minHeight", ng-init="vm.settings.minHeight = vm.settings.minHeight || 0")
 
-  md-input-container
-    label Max. Width
-    input(type="number", required, ng-model="vm.item.settings.maxWidth", ng-init="vm.item.settings.maxWidth = vm.item.settings.maxWidth || 3000")
+        br
 
-  md-input-container
-    label Max. Height
-    input(type="number", required, ng-model="vm.item.settings.maxHeight", ng-init="vm.item.settings.maxHeight = vm.item.settings.maxHeight || 2000")
+        md-input-container
+          label Max. Width
+          input(type="number", required, ng-model="vm.settings.maxWidth", ng-init="vm.settings.maxWidth = vm.settings.maxWidth || 3000")
 
-  md-input-container
-    md-checkbox(ng-model="vm.item.settings.dzi", aria-label="Deep Zoom Image?") Deep Zoom Image
+        md-input-container
+          label Max. Height
+          input(type="number", required, ng-model="vm.settings.maxHeight", ng-init="vm.settings.maxHeight = vm.settings.maxHeight || 2000")
 
-  br
+        br
 
-md-toolbar.md-table-toolbar.md-primary
-  .md-toolbar-tools Crops
-    span(flex)
-    md-button(ng-click="vm.fieldSettingsAdd('crops')") Add Crop
+        md-input-container
+          md-checkbox(ng-model="vm.settings.dzi", aria-label="Deep Zoom Image?") Deep Zoom Image
 
-md-table-container(ng-show="vm.item.settings.crops.length")
-  table(md-table)
+        br
 
-    thead(md-head)
-      tr(md-row)
-        th(md-column) Name
-        th(md-column) Slug
-        th(md-column) Min. Size
-        th(md-column) Ratio
-        th(md-column) Gravity
+        md-toolbar.md-table-toolbar.md-primary
+          .md-toolbar-tools Crops
+            span(flex)
+            md-button(ng-click="vm.editCrop(null, vm.settings.crops, $event)") Add Crop
 
-    tbody(md-body)
-      tr(md-row, ng-repeat="crop in vm.item.settings.crops")
-        td(md-cell) {{crop.name}}
-        td(md-cell) {{crop.slug}}
-        td(md-cell) {{crop.minWidth}}×{{crop.minHeight}}
-        td(md-cell) {{crop.ratio}}
-        td(md-cell) {{crop.gravity}}
-        td(md-cell)
-          md-button.md-icon-button(ng-click="vm.fieldSettingsEdit('crops', crop)")
-            md-icon(md-font-set="material-icons") edit
-          md-button.md-icon-button(ng-click="vm.fieldSettingsDelete('crops', crop)")
-            md-icon(md-font-set="material-icons") close
+        md-table-container(ng-show="vm.settings.crops.length")
+          table(md-table)
+
+            thead(md-head)
+              tr(md-row)
+                th(md-column) Name
+                th(md-column) Slug
+                th(md-column) Min. Size
+                th(md-column) Ratio
+                th(md-column) Gravity
+
+            tbody(md-body)
+              tr(md-row, ng-repeat="crop in vm.settings.crops")
+                td(md-cell) {{crop.name}}
+                td(md-cell) {{crop.slug}}
+                td(md-cell) {{crop.minWidth}}×{{crop.minHeight}}
+                td(md-cell) {{crop.ratio}}
+                td(md-cell) {{crop.gravity}}
+                td(md-cell)
+                  md-button.md-icon-button(ng-click="vm.editCrop(crop, vm.settings.crops, $event)")
+                    md-icon(md-font-set="material-icons") edit
+                  md-button.md-icon-button(ng-click="vm.deleteCrop(crop, vm.settings.crops, $event)")
+                    md-icon(md-font-set="material-icons") close
+
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.settings)" ng-disabled="vm.form.$invalid") Save

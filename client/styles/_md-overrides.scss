@@ -26,9 +26,13 @@ md-chip [ace-sortable] * {
   pointer-events: none;
 }
 
-md-dialog md-table-container {
-  margin: 0 -23px;
-  max-width: none;
+md-dialog {
+  md-table-container,
+  .md-table-toolbar {
+    margin: 0 -24px;
+    max-width: none;
+    width: auto;
+  }
 }
 
 .md-table {

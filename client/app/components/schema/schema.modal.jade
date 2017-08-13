@@ -29,7 +29,10 @@ md-dialog(aria-label="Schema")
             ng-disabled="!vm.createNew"
           )
 
-        .md-subhead Fields
+        md-toolbar.md-table-toolbar.md-primary
+          .md-toolbar-tools Fields
+            span(flex)
+            md-button(ng-click="vm.editField(null, vm.schema, $event)") Add Field
 
         md-table-container(ng-show="vm.schema.fields.length")
           table.md-table-sortable(md-table)
@@ -47,13 +50,13 @@ md-dialog(aria-label="Schema")
                 td(md-cell)
                   md-button.md-icon-button(ng-click="vm.editField(field, vm.schema, $event)")
                     md-icon(md-font-set="material-icons") create
-                  md-button.md-icon-button(ng-click="vm.editFieldSettings(field, vm.schema, $event)")
+                  md-button.md-icon-button(ng-show="$root.$field.field(field.type).editSettings" ng-click="vm.editFieldSettings(field, vm.schema, $event)")
                     md-icon(md-font-set="material-icons") settings
 
-        div(layout="row")
-          span(flex)
-          md-button.md-fab.md-mini(ng-click="vm.editField(null, vm.schema, $event)" aria-label="Add field")
-            md-icon(md-font-set="material-icons") add
+        //- div(layout="row")
+        //-   span(flex)
+        //-   md-button.md-fab.md-mini(ng-click="vm.editField(null, vm.schema, $event)" aria-label="Add field")
+        //-     md-icon(md-font-set="material-icons") add
 
     md-dialog-actions(layout="row")
       span(flex)

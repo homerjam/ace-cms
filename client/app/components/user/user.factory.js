@@ -14,15 +14,6 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
 
   const service = {};
 
-  function DialogController ($mdDialog) {
-    'ngInject';
-
-    const vm = this;
-
-    vm.cancel = () => $mdDialog.cancel();
-    vm.ok = item => $mdDialog.hide(item);
-  }
-
   service.editUser = async (userId, event) => {
     const createNew = !userId;
 
@@ -31,7 +22,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
     let config = ConfigFactory.getConfig();
 
     const userDialog = {
-      controller: DialogController,
+      controller: 'DefaultModalController',
       bindToController: true,
       controllerAs: 'vm',
       template: userModalTemplate,

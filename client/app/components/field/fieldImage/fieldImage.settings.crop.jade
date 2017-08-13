@@ -1,0 +1,46 @@
+md-dialog(aria-label="Crop Settings")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Crop Settings
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
+
+        md-input-container
+          label Name
+          input(ng-model="vm.crop.name", required, ng-minlength="2", ng-maxlength="50", ng-pattern="/^[^\"]*$/", ng-change="vm.createNew && vm.slugify(vm.crop)")
+
+        md-input-container
+          label Slug
+          input(ng-model="vm.crop.slug", required, disabled)
+
+        br
+
+        md-input-container
+          label Ratio
+          input(type="number", ng-model="vm.crop.ratio", min='0', max='99')
+
+        br
+
+        md-input-container
+          label Minimum Width
+          input(type="number", ng-model="vm.crop.minWidth", min='0')
+
+        md-input-container
+          label Minimum Height
+          input(type="number", ng-model="vm.crop.minHeight", min='0')
+
+        br
+
+        md-input-container
+          label Gravity
+          md-select(ng-model="vm.crop.gravity")
+            md-option(ng-repeat="option in vm.gravityOptions", value="{{option.value}}") {{option.name}}
+
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.crop)" ng-disabled="vm.form.$invalid") Save
