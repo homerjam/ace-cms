@@ -9,10 +9,10 @@ md-dialog(aria-label="Field Settings")
     md-dialog-content
       .md-dialog-content
 
-        md-toolbar.md-table-toolbar.md-primary
+        md-toolbar.md-table-toolbar.md-secondary
           .md-toolbar-tools Video Outputs
             span(flex)
-            md-button(ng-click="vm.editOutput(null, vm.outputs, $event)") Add Output
+            md-button(ng-click="vm.editOutput(null, vm.settings.videoOutputs, $event)") Add Output
 
         md-table-container(ng-show="vm.settings.videoOutputs.length")
           table(md-table)
@@ -33,9 +33,9 @@ md-dialog(aria-label="Field Settings")
                 td(md-cell) {{output.maxWidth}}×{{output.maxHeight}}
                 td(md-cell) {{output.quality}}
                 td(md-cell)
-                  md-button.md-icon-button(ng-click="vm.editOutput(output, vm.outputs, $event)")
+                  md-button.md-icon-button(ng-click="vm.editOutput(output, vm.settings.videoOutputs, $event)")
                     md-icon(md-font-set="material-icons") edit
-                  md-button.md-icon-button(ng-click="vm.deleteOutput(null, vm.outputs, $event)")
+                  md-button.md-icon-button(ng-click="vm.deleteOutput(output, vm.settings.videoOutputs, $event)")
                     md-icon(md-font-set="material-icons") close
 
     md-dialog-actions(layout="row")

@@ -1,13 +1,25 @@
-div(layout="column", layout-margin)
+md-dialog(aria-label="Field Settings")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Field Settings
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
 
-  div(layout="row")
-    md-chips(flex, ng-model="vm.item.settings.schemas", ng-init="vm.item.settings.schemas = vm.item.settings.schemas || []", md-autocomplete-snap, md-require-match="true")
-      md-autocomplete(md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="item in $admin.get('schema', true)", md-item-text="item.name", placeholder="Schema(s)", md-min-length="0")
-        span(md-highlight-text="vm.searchText") {{item.name}}
-      md-chip-template
-        span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.name}}
+        div(layout="row")
+          md-chips(flex, ng-model="vm.settings.schemas", md-transform-chip="vm.transformChip($chip)", md-require-match="true", md-autocomplete-snap)
+            md-autocomplete(md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="schema in vm.schemas", md-item-text="schema.name", placeholder="Schema(s)", md-min-length="0")
+              span(md-highlight-text="vm.searchText") {{schema.name}}
+            md-chip-template
+              span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{ $chip | schemaName }}
 
-    md-button.md-icon-button(aria-label="New schema", ng-click="vm.newItem('schema', vm.item.settings.schemas)")
-      md-icon(md-font-set="material-icons") add
+          md-button.md-icon-button(aria-label="New schema", ng-click="vm.newSchema(vm.settings.schemas, $event)")
+            md-icon(md-font-set="material-icons") add
 
-  br
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.settings)" ng-disabled="vm.form.$invalid") Save

@@ -7,6 +7,15 @@ const FieldImageSettingsFactory = function FieldImageSettingsFactory($rootScope,
 
   const service = {};
 
+  const defaultSettings = {
+    minWidth: 0,
+    minHeight: 0,
+    maxWidth: 3000,
+    maxHeight: 2000,
+    dzi: false,
+    crop: [],
+  };
+
   const defaultCrop = {
     minWidth: 0,
     minHeight: 0,
@@ -44,10 +53,6 @@ const FieldImageSettingsFactory = function FieldImageSettingsFactory($rootScope,
   const editCrop = async (crop, crops, event) => {
     const createNew = !crop;
 
-    if (!crop) {
-      crop = defaultCrop;
-    }
-
     const cropDialog = {
       controller: 'DefaultModalController',
       bindToController: true,
@@ -57,7 +62,7 @@ const FieldImageSettingsFactory = function FieldImageSettingsFactory($rootScope,
       clickOutsideToClose: true,
       multiple: true,
       locals: {
-        crop: _.merge({}, crop),
+        crop: _.merge({}, defaultCrop, crop),
         createNew,
         gravityOptions,
         slugify,
@@ -114,7 +119,7 @@ const FieldImageSettingsFactory = function FieldImageSettingsFactory($rootScope,
       clickOutsideToClose: true,
       multiple: true,
       locals: {
-        settings: _.merge({}, field.settings),
+        settings: _.merge({}, defaultSettings, field.settings),
         editCrop,
         deleteCrop,
       },

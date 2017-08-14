@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import angular from 'angular';
 import fieldEntityTileComponent from './fieldEntityTile.component';
-import settingsTemplate from './fieldEntityTile.settings.jade';
+import FieldEntityTileSettingsFactory from './fieldEntityTile.settings.factory';
 
 const fieldEntityTileModule = angular.module('fieldEntityTile', [])
 
@@ -14,12 +14,12 @@ const fieldEntityTileModule = angular.module('fieldEntityTile', [])
     $mdThemingProvider.theme('ungrouped').primaryPalette('blue-grey').dark();
   })
 
-  .run((FieldFactory, EntityFactory) => {
+  .run((FieldFactory, EntityFactory, FieldEntityTileSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('entityTile', {
       name: 'Entity Tile',
-      settingsTemplate,
+      editSettings: FieldEntityTileSettingsFactory.edit,
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
@@ -72,6 +72,8 @@ const fieldEntityTileModule = angular.module('fieldEntityTile', [])
     });
 
   })
+
+  .factory('FieldEntityTileSettingsFactory', FieldEntityTileSettingsFactory)
 
   .directive('fieldEntityTile', fieldEntityTileComponent);
 

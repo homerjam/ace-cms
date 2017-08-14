@@ -1,33 +1,42 @@
-div(layout="column", layout-margin)
+md-dialog(aria-label="Field Settings")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Field Settings
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
 
-  md-input-container
-    md-checkbox(ng-model='vm.item.settings.required', aria-label='Required?') Required
+        md-toolbar.md-table-toolbar.md-secondary
+          .md-toolbar-tools Audio Outputs
+            span(flex)
+            md-button(ng-click="vm.editOutput(null, vm.settings.audioOutputs, $event)") Add Output
 
-  br
+        md-table-container(ng-show="vm.settings.audioOutputs.length")
+          table(md-table)
 
-md-toolbar.md-table-toolbar.md-primary
-  .md-toolbar-tools Audio Outputs
-    span(flex)
-    md-button(ng-click="vm.fieldSettingsAdd('audioOutputs')") Add Output
+            thead(md-head)
+              tr(md-row)
+                th(md-column) Name
+                th(md-column) Slug
+                th(md-column) Format
+                th(md-column) Quality
 
-md-table-container(ng-show="vm.item.settings.audioOutputs.length")
-  table(md-table)
+            tbody(md-body)
+              tr(md-row, ng-repeat="output in vm.settings.audioOutputs")
+                td(md-cell) {{output.name}}
+                td(md-cell) {{output.slug}}
+                td(md-cell) {{output.format}}
+                td(md-cell) {{output.audioQuality}}
+                td(md-cell)
+                  md-button.md-icon-button(ng-click="vm.editOutput(output, vm.settings.audioOutputs, $event)")
+                    md-icon(md-font-set="material-icons") edit
+                  md-button.md-icon-button(ng-click="vm.deleteOutput(output, vm.settings.audioOutputs, $event)")
+                    md-icon(md-font-set="material-icons") close
 
-    thead(md-head)
-      tr(md-row)
-        th(md-column) Name
-        th(md-column) Slug
-        th(md-column) Format
-        th(md-column) Quality
-
-    tbody(md-body)
-      tr(md-row, ng-repeat="output in vm.item.settings.audioOutputs")
-        td(md-cell) {{output.name}}
-        td(md-cell) {{output.slug}}
-        td(md-cell) {{output.format}}
-        td(md-cell) {{output.audioQuality}}
-        td(md-cell)
-          md-button.md-icon-button(ng-click="vm.fieldSettingsEdit('audioOutputs', output)")
-            md-icon(md-font-set="material-icons") edit
-          md-button.md-icon-button(ng-click="vm.fieldSettingsDelete('audioOutputs', output)")
-            md-icon(md-font-set="material-icons") close
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.settings)" ng-disabled="vm.form.$invalid") Save

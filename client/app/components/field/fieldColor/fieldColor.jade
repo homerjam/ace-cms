@@ -1,5 +1,5 @@
-md-subheader.md-no-sticky.field-toolbar
-  md-toolbar.md-menu-toolbar
+md-subheader.md-no-sticky
+  md-toolbar.md-menu-toolbar.md-secondary
     .md-toolbar-tools
       md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
       h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
@@ -7,4 +7,9 @@ md-subheader.md-no-sticky.field-toolbar
 div(flex, layout="row", layout-margin)
   md-input-container(flex)
     // div(md-color-picker, ng-model="vm.fieldModel.value", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined", aria-label="{{vm.fieldOptions.name}}")
-    input(ng-model="vm.fieldModel.value", ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined", aria-label="{{vm.fieldOptions.name}}")
+    input(
+      type="color"
+      ng-model="vm.fieldModel.value"
+      ng-required="vm.fieldOptions.settings.required && vm.fieldApply === undefined"
+      aria-label="{{vm.fieldOptions.name}}"
+      )

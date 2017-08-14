@@ -15,7 +15,7 @@ md-content
         md-icon(md-font-set="material-icons") create
         p Content
       md-menu-content(width="4")
-        md-menu-item(ng-repeat="schema in $root.$config.schemas")
+        md-menu-item(ng-repeat="schema in $root.$config.schemas" ng-if="!schema.settings.hidden")
           md-button(ng-if="schema.settings.singular" ui-sref="singularEntity({id: schema.slug})")
             // md-icon(md-font-set="material-icons") dashboard
             span {{ schema.name }}
@@ -28,10 +28,13 @@ md-content
         md-icon(md-font-set="material-icons") format_list_bulleted
         p Taxonomy
       md-menu-content(width="4")
-        md-menu-item(ng-repeat="taxonomy in $root.$config.taxonomies")
-          md-button(ui-sref="taxonomy({taxonomySlug: taxonomy.slug})")
-            // md-icon(md-font-set="material-icons") dashboard
-            span {{ taxonomy.name }}
+        md-menu-item(ng-repeat="taxonomy in $root.$config.taxonomies | orderBy: 'name'")
+          md-button(ui-sref="taxonomy({taxonomySlug: taxonomy.slug})") {{ taxonomy.name }}
+        md-menu-divider(ng-if="::$root.$isSuperUser")
+        md-menu-item(ng-if="::$root.$isSuperUser")
+          md-button(ng-click="vm.newTaxonomy($event)")
+            md-icon(md-font-set="material-icons") add
+            span New Taxonomy
 
     md-menu(md-offset="220 0", ng-show="($root.$user.permissions.ecommerce || $root.$isSuperUser) && $root.$config.moduleEnabled.ecommerce")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('ecommerce', $root.$state.current.name)}")
@@ -92,26 +95,14 @@ md-content
     hr
 
     md-menu(md-offset="220 0", ng-if="::$root.$isSuperUser")
-      md-list-item(ng-click="$mdMenu.open()", ui-sref-active, ng-class="{active: $root.$helper.testExp('admin', $root.$state.current.name) && $root.$state.params.adminType !== 'user'}")
+      md-list-item(ng-click="$mdMenu.open()", ui-sref-active, ng-class="{active: $root.$helper.testExp('schemas|tools', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") settings_applications
         p Admin
       md-menu-content(width="4")
-        //- md-menu-item
-        //-   md-button(ui-sref="admin({adminType: 'field'})")
-        //-     // md-icon(md-font-set="material-icons") dashboard
-        //-     span Fields
         md-menu-item
-          md-button(ui-sref="schema")
+          md-button(ui-sref="schemas")
             // md-icon(md-font-set="material-icons") dashboard
             span Schemas
-        md-menu-item
-          md-button(ui-sref="admin({adminType: 'taxonomy'})")
-            // md-icon(md-font-set="material-icons") dashboard
-            span Taxonomy
-        //- md-menu-item
-        //-   md-button(ui-sref="admin({adminType: 'action'})")
-        //-     // md-icon(md-font-set="material-icons") dashboard
-        //-     span Actions
         md-menu-item
           md-button(ui-sref="tools")
             // md-icon(md-font-set="material-icons") dashboard

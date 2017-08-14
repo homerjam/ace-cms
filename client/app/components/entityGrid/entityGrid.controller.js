@@ -44,14 +44,11 @@ class EntityGridController {
     vm.sortFields = [];
 
     schemas.forEach((schema) => {
-      if (schema.gridColumns) {
-        schema.gridColumns.forEach((fieldSlug) => {
-          const field = schema.fields.filter(field => field.slug === fieldSlug)[0];
-          if (vm.sortFields.indexOf(field) === -1) {
-            vm.sortFields.push(field);
-          }
-        });
-      }
+      schema.fields.forEach((field) => {
+        if (field.settings.gridColumn) {
+          vm.sortFields.push(field);
+        }
+      });
     });
 
     vm.filterFields = $filter('filterFields')(vm.sortFields);

@@ -1,6 +1,6 @@
 import angular from 'angular';
 import fieldDateComponent from './fieldDate.component';
-import settingsTemplate from './fieldDate.settings.jade';
+import FieldDateSettingsFactory from './fieldDate.settings.factory';
 
 const fieldDateModule = angular.module('fieldDate', [])
 
@@ -8,22 +8,12 @@ const fieldDateModule = angular.module('fieldDate', [])
     'ngInject';
   })
 
-  .run(($filter, FieldFactory) => {
+  .run(($filter, FieldFactory, FieldDateSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('date', {
       name: 'Date',
-      settingsTemplate,
-      formats: [
-        {
-          name: 'dd/MM/yyyy',
-          value: 'dd/MM/yyyy',
-        },
-        {
-          name: 'MM/dd/yyyy',
-          value: 'MM/dd/yyyy',
-        },
-      ],
+      editSettings: FieldDateSettingsFactory.edit,
       toString(value) {
         return $filter('date')(value, 'short');
       },
@@ -36,6 +26,8 @@ const fieldDateModule = angular.module('fieldDate', [])
     });
 
   })
+
+  .factory('FieldDateSettingsFactory', FieldDateSettingsFactory)
 
   .directive('fieldDate', fieldDateComponent);
 

@@ -75,7 +75,7 @@ class FieldEntityTileController {
         return false;
       }
 
-      return ConfigFactory.getSchema(vm.fieldModel.value[i].schema).thumbnailField;
+      return ConfigFactory.getSchema(vm.fieldModel.value[i].schema).thumbnailFields[0];
     };
 
     vm.preview = (event, item) => {

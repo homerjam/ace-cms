@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 class SchemaController {
   /* @ngInject */
-  constructor(ConfigFactory, SchemaFactory, HelperFactory) {
+  constructor($scope, ConfigFactory, SchemaFactory) {
     const vm = this;
 
     vm.schemas = ConfigFactory.getConfig().schemas;
@@ -12,6 +12,9 @@ class SchemaController {
     // vm.order = 'name';
 
     vm.changeOrder = (order) => {
+      if (!order) {
+        return;
+      }
       const desc = /-/.test(order);
       order = /[a-z]+/i.exec(order)[0];
 
@@ -27,23 +30,23 @@ class SchemaController {
     };
 
     vm.edit = async (event, schema) => {
-      schema = await SchemaFactory.editSchema(schema, event);
+      await SchemaFactory.editSchema(schema, event);
 
-      if (schema) {
-        vm.schemas = HelperFactory.replace(vm.schemas, schema, 'slug');
+      vm.schemas = ConfigFactory.getConfig().schemas;
 
-        vm.changeOrder(vm.order);
-      }
+      vm.changeOrder(vm.order);
+
+      $scope.$apply();
     };
 
     vm.new = async (event) => {
-      const schema = await SchemaFactory.editSchema(null, event);
+      await SchemaFactory.editSchema(null, event);
 
-      if (schema) {
-        vm.schemas.push(schema);
+      vm.schemas = ConfigFactory.getConfig().schemas;
 
-        vm.changeOrder(vm.order);
-      }
+      vm.changeOrder(vm.order);
+
+      $scope.$apply();
     };
 
     vm.delete = async (event, selected) => {
@@ -52,9 +55,17 @@ class SchemaController {
       const deleted = await SchemaFactory.deleteSchemas(schemaSlugs, event);
 
       if (deleted) {
-        vm.schemas = _.remove(vm.schemas, schema => schemaSlugs.indexOf(schema.slug) === -1);
+        vm.schemas = ConfigFactory.getConfig().schemas;
+
+        vm.changeOrder(vm.order);
+
+        $scope.$apply();
       }
     };
+
+    $scope.$on('aceSortable:change', (event, { collection }) => {
+      SchemaFactory.updateSchemas(collection);
+    });
   }
 }
 

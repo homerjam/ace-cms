@@ -52,14 +52,12 @@ class FieldEntityGridController {
       const buttons = [];
 
       vm.fieldOptions.settings.schemas.forEach((schema) => {
-        if (ConfigFactory.getSchema(schema).gridColumns) {
-          ConfigFactory.getSchema(schema).gridColumns.forEach((fieldSlug) => {
-            const field = ConfigFactory.getField(schema, fieldSlug);
-            if (sortFields.indexOf(field) === -1) {
-              sortFields.push(field);
-            }
-          });
-        }
+        schema = ConfigFactory.getSchema(schema);
+        schema.fields.forEach((field) => {
+          if (field.settings.gridColumn) {
+            sortFields.push(field);
+          }
+        });
       });
 
       if (sortFields.length === 0) {

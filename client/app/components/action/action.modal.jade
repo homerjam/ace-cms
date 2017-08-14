@@ -1,0 +1,40 @@
+md-dialog(aria-label="Action")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Action
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
+
+        md-input-container.md-block
+          label Name
+          input(
+            ng-model="vm.action.name"
+            required
+            ng-minlength="2"
+            ng-maxlength="50"
+            ng-pattern="/^[^\"]*$/"
+            ng-change="vm.createNew && vm.slugify(vm.action)"
+          )
+
+        md-input-container.md-block
+          label Slug
+          input(
+            ng-model="vm.action.slug"
+            required
+            ng-pattern="vm.slugPattern"
+            ng-disabled="!vm.createNew"
+          )
+
+        md-input-container.md-block
+          label Type
+          md-select(ng-model="vm.action.type" required)
+            md-option(ng-repeat="(type, action) in $root.$action.actions()" value="{{type}}") {{action.name}}
+
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.action)" ng-disabled="vm.form.$invalid") Save

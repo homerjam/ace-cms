@@ -1,6 +1,5 @@
 import angular from 'angular';
 import fieldEmbedlyComponent from './fieldEmbedly.component';
-import settingsTemplate from './fieldEmbedly.settings.jade';
 
 const fieldEmbedlyModule = angular.module('fieldEmbedly', [])
 
@@ -13,7 +12,6 @@ const fieldEmbedlyModule = angular.module('fieldEmbedly', [])
 
     FieldFactory.registerField('embedly', {
       name: 'Embed.ly',
-      settingsTemplate,
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
@@ -29,7 +27,7 @@ const fieldEmbedlyModule = angular.module('fieldEmbedly', [])
         return value.url;
       },
       thumbnail(value) {
-        if (!value.oembed) {
+        if (!value || !value.oembed) {
           return null;
         }
 

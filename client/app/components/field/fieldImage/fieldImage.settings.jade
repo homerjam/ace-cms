@@ -11,26 +11,26 @@ md-dialog(aria-label="Field Settings")
 
         md-input-container
           label Min. Width
-          input(type="number", ng-model="vm.settings.minWidth", ng-init="vm.settings.minWidth = vm.settings.minWidth || 0")
+          input(type="number", ng-model="vm.settings.minWidth")
 
         md-input-container
           label Min. Height
-          input(type="number", ng-model="vm.settings.minHeight", ng-init="vm.settings.minHeight = vm.settings.minHeight || 0")
+          input(type="number", ng-model="vm.settings.minHeight")
 
         br
 
         md-input-container
           label Max. Width
-          input(type="number", required, ng-model="vm.settings.maxWidth", ng-init="vm.settings.maxWidth = vm.settings.maxWidth || 3000")
+          input(type="number", required, ng-model="vm.settings.maxWidth")
 
         md-input-container
           label Max. Height
-          input(type="number", required, ng-model="vm.settings.maxHeight", ng-init="vm.settings.maxHeight = vm.settings.maxHeight || 2000")
+          input(type="number", required, ng-model="vm.settings.maxHeight")
 
         md-input-container.md-block
           md-checkbox(ng-model="vm.settings.dzi", aria-label="Deep Zoom Image?") Deep Zoom Image
 
-        md-toolbar.md-table-toolbar.md-primary
+        md-toolbar.md-table-toolbar.md-secondary
           .md-toolbar-tools Crops
             span(flex)
             md-button(ng-click="vm.editCrop(null, vm.settings.crops, $event)") Add Crop

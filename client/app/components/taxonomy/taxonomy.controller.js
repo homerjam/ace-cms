@@ -204,6 +204,14 @@ class TaxonomyController {
         );
     };
 
+    vm.delete = async (event) => {
+      const deleted = await TaxonomyFactory.deleteTaxonomy(vm.taxonomy, event);
+
+      if (deleted) {
+        $state.go('dashboard');
+      }
+    };
+
   }
 }
 

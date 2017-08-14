@@ -1,6 +1,6 @@
 import angular from 'angular';
 import actionUrlComponent from './actionUrl.component';
-import settingsTemplate from './actionUrl.settings.jade';
+import ActionUrlSettingsFactory from './actionUrl.settings.factory';
 
 const actionUrlModule = angular.module('actionUrl', [])
 
@@ -8,14 +8,16 @@ const actionUrlModule = angular.module('actionUrl', [])
     'ngInject';
   })
 
-  .run((ActionFactory) => {
+  .run((ActionFactory, ActionUrlSettingsFactory) => {
     'ngInject';
 
     ActionFactory.registerAction('url', {
       name: 'URL',
-      settingsTemplate,
+      editSettings: ActionUrlSettingsFactory.edit,
     });
   })
+
+  .factory('ActionUrlSettingsFactory', ActionUrlSettingsFactory)
 
   .directive('actionUrl', actionUrlComponent);
 

@@ -1,6 +1,5 @@
 import angular from 'angular';
 import fieldAttachmentComponent from './fieldAttachment.component';
-import settingsTemplate from './fieldAttachment.settings.jade';
 
 const fieldAttachmentModule = angular.module('fieldAttachment', [])
 
@@ -13,7 +12,6 @@ const fieldAttachmentModule = angular.module('fieldAttachment', [])
 
     FieldFactory.registerField('attachment', {
       name: 'Attachment',
-      settingsTemplate,
       modeDisabled: {
         batchEdit: true,
         batchUpload: true,

@@ -12,6 +12,9 @@ class UserController {
     vm.order = 'lastName';
 
     vm.changeOrder = (order) => {
+      if (!order) {
+        return;
+      }
       const desc = /-/.test(order);
       order = /[a-z]+/i.exec(order)[0];
 

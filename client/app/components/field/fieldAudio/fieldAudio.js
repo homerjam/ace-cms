@@ -1,6 +1,6 @@
 import angular from 'angular';
 import fieldAudioComponent from './fieldAudio.component';
-import settingsTemplate from './fieldAudio.settings.jade';
+import FieldAudioSettingsFactory from './fieldAudio.settings.factory';
 
 const fieldAudioModule = angular.module('fieldAudio', [])
 
@@ -8,12 +8,12 @@ const fieldAudioModule = angular.module('fieldAudio', [])
     'ngInject';
   })
 
-  .run((FieldFactory) => {
+  .run((FieldFactory, FieldAudioSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('audio', {
       name: 'Audio',
-      settingsTemplate,
+      editSettings: FieldAudioSettingsFactory.edit,
       modeDisabled: {
         batchEdit: true,
         batchUpload: true,
@@ -24,6 +24,8 @@ const fieldAudioModule = angular.module('fieldAudio', [])
     });
 
   })
+
+  .factory('FieldAudioSettingsFactory', FieldAudioSettingsFactory)
 
   .directive('fieldAudio', fieldAudioComponent);
 

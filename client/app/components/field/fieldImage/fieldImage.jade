@@ -1,6 +1,6 @@
 ace-flow(options="vm.flowOptions")
-  md-subheader.md-no-sticky.field-toolbar
-    md-toolbar.md-menu-toolbar
+  md-subheader.md-no-sticky
+    md-toolbar.md-menu-toolbar.md-secondary
       .md-toolbar-tools
         md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
         h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}

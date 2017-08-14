@@ -34,8 +34,11 @@ md-dialog(aria-label="Field")
           md-select(ng-model="vm.field.type" required)
             md-option(ng-repeat="(type, field) in $root.$field.fields()" value="{{type}}") {{field.name}}
 
-        md-input-container
+        md-input-container.md-block
           md-checkbox(ng-model="vm.field.settings.required", aria-label="Required?") Required
+
+        md-input-container.md-block
+          md-checkbox(ng-model="vm.field.settings.gridColumn", aria-label="Grid column?") Grid Column
 
     md-dialog-actions(layout="row")
       span(flex)

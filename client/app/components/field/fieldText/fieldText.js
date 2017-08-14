@@ -1,6 +1,6 @@
 import angular from 'angular';
 import fieldTextComponent from './fieldText.component';
-import settingsTemplate from './fieldText.settings.jade';
+import FieldTextSettingsFactory from './fieldText.settings.factory';
 
 const fieldTextModule = angular.module('fieldText', [])
 
@@ -8,28 +8,16 @@ const fieldTextModule = angular.module('fieldText', [])
     'ngInject';
   })
 
-  .run((FieldFactory) => {
+  .run((FieldFactory, FieldTextSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('text', {
       name: 'Text',
-      settingsTemplate,
-      formats: [
-        {
-          name: 'Default',
-          value: 'default',
-        },
-        {
-          name: 'URL',
-          value: 'url',
-        },
-        {
-          name: 'Email',
-          value: 'email',
-        },
-      ],
+      editSettings: FieldTextSettingsFactory.edit,
     });
   })
+
+  .factory('FieldTextSettingsFactory', FieldTextSettingsFactory)
 
   .directive('fieldText', fieldTextComponent);
 

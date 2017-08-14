@@ -1,6 +1,6 @@
 import angular from 'angular';
 import fieldRichTextComponent from './fieldRichText.component';
-import settingsTemplate from './fieldRichText.settings.jade';
+import FieldRichTextSettingsFactory from './fieldRichText.settings.factory';
 
 const fieldRichTextModule = angular.module('fieldRichText', [])
 
@@ -8,12 +8,12 @@ const fieldRichTextModule = angular.module('fieldRichText', [])
     'ngInject';
   })
 
-  .run(($filter, FieldFactory) => {
+  .run(($filter, FieldFactory, FieldRichTextSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('richText', {
       name: 'Rich Text',
-      settingsTemplate,
+      editSettings: FieldRichTextSettingsFactory.edit,
       toString(value) {
         return $filter('cleanHTML')(value.html);
       },
@@ -46,6 +46,8 @@ const fieldRichTextModule = angular.module('fieldRichText', [])
     });
 
   })
+
+  .factory('FieldRichTextSettingsFactory', FieldRichTextSettingsFactory)
 
   .directive('fieldRichText', fieldRichTextComponent);
 

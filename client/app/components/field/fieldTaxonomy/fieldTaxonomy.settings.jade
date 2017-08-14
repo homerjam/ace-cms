@@ -1,15 +1,26 @@
-div(layout="column", layout-margin)
+md-dialog(aria-label="Field Settings")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Field Settings
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
 
-  md-input-container
-    label Taxonomy
-    md-select(ng-model='vm.item.settings.taxonomy', placeholder="Taxonomy")
-      md-option(ng-repeat="item in $admin.get('taxonomy', true)", ng-value='item') {{item.name}}
+        md-input-container.md-block
+          label Taxonomy
+          md-select(ng-model="vm.settings.taxonomy", placeholder="Taxonomy")
+            md-option(ng-repeat="taxonomy in vm.taxonomies", ng-value="taxonomy.slug") {{taxonomy.name}}
 
-  md-input-container
-    md-checkbox(ng-model='vm.item.settings.multiple', aria-label='Multiple?') Multiple
+        md-input-container.md-block
+          md-checkbox(ng-model="vm.settings.multiple", aria-label="Multiple?") Multiple
 
-  md-input-container
-    md-checkbox(ng-model='vm.item.settings.existingOnly', aria-label='Existing terms only?') Existing terms only
+        md-input-container.md-block
+          md-checkbox(ng-model="vm.settings.existingOnly", aria-label="Existing terms only?") Existing terms only
 
-  md-input-container
-    md-checkbox(ng-model='vm.item.settings.required', aria-label='Required?') Required
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.settings)" ng-disabled="vm.form.$invalid") Save

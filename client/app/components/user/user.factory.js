@@ -17,7 +17,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
   service.editUser = async (userId, event) => {
     const createNew = !userId;
 
-    let user = userId ? ConfigFactory.getUser(userId) : defaultUser;
+    let user = userId ? ConfigFactory.getUser(userId) : {};
 
     let config = ConfigFactory.getConfig();
 
@@ -29,7 +29,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
       targetEvent: event,
       clickOutsideToClose: true,
       locals: {
-        user: _.merge({}, user),
+        user: _.merge({}, defaultUser, user),
       },
     };
 
@@ -66,7 +66,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
       return false;
     }
 
-    const config = (await $http.delete(`${appConfig.apiUrl}/user`, { params: { userIds } })).data;
+    const config = (await $http.delete(`${appConfig.apiUrl}/user`, { data: { userIds } })).data;
 
     ConfigFactory.setConfig(config);
 

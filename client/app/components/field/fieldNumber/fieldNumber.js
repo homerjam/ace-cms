@@ -1,6 +1,5 @@
 import angular from 'angular';
 import fieldNumberComponent from './fieldNumber.component';
-import settingsTemplate from './fieldNumber.settings.jade';
 
 const fieldNumberModule = angular.module('fieldNumber', [])
 
@@ -13,17 +12,6 @@ const fieldNumberModule = angular.module('fieldNumber', [])
 
     FieldFactory.registerField('number', {
       name: 'Number',
-      settingsTemplate,
-      formats: [
-        {
-          name: 'Default',
-          value: 'default',
-        },
-        {
-          name: 'Currency',
-          value: 'currency',
-        },
-      ],
       toString(value) {
         return value.toString();
       },

@@ -29,9 +29,27 @@ md-dialog(aria-label="Schema")
             ng-disabled="!vm.createNew"
           )
 
-        md-toolbar.md-table-toolbar.md-primary
+        md-input-container.md-block
+          md-checkbox(ng-model="vm.schema.settings.singular", aria-label="Singular?") Singular
+
+        md-input-container.md-block
+          md-checkbox(ng-model="vm.schema.settings.hidden", aria-label="Hidden?") Hidden
+
+        br
+
+        md-input-container.md-block
+          label(ng-non-bindable) Title Template {{handlebars}}
+          input(ng-model="vm.schema.titleTemplate", aria-label="Title template")
+
+        md-input-container.md-block
+          label(ng-non-bindable) Slug Template {{handlebars}}
+          input(ng-model="vm.schema.slugTemplate", aria-label="Slug template")
+
+        md-toolbar.md-table-toolbar.md-secondary
           .md-toolbar-tools Fields
             span(flex)
+            //- md-button.md-fab.md-mini.md-accent(ng-click="vm.editField(null, vm.schema, $event)" aria-label="Add field")
+            //-   md-icon(md-font-set="material-icons") add
             md-button(ng-click="vm.editField(null, vm.schema, $event)") Add Field
 
         md-table-container(ng-show="vm.schema.fields.length")
@@ -41,22 +59,58 @@ md-dialog(aria-label="Schema")
                 th(md-column) Name
                 th(md-column) Slug
                 th(md-column) Type
+                th(md-column) Required
+                th(md-column) Grid Column
                 th(md-column)
             tbody(md-body)
               tr(md-row ng-repeat="field in vm.schema.fields" ace-sortable collection="vm.schema.fields" index="$index" handle-selector="'.handle'" axis="'y'")
                 td.handle(md-cell) {{ field.name }}
                 td.handle(md-cell) {{ field.slug }}
-                td.handle(md-cell) {{ field.type }}
-                td(md-cell)
-                  md-button.md-icon-button(ng-click="vm.editField(field, vm.schema, $event)")
-                    md-icon(md-font-set="material-icons") create
+                td.handle(md-cell) {{ field.type | fieldTypeName }}
+                td.handle(md-cell)
+                  span(class="{{ field.settings.required | crossCheck }}")
+                td.handle(md-cell)
+                  span(class="{{ field.settings.gridColumn | crossCheck }}")
+                td.align-right(md-cell)
                   md-button.md-icon-button(ng-show="$root.$field.field(field.type).editSettings" ng-click="vm.editFieldSettings(field, vm.schema, $event)")
                     md-icon(md-font-set="material-icons") settings
+                  md-button.md-icon-button(ng-click="vm.editField(field, vm.schema, $event)")
+                    md-icon(md-font-set="material-icons") create
+                  md-button.md-icon-button(ng-click="vm.deleteField(field, vm.schema, $event)")
+                    md-icon(md-font-set="material-icons") close
 
         //- div(layout="row")
         //-   span(flex)
         //-   md-button.md-fab.md-mini(ng-click="vm.editField(null, vm.schema, $event)" aria-label="Add field")
         //-     md-icon(md-font-set="material-icons") add
+
+        br
+
+        md-toolbar.md-table-toolbar.md-secondary
+          .md-toolbar-tools Actions
+            span(flex)
+            md-button(ng-click="vm.editAction(null, vm.schema, $event)") Add Action
+
+        md-table-container(ng-show="vm.schema.actions.length")
+          table.md-table-sortable(md-table)
+            thead(md-head)
+              tr(md-row)
+                th(md-column) Name
+                th(md-column) Slug
+                th(md-column) Type
+                th(md-column)
+            tbody(md-body)
+              tr(md-row ng-repeat="action in vm.schema.actions" ace-sortable collection="vm.schema.actions" index="$index" handle-selector="'.handle'" axis="'y'")
+                td.handle(md-cell) {{ action.name }}
+                td.handle(md-cell) {{ action.slug }}
+                td.handle(md-cell) {{ action.type | actionTypeName }}
+                td.align-right(md-cell)
+                  md-button.md-icon-button(ng-show="$root.$action.action(action.type).editSettings" ng-click="vm.editActionSettings(action, vm.schema, $event)")
+                    md-icon(md-font-set="material-icons") settings
+                  md-button.md-icon-button(ng-click="vm.editAction(action, vm.schema, $event)")
+                    md-icon(md-font-set="material-icons") create
+                  md-button.md-icon-button(ng-click="vm.deleteAction(action, vm.schema, $event)")
+                    md-icon(md-font-set="material-icons") close
 
     md-dialog-actions(layout="row")
       span(flex)

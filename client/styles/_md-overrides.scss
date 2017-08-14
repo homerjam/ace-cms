@@ -26,7 +26,16 @@ md-chip [ace-sortable] * {
   pointer-events: none;
 }
 
-md-dialog {
+md-toolbar.md-secondary {
+  background-color: lightgrey;
+  color: black;
+}
+
+md-dialog-content {
+  md-toolbar:first-child {
+    margin-top: -24px;
+  }
+
   md-table-container,
   .md-table-toolbar {
     margin: 0 -24px;
@@ -43,7 +52,7 @@ md-dialog {
     outline: none;
   }
   md-icon {
-    margin-top: -4px;
+    // margin-top: -4px;
     min-width: 0;
     min-height: 0;
   }

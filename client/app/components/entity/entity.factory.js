@@ -12,24 +12,26 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
   $rootScope.$entity = service;
 
-  function prepEntityFromDb (entity) {
-    if (entity.published) {
-      entity.publishedAt = new Date(Date.parse(entity.publishedAt));
-    }
-
-    entity.fields = _.mapValues(entity.fields, (field, fieldSlug) => {
-      const fieldOpts = ConfigFactory.getField(entity.schema, fieldSlug);
-
-      field.value = FieldFactory.field(field.type).fromDb(field.value, fieldOpts.settings);
-
-      return field;
-    });
-
-    return entity;
-  }
-
   function prepEntitiesFromDb (entities) {
-    return entities.map(entity => prepEntityFromDb(entity));
+    return entities.map((entity) => {
+      if (entity.published) {
+        entity.publishedAt = new Date(Date.parse(entity.publishedAt));
+      }
+
+      entity.fields = _.mapValues(entity.fields, (field, fieldSlug) => {
+        const fieldOpts = ConfigFactory.getField(entity.schema, fieldSlug);
+
+        if (!fieldOpts) {
+          return field;
+        }
+
+        field.value = FieldFactory.field(field.type).fromDb(field.value, fieldOpts.settings);
+
+        return field;
+      });
+
+      return entity;
+    });
   }
 
   function getEntityById (params) {
@@ -52,7 +54,9 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
             }
           }
 
-          resolve(prepEntitiesFromDb(response.data));
+          const entities = prepEntitiesFromDb(response.data);
+
+          resolve(entities);
         }, reject);
     });
   }
@@ -101,7 +105,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   };
 
   service.getEntityThumbnail = (entity) => {
-    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailField;
+    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailFields[0];
 
     if (thumbnailFieldSlug && entity.fields[thumbnailFieldSlug]) {
       return service.getFieldThumbnail(entity.fields[thumbnailFieldSlug]);
@@ -111,7 +115,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   };
 
   service.getEntityThumbnailUrl = (entity, transformSettings) => {
-    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailField;
+    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailFields[0];
 
     if (thumbnailFieldSlug && entity.fields[thumbnailFieldSlug]) {
       return HelperFactory.getFieldThumbnailUrl(entity.fields[thumbnailFieldSlug], transformSettings);

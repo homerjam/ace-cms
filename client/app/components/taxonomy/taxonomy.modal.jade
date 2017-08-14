@@ -1,0 +1,35 @@
+md-dialog(aria-label="Taxonomy")
+  form(name="vm.form" role="form" novalidate ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Taxonomy
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancel()")
+          md-icon(md-font-set="material-icons") close
+    md-dialog-content
+      .md-dialog-content
+
+        md-input-container.md-block
+          label Name
+          input(
+            ng-model="vm.taxonomy.name"
+            required
+            ng-minlength="2"
+            ng-maxlength="50"
+            ng-pattern="/^[^\"]*$/"
+            ng-change="vm.createNew && vm.slugify(vm.taxonomy)"
+          )
+
+        md-input-container.md-block
+          label Slug
+          input(
+            ng-model="vm.taxonomy.slug"
+            required
+            ng-pattern="vm.slugPattern"
+            ng-disabled="!vm.createNew"
+          )
+
+    md-dialog-actions(layout="row")
+      span(flex)
+      md-button(ng-click="vm.cancel()") Close
+      md-button.md-accent(ng-click="vm.ok(vm.taxonomy)" ng-disabled="vm.form.$invalid") Save

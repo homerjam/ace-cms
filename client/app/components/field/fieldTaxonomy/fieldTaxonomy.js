@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import angular from 'angular';
 import fieldTaxonomyComponent from './fieldTaxonomy.component';
-import settingsTemplate from './fieldTaxonomy.settings.jade';
+import FieldTaxonomySettingsFactory from './fieldTaxonomy.settings.factory';
 
 const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
 
@@ -9,12 +9,12 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
     'ngInject';
   })
 
-  .run((FieldFactory) => {
+  .run((FieldFactory, FieldTaxonomySettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('taxonomy', {
       name: 'Taxonomy',
-      settingsTemplate,
+      editSettings: FieldTaxonomySettingsFactory.edit,
       toString(value) {
         if (!value.terms) {
           return '';
@@ -39,7 +39,6 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
 
         return {
           taxonomy: settings.taxonomy,
-          type: 'taxonomy',
           terms,
         };
       },
@@ -52,6 +51,8 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
     });
 
   })
+
+  .factory('FieldTaxonomySettingsFactory', FieldTaxonomySettingsFactory)
 
   .directive('fieldTaxonomy', fieldTaxonomyComponent);
 

@@ -4,6 +4,8 @@ md-toolbar
       md-icon(md-icon-set="material-icons") menu
     h2 {{vm.taxonomy.name || "Taxonomy"}}
     span(flex)
+    md-button.md-icon-button(ng-if="::$root.$isSuperUser", ng-click="vm.delete($event)", aria-label="Delete")
+      md-icon(md-font-set="material-icons") delete
     md-button.md-fab.md-mini(ng-click="vm.newTerm()", aria-label="New Term")
       md-icon(md-font-set="material-icons") add
 

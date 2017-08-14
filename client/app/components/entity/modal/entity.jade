@@ -17,5 +17,5 @@
       .modal-footer(layout="row")
 
         span(flex)
-        md-button.md-accent(ng-disabled="vm.entityForm.$invalid || vm.entity.trashed", ng-click="$modal.close(vm.entity)") Save
         md-button.md-warn(ng-click="$modal.dismiss()") Cancel
+        md-button.md-accent(ng-disabled="vm.entityForm.$invalid || vm.entity.trashed", ng-click="$modal.close(vm.entity)") Save

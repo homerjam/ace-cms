@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import angular from 'angular';
 import fieldSelectComponent from './fieldSelect.component';
-import settingsTemplate from './fieldSelect.settings.jade';
+import FieldSelectSettingsFactory from './fieldSelect.settings.factory';
 
 const fieldSelectModule = angular.module('fieldSelect', [])
 
@@ -9,12 +9,12 @@ const fieldSelectModule = angular.module('fieldSelect', [])
     'ngInject';
   })
 
-  .run((FieldFactory) => {
+  .run((FieldFactory, FieldSelectSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('select', {
       name: 'Select',
-      settingsTemplate,
+      editSettings: FieldSelectSettingsFactory.edit,
       toString(value) {
         if (!value) {
           return '';
@@ -45,6 +45,8 @@ const fieldSelectModule = angular.module('fieldSelect', [])
     });
 
   })
+
+  .factory('FieldSelectSettingsFactory', FieldSelectSettingsFactory)
 
   .directive('fieldSelect', fieldSelectComponent);
 

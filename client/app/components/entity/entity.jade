@@ -52,8 +52,8 @@ md-content(mode="{{vm.mode}}")
 
   section(ng-class="::{disabled: vm.entity.trashed}")
 
-    md-subheader.md-no-sticky.field-toolbar
-      md-toolbar.md-menu-toolbar
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
         .md-toolbar-tools
           md-checkbox.md-primary.field-apply(ng-if="::vm.mode === 'batchEdit'", ng-model="vm.batchPublish", aria-label="Apply to all?")
           h3 Published

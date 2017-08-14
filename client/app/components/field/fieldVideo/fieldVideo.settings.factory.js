@@ -1,14 +1,29 @@
 import _ from 'lodash';
 import settingsModalTemplate from './fieldVideo.settings.jade';
 import outputModalTemplate from './fieldVideo.settings.output.jade';
+import thumbnailModalTemplate from './fieldVideo.settings.thumbnail.jade';
 
 const FieldVideoSettingsFactory = function FieldVideoSettingsFactory($rootScope, $mdDialog, HelperFactory) {
   'ngInject';
 
   const service = {};
 
-  const defaultOutput = {
+  const defaultSettings = {
+    videoOutputs: [],
+  };
 
+  const defaultOutput = {
+    name: '',
+    slug: '',
+    format: 'mp4',
+    quality: 3,
+    thumbnails: [],
+  };
+
+  const defaultThumbnail = {
+    name: '',
+    slug: '',
+    format: 'jpg',
   };
 
   const formatOptions = [
@@ -45,16 +60,82 @@ const FieldVideoSettingsFactory = function FieldVideoSettingsFactory($rootScope,
     },
   ];
 
+  const thumbnailFormatOptions = [
+    {
+      value: 'jpg',
+      name: 'jpg',
+    },
+    {
+      value: 'png',
+      name: 'png',
+    },
+  ];
+
   const slugify = (item) => {
     item.slug = _.camelCase(item.name);
   };
 
+  const editThumbnail = async (thumbnail, thumbnails, event) => {
+    const createNew = !thumbnail;
+
+    const thumbnailDialog = {
+      controller: 'DefaultModalController',
+      bindToController: true,
+      controllerAs: 'vm',
+      template: thumbnailModalTemplate,
+      targetEvent: event,
+      clickOutsideToClose: true,
+      multiple: true,
+      locals: {
+        thumbnail: _.merge({}, defaultThumbnail, thumbnail),
+        createNew,
+        slugify,
+        thumbnailFormatOptions,
+      },
+    };
+
+    try {
+      thumbnail = await $mdDialog.show(thumbnailDialog);
+    } catch (error) {
+      return false;
+    }
+
+    if (createNew) {
+      thumbnails.push(thumbnail);
+    } else {
+      HelperFactory.replace(thumbnails, thumbnail, 'slug');
+    }
+
+    $rootScope.$apply();
+
+    return thumbnail;
+  };
+
+  const deleteThumbnail = async (thumbnail, thumbnails, event) => {
+    const confirmDialog = $mdDialog.confirm({
+      title: 'Delete thumbnail?',
+      textContent: `Are you sure you want to delete ${thumbnail.name}?`,
+      targetEvent: event,
+      ok: 'Confirm',
+      cancel: 'Cancel',
+      multiple: true,
+    });
+
+    try {
+      await $mdDialog.show(confirmDialog);
+    } catch (error) {
+      return false;
+    }
+
+    _.remove(thumbnails, { slug: thumbnail.slug });
+
+    $rootScope.$apply();
+
+    return true;
+  };
+
   const editOutput = async (output, outputs, event) => {
     const createNew = !output;
-
-    if (!output) {
-      output = defaultOutput;
-    }
 
     const outputDialog = {
       controller: 'DefaultModalController',
@@ -65,11 +146,13 @@ const FieldVideoSettingsFactory = function FieldVideoSettingsFactory($rootScope,
       clickOutsideToClose: true,
       multiple: true,
       locals: {
-        output: _.merge({}, output),
+        output: _.merge({}, defaultOutput, output),
         createNew,
         slugify,
         formatOptions,
         qualityOptions,
+        editThumbnail,
+        deleteThumbnail,
       },
     };
 
@@ -92,7 +175,7 @@ const FieldVideoSettingsFactory = function FieldVideoSettingsFactory($rootScope,
 
   const deleteOutput = async (output, outputs, event) => {
     const confirmDialog = $mdDialog.confirm({
-      title: 'Delete Output?',
+      title: 'Delete output?',
       textContent: `Are you sure you want to delete ${output.name}?`,
       targetEvent: event,
       ok: 'Confirm',
@@ -123,7 +206,7 @@ const FieldVideoSettingsFactory = function FieldVideoSettingsFactory($rootScope,
       clickOutsideToClose: true,
       multiple: true,
       locals: {
-        settings: _.merge({}, field.settings),
+        settings: _.merge({}, defaultSettings, field.settings),
         editOutput,
         deleteOutput,
       },

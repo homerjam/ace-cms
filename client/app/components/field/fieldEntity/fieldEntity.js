@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import angular from 'angular';
 import fieldEntityComponent from './fieldEntity.component';
-import settingsTemplate from './fieldEntity.settings.jade';
+import FieldEntitySettingsFactory from './fieldEntity.settings.factory';
 
 const fieldEntityModule = angular.module('fieldEntity', [])
 
@@ -9,13 +9,13 @@ const fieldEntityModule = angular.module('fieldEntity', [])
     'ngInject';
   })
 
-  .run((FieldFactory, EntityFactory, ConfigFactory) => {
+  .run((FieldFactory, EntityFactory, FieldEntitySettingsFactory, ConfigFactory) => {
     'ngInject';
 
     FieldFactory.registerField('entity', {
       name: 'Entity',
-      settingsTemplate,
-      thumbnailField: true,
+      editSettings: FieldEntitySettingsFactory.edit,
+      thumbnailField: false,
       toString(value) {
         if (_.isArray(value)) {
           return value.slice(0, 1).map(entity => entity.title).join(', ');
@@ -77,7 +77,7 @@ const fieldEntityModule = angular.module('fieldEntity', [])
           return value[0].thumbnail;
         }
 
-        const thumbnailFieldSlug = ConfigFactory.getSchema(value[0].schema).thumbnailField[0];
+        const thumbnailFieldSlug = ConfigFactory.getSchema(value[0].schema).thumbnailFields[0];
         const thumbnailFieldType = ConfigFactory.getField(value[0].schema, thumbnailFieldSlug).type;
 
         const thumbnail = FieldFactory.field(thumbnailFieldType).thumbnail(value[0].thumbnail);
@@ -87,6 +87,8 @@ const fieldEntityModule = angular.module('fieldEntity', [])
     });
 
   })
+
+  .factory('FieldEntitySettingsFactory', FieldEntitySettingsFactory)
 
   .directive('fieldEntity', fieldEntityComponent);
 

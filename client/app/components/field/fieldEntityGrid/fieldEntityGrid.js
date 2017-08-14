@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import angular from 'angular';
 import fieldEntityGridComponent from './fieldEntityGrid.component';
-import settingsTemplate from './fieldEntityGrid.settings.jade';
+import FieldEntityGridSettingsFactory from './fieldEntityGrid.settings.factory';
 
 const fieldEntityGridModule = angular.module('fieldEntityGrid', [])
 
@@ -9,12 +9,12 @@ const fieldEntityGridModule = angular.module('fieldEntityGrid', [])
     'ngInject';
   })
 
-  .run((FieldFactory, EntityFactory) => {
+  .run((FieldFactory, EntityFactory, FieldEntityGridSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('entityGrid', {
       name: 'Entity Grid',
-      settingsTemplate,
+      editSettings: FieldEntityGridSettingsFactory.edit,
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
@@ -67,6 +67,8 @@ const fieldEntityGridModule = angular.module('fieldEntityGrid', [])
     });
 
   })
+
+  .factory('FieldEntityGridSettingsFactory', FieldEntityGridSettingsFactory)
 
   .directive('fieldEntityGrid', fieldEntityGridComponent);
 

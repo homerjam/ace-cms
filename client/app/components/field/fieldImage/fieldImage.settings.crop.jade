@@ -20,25 +20,21 @@ md-dialog(aria-label="Crop Settings")
         br
 
         md-input-container
-          label Ratio
-          input(type="number", ng-model="vm.crop.ratio", min='0', max='99')
-
-        br
-
-        md-input-container
           label Minimum Width
-          input(type="number", ng-model="vm.crop.minWidth", min='0')
+          input(type="number", ng-model="vm.crop.minWidth", min="0")
 
         md-input-container
           label Minimum Height
-          input(type="number", ng-model="vm.crop.minHeight", min='0')
+          input(type="number", ng-model="vm.crop.minHeight", min="0")
 
-        br
-
-        md-input-container
+        md-input-container.md-block
           label Gravity
           md-select(ng-model="vm.crop.gravity")
             md-option(ng-repeat="option in vm.gravityOptions", value="{{option.value}}") {{option.name}}
+
+        md-input-container
+          label Ratio
+          input(type="number", ng-model="vm.crop.ratio", min="0", max="99")
 
     md-dialog-actions(layout="row")
       span(flex)
