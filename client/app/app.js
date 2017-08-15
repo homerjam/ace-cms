@@ -72,7 +72,7 @@ angular.module('app', [
     $compileProvider.debugInfoEnabled(false);
 
     // Disable unhandled rejection errors
-    // $qProvider.errorOnUnhandledRejections(false);
+    $qProvider.errorOnUnhandledRejections(false);
 
     // Routing
     $locationProvider.html5Mode(true);

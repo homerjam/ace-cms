@@ -68,7 +68,10 @@ class FieldEntityTileController {
       vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1);
     };
 
-    vm.getSortFields = schema => ConfigFactory.getSchema(schema).gridColumns;
+    vm.getGridColumnFieldSlugs = schemaSlug =>
+      ConfigFactory.getSchema(schemaSlug)
+        .fields.filter(field => field.settings.gridColumn)
+        .map(field => field.slug);
 
     vm.hasPreview = (i) => {
       if (!vm.fieldModel.value[i]) {

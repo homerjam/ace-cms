@@ -27,8 +27,8 @@ class EntityGridController {
 
     const schemaSlugs = vm.schema ?
       [vm.schema] : vm.mode === 'trash' ?
-      [] : $stateParams.schemaSlug ?
-      [$stateParams.schemaSlug] : [];
+        [] : $stateParams.schemaSlug ?
+          [$stateParams.schemaSlug] : [];
 
     let hasImageColumn = false;
     let bookmarks = {};
@@ -207,7 +207,7 @@ class EntityGridController {
 
       vm.filters.forEach((filter) => {
         if (filter.value) {
-          options.q.push(`fields.${filter.fieldSlug}:"${filter.value.title.toLowerCase()}"`);
+          options.q.push(`fields.${filter.fieldSlug}:"${filter.value.toLowerCase()}"`);
         }
       });
 
@@ -383,16 +383,9 @@ class EntityGridController {
       getResults(true);
     };
 
-    vm.filterOptions = (filter, query) => {
-      if (!schemaSlugs.length) {
-        return $log.error('No schemas specified');
-      }
-
-      return EntityFactory.filterValues({
-        searchTerm: query,
-        schema: schemaSlugs.join(','),
-        fieldSlug: filter.fieldSlug,
-      });
+    vm.filterOptions = async (filter, searchTerm) => {
+      const result = await EntityFactory.fieldValues(filter.fieldSlug, searchTerm);
+      return result;
     };
 
     /* State */

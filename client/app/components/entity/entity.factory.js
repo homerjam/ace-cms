@@ -95,6 +95,10 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   };
 
   service.getFieldThumbnail = (field) => {
+    if (!field.value) {
+      return null;
+    }
+
     const thumbnail = FieldFactory.field(field.type).thumbnail(field.value);
 
     if (thumbnail) {
@@ -176,6 +180,8 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     return entity;
   }
 
+  service.fieldValues = async (slug, searchTerm) => (await $http.get(`${appConfig.apiUrl}/entities/field`, { params: { slug, searchTerm } })).data.rows;
+
   service.search = params => $q((resolve, reject) => {
     $http({
       method: 'GET',
@@ -184,27 +190,6 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     })
       .then((response) => {
         resolve(response.data.rows);
-      }, reject);
-  });
-
-  service.filterValues = params => $q((resolve, reject) => {
-    params = params || {
-      searchTerm: '',
-      schema: '',
-      fieldSlug: '',
-    };
-
-    $http({
-      method: 'GET',
-      url: `${appConfig.apiUrl}/entities/filterValues`,
-      params })
-      .then((response) => {
-        const results = response.data.map((value, key) => ({
-          id: key,
-          title: he.decode(value),
-        }));
-
-        resolve(results);
       }, reject);
   });
 

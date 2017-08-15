@@ -67,9 +67,9 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
 
   service.getSchema = schemaSlug => Config.schemas.filter(schema => schema.slug === schemaSlug)[0];
 
-  service.getField = (schemaSlug, fieldSlug) => (service.getSchema(schemaSlug).fields || []).filter(field => field.slug === fieldSlug)[0];
+  service.getField = (schemaSlug, fieldSlug) => (service.getSchema(schemaSlug) || { fields: [] }).fields.filter(field => field.slug === fieldSlug)[0];
 
-  service.getAction = (schemaSlug, actionSlug) => (service.getSchema(schemaSlug).actions || []).filter(action => action.slug === actionSlug)[0];
+  service.getAction = (schemaSlug, actionSlug) => (service.getSchema(schemaSlug) || { actions: [] }).actions.filter(action => action.slug === actionSlug)[0];
 
   service.getTaxonomy = taxonomySlug => Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0];
 

@@ -57,10 +57,23 @@ div(layout="column", style="position: absolute; width: 100%; height: 100%")
         md-icon(md-font-set="material-icons") search
 
   div(flex="nogrow", ng-show="vm.filters.length > 0")
+    br
     div.filter(layout="row", layout-padding, ng-repeat="filter in vm.filters track by $index")
-      md-autocomplete(flex, md-selected-item-change="vm.selectFilter()", md-selected-item="filter.value", md-search-text="searchText", md-items="item in vm.filterOptions(filter, searchText)", md-item-text="item.title", md-floating-label="{{filter.name}}", md-input-name="{{filter.fieldSlug}}")
+      md-autocomplete(
+        flex
+        md-no-cache="true"
+        md-selected-item-change="vm.selectFilter()"
+        md-selected-item="filter.value"
+        md-search-text="searchTerm"
+        md-delay="200",
+        md-items="item in vm.filterOptions(filter, searchTerm)"
+        md-item-text="item"
+        md-floating-label="{{filter.name}}"
+        md-input-name="{{filter.fieldSlug}}"
+        md-min-length="0"
+        )
         md-item-template
-          span(md-highlight-text="searchText", md-highlight-flags="^i") {{item.title}}
+          span(md-highlight-text="searchTerm", md-highlight-flags="^i") {{item}}
         md-not-found No matches found.
       md-button.md-icon-button(aria-label="Remove filter", ng-click="vm.removeFilter($index)")
         md-icon(md-font-set="material-icons") close

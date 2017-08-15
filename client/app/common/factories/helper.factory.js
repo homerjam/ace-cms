@@ -34,7 +34,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
   };
 
   service.getFieldThumbnailUrl = (field, transformSettings = 'h:200;q:60') => {
-    if (!field) {
+    if (!field || !field.value) {
       return null;
     }
 

@@ -28,6 +28,10 @@ const fieldImageModule = angular.module('fieldImage', [
         return value.original ? value.original.fileName : '';
       },
       thumbnail(value) {
+        if (!value) {
+          return null;
+        }
+
         const thumbnail = {
           thumbnailType: 'image',
           thumbnailUrl: [$rootScope.assistUrl, $rootScope.slug, value.fileName].join('/'),
