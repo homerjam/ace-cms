@@ -26,9 +26,9 @@ app.use(webpackHotMiddleware(webpackCompiler));
 
 const aceCms = new AceCms(app);
 
-app.use((req, res) => {
-  res.redirect(BASE_PATH);
-});
+// app.use((req, res) => {
+//   res.redirect(BASE_PATH);
+// });
 
 const server = http.createServer(aceCms);
 

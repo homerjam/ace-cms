@@ -10,7 +10,7 @@ const app = express();
 
 const aceCms = new AceCms(app);
 
-app.use((req, res) => {
+app.get('/', (req, res) => {
   res.redirect(BASE_PATH);
 });
 

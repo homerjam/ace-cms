@@ -102,8 +102,9 @@ a {
     socialButtonStyle: 'big',
 		auth: {
 			responseType: 'code',
-			redirectUrl: window.location.protocol + '//' + window.location.host + '<%= locals.basePath %>login',
+			redirectUrl: window.location.protocol + '//' + window.location.host + '<%= locals.basePath %>authorise',
 			params: {
+				state: JSON.stringify({ slug: '<%= locals.slug %>' }),
 				scope: 'openid email',
 			},
 		},
