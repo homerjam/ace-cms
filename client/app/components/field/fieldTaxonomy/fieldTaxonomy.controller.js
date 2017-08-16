@@ -1,9 +1,8 @@
 import _ from 'lodash';
-import angular from 'angular';
 
 class FieldTaxonomyController {
   /* @ngInject */
-  constructor($q, ConfigFactory, TaxonomyFactory, Slug) {
+  constructor($q, ConfigFactory, TaxonomyFactory) {
     const vm = this;
 
     if (!vm.fieldModel.value) {
@@ -92,14 +91,14 @@ class FieldTaxonomyController {
     };
 
     vm.transformChip = (chip) => {
-      if (angular.isObject(chip)) {
+      if (_.isObject(chip)) {
         return chip;
       }
 
       const term = TaxonomyFactory.getNewTerm();
 
       term.title = chip;
-      term.slug = Slug.slugify(chip);
+      term.slug = _.camelCase(chip);
 
       TaxonomyFactory.createTerm(vm.fieldOptions.settings.taxonomy, term);
 

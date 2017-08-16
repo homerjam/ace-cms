@@ -57,7 +57,6 @@
     "angular-modal-service2": "0.0.10",
     "angular-moment": "^1.0.1",
     "angular-sanitize": "^1.6.5",
-    "angular-slugify": "^1.0.3",
     "angular-touch": "^1.6.5",
     "angular-ui-grid": "^4.0.6",
     "angular-ui-tree": "^2.22.5",

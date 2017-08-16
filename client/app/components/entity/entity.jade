@@ -41,13 +41,13 @@ md-content(mode="{{vm.mode}}")
 
   section(ng-show="vm.revisions.length")
     md-content(style="max-height: 20rem")
-      md-subheader.md-no-sticky.field-toolbar
-        md-toolbar.md-menu-toolbar
+      md-subheader.md-no-sticky
+        md-toolbar.md-menu-toolbar.md-secondary
           .md-toolbar-tools
             h3 Revisions
       md-list
         md-list-item.secondary-button-padding(ng-repeat="revision in vm.revisions", md-colors="{background: '{{revision._rev === vm.currentRevId ? 'default-primary' : 'default-background-50'}}'}")
-          .md-body-1 {{revision.modified | date: 'short'}} by {{revision.modifiedBy}}
+          .md-body-1 {{revision.modifiedAt | date: 'short'}} by {{revision.modifiedBy}}
           md-button.md-secondary(ng-click="vm.restoreRevision(revision)", ng-disabled="revision._rev === vm.currentRevId") {{revision._rev === vm.currentRevId ? 'Current' : 'Restore'}}
 
   section(ng-class="::{disabled: vm.entity.trashed}")

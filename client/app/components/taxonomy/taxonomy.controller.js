@@ -4,7 +4,7 @@ import termTemplate from './taxonomy.term.jade';
 
 class TaxonomyController {
   /* @ngInject */
-  constructor($rootScope, $scope, $document, $state, $stateParams, $transitions, $timeout, $log, $q, $mdDialog, ConfigFactory, TaxonomyFactory, HelperFactory, Slug) {
+  constructor($rootScope, $scope, $document, $state, $stateParams, $transitions, $timeout, $log, $q, $mdDialog, ConfigFactory, TaxonomyFactory) {
     const vm = this;
 
     vm.taxonomy = ConfigFactory.getTaxonomy($stateParams.taxonomySlug);
@@ -130,7 +130,7 @@ class TaxonomyController {
           TaxonomyFactory.updateTerm({
             id: scope.$modelValue.id,
             title: scope.$modelValue.title,
-            slug: Slug.slugify(scope.$modelValue.title),
+            slug: _.camelCase(scope.$modelValue.title),
           })
             .then(
               (response) => {
@@ -175,7 +175,7 @@ class TaxonomyController {
     };
 
     const slugifyTerms = (term) => {
-      term.slug = Slug.slugify(term.title);
+      term.slug = _.camelCase(term.title);
 
       (term.terms || []).forEach((term) => {
         slugifyTerms(term);

@@ -5,7 +5,7 @@ import Handlebars from 'handlebars/dist/handlebars';
 import selectEntityModalTemplate from './modal/selectEntity.jade';
 import entityModalTemplate from './modal/entity.jade';
 
-const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGridFactory, FieldFactory, ConfigFactory, HelperFactory, Slug, ModalService, appConfig) => {
+const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGridFactory, FieldFactory, ConfigFactory, HelperFactory, ModalService, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -80,11 +80,11 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     title = $filter('trimify')(title);
 
     if (schema.slugTemplate && schema.slugTemplate !== '') {
-      slug = Slug.slugify(Handlebars.compile(schema.slugTemplate)(fields));
+      slug = _.camelCase(Handlebars.compile(schema.slugTemplate)(fields));
       slug = $filter('trimify')(slug);
 
     } else {
-      slug = Slug.slugify(title);
+      slug = _.camelCase(title);
     }
 
     // Decode entities
@@ -145,7 +145,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     }
 
     entity.modifiedBy = ConfigFactory.getUser().id;
-    entity.modified = now;
+    entity.modifiedAt = now;
 
     if (entity.published) {
       entity.publishedAt = JSON.stringify(entity.publishedAt).replace(/"/g, '');

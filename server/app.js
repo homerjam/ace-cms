@@ -52,7 +52,7 @@ class AceCms {
 
     /* Session */
 
-    if (config.environment !== 'production') {
+    if (config.environment === 'development') {
       app.use(session({
         secret: config.session.secret,
         resave: true,
@@ -137,34 +137,28 @@ class AceCms {
 
         const userId = req.user.emails[0].value; // TODO: Replace email as userId?
 
-        const apiConfigClone = AceApi.Helpers.cloneConfig(apiConfig);
+        const auth = new AceApi.Auth(apiConfig);
 
-        apiConfigClone.db.name = slug;
-
-        const auth = new AceApi.Auth(apiConfigClone);
-        const jwt = new AceApi.Jwt(apiConfigClone);
-
-        auth.authoriseUser(userId)
+        auth.authoriseUser(slug, userId)
           .then((user) => {
-            req.session.accessToken = req.query.access_token;
-            req.session.idToken = req.query.id_token;
+            // req.session.accessToken = req.authInfo.access_token;
+            // req.session.idToken = req.authInfo.id_token;
 
             const payload = {
               userId,
+              slug,
               role: user.role,
             };
 
-            req.session.userId = userId;
-            req.session.role = user.role;
+            // _.merge(req.session, payload);
 
-            if (user.slug) { // user.slug is undefined for super user
-              payload.slug = user.slug;
-              req.session.slug = user.slug;
-            }
+            const jwt = new AceApi.Jwt(apiConfig);
 
-            req.session.apiToken = jwt.signToken(payload, {
+            const apiToken = jwt.signToken(payload, {
               expiresIn: API_TOKEN_EXPIRES_IN,
             });
+
+            req.session.apiToken = apiToken;
 
             res.redirect(config.basePath + slug);
           })
@@ -182,7 +176,7 @@ class AceCms {
 
     const apiRouter = express.Router();
 
-    app.use(`${config.basePath}`, apiRouter);
+    app.use(`${config.apiUrl}`, apiRouter);
 
     AceApiServer(apiRouter, apiConfig, authMiddleware);
 
@@ -272,7 +266,17 @@ class AceCms {
       req.session.errorMessage = null;
       req.session.successMessage = null;
 
-      res.render('login', data);
+      AceApi.Db.connect(apiConfig, slug).getAsync('config')
+        .then(
+          (config) => {
+            data.client = config.client;
+            res.render('login', data);
+          },
+          (error) => {
+            data.errorMessage = `Client not found: ${slug}`;
+            res.render('login', data);
+          }
+        );
     });
 
     router.post('/logout', (req, res) => {
@@ -291,37 +295,6 @@ class AceCms {
       });
     });
 
-    // router.get('/switch', authMiddleware, (req, res) => {
-    //   if (req.session.role === 'super' || config.environment === 'development') {
-    //     if (req.query.slug) {
-    //       req.session.slug = req.query.slug;
-
-    //       const jwt = new AceApi.Jwt(apiConfig);
-
-    //       req.session.apiToken = jwt.signToken({
-    //         userId: req.session.userId,
-    //         slug: req.session.slug,
-    //         role: req.session.role,
-    //       });
-
-    //       if (req.session.referer && req.session.referer.indexOf('/switch') === -1) {
-    //         return res.redirect(req.session.referer);
-    //       }
-
-    //       return res.redirect(basePath);
-    //     }
-
-    //     return res.render('switch', {
-    //       basePath,
-    //       environment: config.environment,
-    //       version: VERSION,
-    //       slugs: config.slugs.split(','),
-    //     });
-    //   }
-
-    //   return res.redirect(`${basePath}logout`);
-    // });
-
     /* Index */
 
     let assistCredentials = new Buffer(`${config.assist.username}:${passwordHash.generate(config.assist.password)}`);
@@ -338,6 +311,7 @@ class AceCms {
         assistUrl: config.assist.url,
         assistCredentials,
         apiUrl: config.apiUrl,
+        apiToken: req.session.apiToken,
         session: req.session,
       });
     }
@@ -346,11 +320,6 @@ class AceCms {
       // if (req.headers.accept && req.headers.accept.indexOf('application/json') > -1) {
       //   res.status(404);
       //   res.send('Not found');
-      //   return;
-      // }
-
-      // if (req.session.role === 'super' && !req.session.slug) {
-      //   res.redirect(`${basePath}switch`);
       //   return;
       // }
 

@@ -1,8 +1,8 @@
-import angular from 'angular';
+import _ from 'lodash';
 
 class FieldSelectController {
   /* @ngInject */
-  constructor($q, Slug) {
+  constructor($q) {
     const vm = this;
 
     if (!vm.fieldModel.value) {
@@ -11,7 +11,7 @@ class FieldSelectController {
 
     vm.search = query => $q((resolve, reject) => {
       const options = (vm.fieldOptions.settings.options || []).map(option => ({
-        slug: Slug.slugify(option),
+        slug: _.camelCase(option),
         title: option,
         type: 'option',
       }));
@@ -21,7 +21,7 @@ class FieldSelectController {
 
     vm.transformChip = (chip) => {
       // If it is an object, it's already a known chip
-      if (angular.isObject(chip)) {
+      if (_.isObject(chip)) {
         return chip;
       }
       // Otherwise, create a new one

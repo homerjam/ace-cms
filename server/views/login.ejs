@@ -8,7 +8,7 @@ body {
 
 .auth0-lock * {
   font-family: "Roboto" !important;
-	border-radius: 0 !important;
+	// border-radius: 0 !important;
 }
 
 .auth0-lock-name {
@@ -42,7 +42,7 @@ a {
 	right: 0;
 	margin: auto;
 	width: 300px;
-	height: 540px;
+	height: 735px;
 	text-align: center;
 }
 
@@ -53,20 +53,27 @@ a {
 .message {
   padding: 30px;
   margin-bottom: 60px;
+	border-radius: 5px;
 }
 
 .message.error {
-  background-color: orangered;
+  background-color: #F44336;
   color: white;
 }
 
 .message.success {
-  background-color: lightgreen;
+  background-color: #009688;
+	color: white;
 }
 
 </style>
 
 <div class="wrapper">
+	<% if (locals.client) { %>
+		<h1 class="md-display-1"><%= locals.client.name %></h1>
+		<br>
+	<% } %>
+
 	<% if (locals.errorMessage) { %>
 		<div class="message error md-whiteframe-1dp">
 			<span><%= locals.errorMessage %></span>
@@ -97,6 +104,7 @@ a {
   var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
 		theme: {
 			logo: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+			primaryColor: '#607D8B',
 		},
     container: 'login-form',
     socialButtonStyle: 'big',

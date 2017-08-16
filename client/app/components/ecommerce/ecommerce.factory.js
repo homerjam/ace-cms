@@ -42,7 +42,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Confi
     obj = angular.fromJson(angular.toJson(obj));
 
     obj.modifiedBy = ConfigFactory.getUser().id;
-    obj.modified = HelperFactory.now();
+    obj.modifiedAt = HelperFactory.now();
 
     $http({
       method: 'POST',

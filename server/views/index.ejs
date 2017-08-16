@@ -6,21 +6,22 @@
 
 <script type="text/javascript">
 	var appConfig = {
-		slug: '<%= slug %>',
-		basePath: '<%= basePath %>',
-		assistUrl: '<%= assistUrl %>',
-		assistCredentials: '<%= assistCredentials %>',
-		apiUrl: '<%= apiUrl %>',
+		slug: '<%= locals.slug %>',
+		basePath: '<%= locals.basePath %>',
+		assistUrl: '<%= locals.assistUrl %>',
+		assistCredentials: '<%= locals.assistCredentials %>',
+		apiUrl: '<%= locals.apiUrl %>',
+		apiToken: '<%= locals.apiToken %>',
 	};
 </script>
 
-<% if (environment !== 'production') { %>
+<% if (locals.environment !== 'production') { %>
 
-	<script type="text/javascript" src="/dev/js/bundle.js?v=<%= version %>"></script>
+	<script type="text/javascript" src="/dev/js/bundle.js?v=<%= locals.version %>"></script>
 
 <% } else { %>
 
-	<script type="text/javascript" src="<%= basePath %>build/js/bundle.js?v=<%= version %>"></script>
+	<script type="text/javascript" src="<%= locals.basePath %>build/js/bundle.js?v=<%= locals.version %>"></script>
 
 <% } %>
 

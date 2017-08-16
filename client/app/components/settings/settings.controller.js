@@ -11,9 +11,9 @@ class SettingsController {
 
     vm.authenticateWithProvider = (provider) => {
       ConfigFactory.authenticateWithProvider(provider)
-        .then((providerSettings) => {
-          vm.config.provider[provider] = providerSettings;
-          ConfigFactory.saveConfig(vm.config);
+        .then((config) => {
+          vm.config = config;
+          ConfigFactory.setConfig(config);
         });
     };
   }

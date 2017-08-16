@@ -18,18 +18,21 @@ class EcommerceController {
 
     vm.authenticateWithProvider = (provider) => {
       ConfigFactory.authenticateWithProvider(provider)
-        .then((providerSettings) => {
+        .then((config) => {
+
           if (provider === 'stripe') {
             $http.get(`${appConfig.apiUrl}/stripe/account`)
               .then((response) => {
-                providerSettings.account = response.data;
-                vm.config.provider[provider] = providerSettings;
-                ConfigFactory.saveConfig(vm.config);
+                config.provider.stripe.account = response.data;
+
+                vm.config = config;
+                ConfigFactory.saveConfig(config);
               });
             return;
           }
-          vm.config.provider[provider] = providerSettings;
-          ConfigFactory.saveConfig(vm.config);
+
+          vm.config = config;
+          ConfigFactory.setConfig(config);
         });
     };
 
@@ -175,7 +178,7 @@ class EcommerceController {
         sortType: 'string',
         displayName: 'Customer Email',
       }, {
-        name: 'created',
+        name: 'createdAt',
         sortType: 'number',
         displayName: 'Created',
         cellFilter: 'parseDate',
@@ -357,7 +360,7 @@ class EcommerceController {
       if (ecommerceType === 'order') {
         sort([
           {
-            name: 'created',
+            name: 'createdAt',
             sort: {
               direction: uiGridConstants.ASC,
             },

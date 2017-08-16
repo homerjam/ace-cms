@@ -15,7 +15,7 @@ class EntityGridController {
     vm.filters = [];
     vm.sortColumns = [
       {
-        name: 'modified',
+        name: 'modifiedAt',
         sort: {
           direction: uiGridConstants.ASC,
         },
@@ -36,7 +36,10 @@ class EntityGridController {
     const schemas = ConfigFactory.getConfig().schemas.filter(schema => schemaSlugs.indexOf(schema.slug) > -1);
 
     if (vm.mode !== 'trash' && !schemas[0]) {
-      throw Error('Schema not found');
+      // throw Error(`Schema not found: ${schemaSlugs[0]}`);
+      $log.error(`Schema not found: ${schemaSlugs[0]}`);
+      $state.go('dashboard');
+      return;
     }
 
     vm.heading = vm.mode === 'trash' ? 'Trash' : $filter('pluralize')(schemas[0] ? schemas[0].name : '');
@@ -81,7 +84,7 @@ class EntityGridController {
     }
 
     vm.columnDefs.push({
-      name: 'modified',
+      name: 'modifiedAt',
       displayName: 'Modified',
       cellFilter: 'parseDate',
       allowCellFocus: false,
@@ -220,7 +223,7 @@ class EntityGridController {
 
         let columnName = column.name.replace(/fields\.|\.value/g, '');
 
-        if (/^(modified|publishedAt)$/.test(columnName)) {
+        if (/^(modifiedAt|publishedAt)$/.test(columnName)) {
           type = '<number>';
 
         } else if (/^(slug|title|schema)$/.test(columnName)) {

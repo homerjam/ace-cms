@@ -15,6 +15,7 @@ const fieldColorModule = angular.module('fieldColor', [])
 
     FieldFactory.registerField('color', {
       name: 'Color',
+      dataType: 'string',
     });
   })
 

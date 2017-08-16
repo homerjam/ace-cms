@@ -59,7 +59,7 @@ const FileFactory = ($http, $q, $log, ConfigFactory, appConfig) => {
 
     file.type = 'file';
     file.uploadedBy = ConfigFactory.getUser().id;
-    file.uploaded = JSON.stringify(new Date()).replace(/"/g, '');
+    file.uploadedAt = JSON.stringify(new Date()).replace(/"/g, '');
 
     $http({
       method: 'POST',

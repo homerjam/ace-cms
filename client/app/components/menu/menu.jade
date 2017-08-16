@@ -88,7 +88,7 @@ md-content
       md-icon(md-font-set="material-icons") desktop_mac
       p Preview
 
-    md-list-item(ng-href="{{:: $root.basePath }}logout", target="_self")
+    md-list-item(ng-href="{{:: $root.basePath + $root.slug }}/logout", target="_self")
       md-icon(md-font-set="material-icons") exit_to_app
       p Logout
 
@@ -107,7 +107,3 @@ md-content
           md-button(ui-sref="tools")
             // md-icon(md-font-set="material-icons") dashboard
             span Tools
-
-    md-list-item(ng-href="{{:: $root.basePath }}switch", target="_self", ng-if="::$root.$isSuperUser")
-      md-icon(md-font-set="material-icons") swap_horiz
-      p Switch

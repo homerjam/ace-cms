@@ -125,7 +125,7 @@ class EntityController {
 
     vm.action = (action) => {
       if (action.type === 'url') {
-        const urlTemplate = Handlebars.compile(action.url);
+        const urlTemplate = Handlebars.compile(action.settings.url);
 
         let compiledUrlTemplate = urlTemplate(vm.entity);
 
@@ -300,7 +300,6 @@ class EntityController {
 
     vm.dropdownMore = (vm.schema.actions || []).map(action => ({
       text: action.name,
-
       click() {
         vm.action(action);
       },

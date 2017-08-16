@@ -13,6 +13,7 @@ const fieldTextModule = angular.module('fieldText', [])
 
     FieldFactory.registerField('text', {
       name: 'Text',
+      dataType: 'string',
       editSettings: FieldTextSettingsFactory.edit,
     });
   })

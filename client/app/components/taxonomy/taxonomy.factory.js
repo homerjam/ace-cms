@@ -2,7 +2,7 @@ import _ from 'lodash';
 import uuid from 'uuid';
 import taxonomyModalTemplate from './taxonomy.modal.jade';
 
-const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $mdDialog, $log, ConfigFactory, HelperFactory, Slug, appConfig) => {
+const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $mdDialog, $log, ConfigFactory, HelperFactory, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -16,7 +16,7 @@ const TaxonomyFactory = ($rootScope, $http, $q, $timeout, $mdDialog, $log, Confi
   };
 
   const slugPattern = (existing, slug) => (({
-    test: function (existing, slug, value) {
+    test: function test (existing, slug, value) {
       const validRegExp = /^[^\d][a-zA-Z0-9]*$/;
       const existsRegExp = new RegExp(`^(${existing.join('|')})$`);
       return validRegExp.test(value) && (!existsRegExp.test(value) || value === slug);

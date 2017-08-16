@@ -61,14 +61,14 @@ md-content
             h3 Instagram
             span(flex)
             md-button(ng-click="vm.authenticateWithProvider('instagram')") {{ vm.config.provider.instagram.access_token ? 'Reconnect' : 'Connect' }}
-            span(ng-show="vm.config.provider.instagram.access_token")
-              md-button(ng-click="vm.config.provider.instagram.access_token = null; vm.config.provider.instagram.user = null;") Disconnect
+            span(ng-show="vm.config.provider.instagram")
+              md-button(ng-click="vm.config.provider.instagram = null") Disconnect
 
       div(flex, layout="row", layout-margin)
 
-        .md-subhead(ng-show="!vm.config.provider.instagram.access_token") Connect your Instagram account
+        .md-subhead(ng-show="!vm.config.provider.instagram") Connect your Instagram account
 
-        md-list-item(ng-show="vm.config.provider.instagram.user")
+        md-list-item(ng-show="vm.config.provider.instagram")
           img.md-avatar(ng-src="{{vm.config.provider.instagram.user.profile_picture}}")
           .md-list-item-text
             a(href="https://instagram.com/{{vm.config.provider.instagram.user.username}}", target="_blank") @{{vm.config.provider.instagram.user.username}}
@@ -80,15 +80,15 @@ md-content
           .md-toolbar-tools
             h3 Vimeo
             span(flex)
-            md-button(ng-click="vm.authenticateWithProvider('vimeo')") {{ vm.config.provider.vimeo.access_token ? 'Reconnect' : 'Connect' }}
-            span(ng-show="vm.config.provider.vimeo.access_token")
-              md-button(ng-click="vm.config.provider.vimeo.access_token = null") Disconnect
+            md-button(ng-click="vm.authenticateWithProvider('vimeo')") {{ vm.config.provider.vimeo ? 'Reconnect' : 'Connect' }}
+            span(ng-show="vm.config.provider.vimeo")
+              md-button(ng-click="vm.config.provider.vimeo = null") Disconnect
 
       div(flex, layout="row", layout-margin)
 
-        .md-subhead(ng-show="!vm.config.provider.vimeo.access_token") Connect your Vimeo account
+        .md-subhead(ng-show="!vm.config.provider.vimeo") Connect your Vimeo account
 
-        md-list-item(ng-show="vm.config.provider.vimeo.user")
+        md-list-item(ng-show="vm.config.provider.vimeo")
           img.md-avatar(ng-src="{{vm.config.provider.vimeo.user.pictures[3].link}}")
           .md-list-item-text
             a(href="{{vm.config.provider.vimeo.user.link}}", target="_blank") {{vm.config.provider.vimeo.user.name}}

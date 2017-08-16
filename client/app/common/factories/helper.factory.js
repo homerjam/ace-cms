@@ -119,22 +119,6 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       }, reject);
   });
 
-  service.getApiToken = () => $q((resolve, reject) => {
-    $http({
-      method: 'GET',
-      url: `${appConfig.apiUrl}/token`,
-      params: {
-        expiresIn: 7200,
-      },
-      cache: false,
-    })
-      .then((response) => {
-        $rootScope.apiToken = response.data.token;
-
-        resolve($rootScope.apiToken);
-      }, reject);
-  });
-
   service.oembed = url => $q((resolve, reject) => {
     $http({
       method: 'GET',

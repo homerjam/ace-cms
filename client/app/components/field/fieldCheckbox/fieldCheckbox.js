@@ -12,6 +12,7 @@ const fieldCheckboxModule = angular.module('fieldCheckbox', [])
 
     FieldFactory.registerField('checkbox', {
       name: 'Checkbox',
+      dataType: 'boolean',
       gridOptions: {
         style: 'boolean',
       },

@@ -15,7 +15,7 @@ class FileController {
     vm.filters = [];
     vm.sortColumns = [
       {
-        name: 'uploaded',
+        name: 'uploadedAt',
         sort: {
           direction: uiGridConstants.ASC,
         },
@@ -49,7 +49,7 @@ class FileController {
     });
 
     vm.columnDefs.push({
-      name: 'uploaded',
+      name: 'uploadedAt',
       displayName: 'Uploaded',
       cellFilter: "date: 'HH:mm dd/MM/yyyy'",
     });
@@ -106,7 +106,7 @@ class FileController {
 
         const columnName = column.name;
 
-        if (/^(uploaded|fileSize)$/.test(columnName)) {
+        if (/^(uploadedAt|fileSize)$/.test(columnName)) {
           type = '<number>';
 
         } else if (/^(originalFileName|mimeType|uploadedBy)$/.test(columnName)) {

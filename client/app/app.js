@@ -26,7 +26,6 @@ import angularModalService2 from 'angular-modal-service2';
 import angularDynamicLocale from 'angular-dynamic-locale';
 import angularIso3166CountryCodes from 'iso-3166-country-codes-angular';
 import satellizer from 'satellizer';
-import angularSlugify from 'angular-slugify';
 import angularGravatar from 'angular-gravatar';
 import Common from './common/common';
 import Components from './components/components';
@@ -47,7 +46,6 @@ angular.module('app', [
   angularDynamicLocale,
   angularModalService2,
   angularIso3166CountryCodes,
-  angularSlugify.name,
   satellizer,
   angularUiGrid,
   'ui.grid.selection',
@@ -66,6 +64,8 @@ angular.module('app', [
 
   .config(($compileProvider, $stateProvider, $locationProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $httpProvider, $provide, $sceDelegateProvider, $sceProvider, $qProvider, $localeProvider, cfpLoadingBarProvider, tmhDynamicLocaleProvider, $mdDateLocaleProvider, $mdThemingProvider, $mdIconProvider, $authProvider, appConfig) => {
     'ngInject';
+
+    /* Setup */
 
     // Compilation
     $compileProvider.preAssignBindingsEnabled(true); // https://github.com/angular/angular.js/commit/bcd0d4d896d0dfdd988ff4f849c1d40366125858
@@ -92,8 +92,10 @@ angular.module('app', [
       'Content-Type': 'application/json;charset=utf-8',
     };
 
-    // Convert all date strings in responses to date objects
+    /* Transform dates */
+
     const dateMatchPattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+
     const convertDates = (obj) => {
       Object.keys(obj).forEach((key) => {
         if (obj[key]) {
@@ -110,6 +112,7 @@ angular.module('app', [
         }
       });
     };
+
     $httpProvider.defaults.transformResponse.push((data) => {
       if (typeof data === 'object') {
         convertDates(data);
@@ -117,50 +120,13 @@ angular.module('app', [
       return data;
     });
 
-    // Remove illegal properties for couchdb
-    // var removeIllegalProps = function (obj) {
-    //   for (var key in obj) {
-    //     if (!obj.hasOwnProperty(key)) {
-    //       continue;
-    //     }
+    /* Date picker */
 
-    //     if (key[0] === '_' && !/^(_id|_rev)$/.test(key)) {
-    //       delete obj[key];
-    //       continue;
-    //     }
-
-    //     var value = obj[key];
-    //     var typeofValue = typeof value;
-
-    //     if (typeofValue === 'object') {
-    //       removeIllegalProps(value);
-    //     }
-    //   }
-    // };
-    // $httpProvider.defaults.transformRequest.push(function (data) {
-    //   if (!data) {
-    //     return data;
-    //   }
-
-    //   try {
-    //     data = angular.fromJson(data);
-
-    //     if (typeof data === 'object') {
-    //       removeIllegalProps(data);
-    //     }
-
-    //     return angular.toJson(data);
-
-    //   } catch (error) {
-    //     throw Error(error);
-    //   }
-    // });
-
-    // Datepicker defaults
     $mdDateLocaleProvider.formatDate = date => moment(date).locale('en-gb').format('L LT');
     $mdDateLocaleProvider.parseDate = dateString => new Date(dateString);
 
-    // Theme settings
+    /* Theme */
+
     const greyMap = $mdThemingProvider.extendPalette('grey', {
       50: '#ffffff',
     });
@@ -175,18 +141,23 @@ angular.module('app', [
         'hue-1': '50',
       });
 
-    // Material design icons
+    /* Material design icons */
+
     $mdIconProvider.fontSet('mdi', 'mdi');
 
-    // Loading bar settings
+    /* Loading bar */
+
     // cfpLoadingBarProvider.includeBar = false;
     cfpLoadingBarProvider.includeSpinner = false;
 
-    // Locale settings
-    tmhDynamicLocaleProvider.localeLocationPattern(`${appConfig.basePath}angular-i18n/angular-locale_{{locale}}.js`);
+    /* Locale */
+
+    tmhDynamicLocaleProvider.localeLocationPattern(`${appConfig.basePath + appConfig.slug}/angular-i18n/angular-locale_{{locale}}.js`);
     tmhDynamicLocaleProvider.defaultLocale('en-gb');
 
-    // Redirect if unauthorised
+    /* Auth */
+
+    // Redirect if not authorised
     $httpProvider.interceptors.push(($q, $window, $injector) => {
       'ngInject';
 
@@ -205,7 +176,7 @@ angular.module('app', [
               .title('Not Authorised')
               .htmlContent(`
                 <p>${message}</p>
-                <p>Please <a href="${$window.location.origin + appConfig.basePath}logout" target="_blank">login</a></p>
+                <p>Please <a href="${$window.location.origin + appConfig.basePath + appConfig.slug}/logout" target="_blank">login</a></p>
               `)
               .ok('Close')
           );
@@ -215,7 +186,8 @@ angular.module('app', [
       };
     });
 
-    // Providers
+    /* Providers */
+
     $authProvider.instagram({
       scope: ['basic', 'public_content'],
     });
@@ -247,8 +219,31 @@ angular.module('app', [
     });
   })
 
-  .run(($rootScope, $state, $location, $window, $document, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, ConfigFactory, HelperFactory, $mdSidenav) => {
+  .run(($rootScope, $state, $location, $window, $document, $http, $log, $injector, $q, $timeout, $transitions, tmhDynamicLocale, appConfig, ConfigFactory) => {
     'ngInject';
+
+    /* API Token */
+
+    const tokenRefreshDelay = 3600 * 1000;
+
+    const setApiToken = (apiToken) => {
+      appConfig.apiToken = apiToken;
+      $rootScope.apiToken = apiToken;
+      $http.defaults.headers.common['X-Api-Token'] = apiToken;
+    };
+
+    setApiToken(appConfig.apiToken);
+
+    const renewToken = async (forceRenew = false) => {
+      if (!$document[0].hidden || forceRenew) {
+        const apiToken = await ($http.get(`${appConfig.apiUrl}/token`, { params: { expiresIn: 7200 } })).data.token;
+        setApiToken(apiToken);
+      }
+
+      $timeout(renewToken, tokenRefreshDelay);
+    };
+
+    /* Constants */
 
     $rootScope.slug = appConfig.slug;
     $rootScope.basePath = appConfig.basePath;
@@ -256,14 +251,18 @@ angular.module('app', [
     $rootScope.assistCredentials = appConfig.assistCredentials;
     $rootScope.apiUrl = appConfig.apiUrl;
 
+    $rootScope.$state = $state;
+    $rootScope.$location = $location;
+
+    /* Locale */
+
     // $rootScope.$on('$localeChangeSuccess', (event) => {
     //   $log.log('$localeChangeSuccess', event);
     // });
 
     tmhDynamicLocale.set('en-gb');
 
-    $rootScope.$state = $state;
-    $rootScope.$location = $location;
+    /* Error Handler */
 
     $state.defaultErrorHandler((error) => {
       $log.error(error.detail);
@@ -273,7 +272,9 @@ angular.module('app', [
       }
     });
 
-    const isAuthorised = (toState, toParams) => {
+    /* Permissions */
+
+    const hasPermission = (toState, toParams) => {
       if ($rootScope.$isSuperUser) {
         return true;
       }
@@ -299,40 +300,30 @@ angular.module('app', [
       return authorised;
     };
 
-    const renewToken = (forceRenew = false) => {
-      if (!$document[0].hidden || forceRenew) {
-        HelperFactory.getApiToken();
-      }
+    /* State Change */
 
-      $timeout(renewToken, 3600 * 1000);
-    };
-
-    let dependenciesLoaded = false;
-
-    const dependencies = [
-      ConfigFactory.loadConfig(),
-    ];
+    let configLoaded = false;
 
     $transitions.onStart({ to: '*' }, (trans) => {
       const toStateName = trans.to().name;
       const toParams = trans.params('to');
 
-      if (!dependenciesLoaded) {
-        $q.all(dependencies)
+      if (!configLoaded) {
+        ConfigFactory.loadConfig()
           .then(() => {
-            dependenciesLoaded = true;
+            configLoaded = true;
 
-            renewToken(true);
+            $timeout(renewToken, tokenRefreshDelay);
 
             $state.go(toStateName, toParams);
           }, () => {
-            // $window.location.href = `${appConfig.basePath}logout`;
+            $window.location.href = `${appConfig.basePath + appConfig.slug}/logout`;
           });
 
         return false;
       }
 
-      if (!isAuthorised(toStateName, toParams)) {
+      if (!hasPermission(toStateName, toParams)) {
         $state.go('dashboard');
         return false;
       }
@@ -343,15 +334,9 @@ angular.module('app', [
     $transitions.onSuccess({ to: '*' }, (trans) => {
       $state.previous = trans.from().name === '' ? null : trans.from();
       $state.previousParams = trans.params('from');
-
-      $mdSidenav('mainMenu').close();
     });
 
     $rootScope.prevState = () => {
       $state.go($state.previous, $state.previousParams);
-    };
-
-    $rootScope.toggleMainMenu = () => {
-      $mdSidenav('mainMenu').toggle();
     };
   });
