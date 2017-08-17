@@ -152,7 +152,7 @@ angular.module('app', [
 
     /* Locale */
 
-    tmhDynamicLocaleProvider.localeLocationPattern(`${appConfig.basePath + appConfig.slug}/angular-i18n/angular-locale_{{locale}}.js`);
+    tmhDynamicLocaleProvider.localeLocationPattern('angular-i18n/angular-locale_{{locale}}.js');
     tmhDynamicLocaleProvider.defaultLocale('en-gb');
 
     /* Auth */
@@ -176,7 +176,7 @@ angular.module('app', [
               .title('Not Authorised')
               .htmlContent(`
                 <p>${message}</p>
-                <p>Please <a href="${$window.location.origin + appConfig.basePath + appConfig.slug}/logout" target="_blank">login</a></p>
+                <p>Please <a href="${$window.location.origin + appConfig.clientBasePath + appConfig.slug}/logout" target="_blank">login</a></p>
               `)
               .ok('Close')
           );
@@ -245,7 +245,8 @@ angular.module('app', [
 
     /* Constants */
 
-    $rootScope.basePath = appConfig.basePath;
+    $rootScope.slug = appConfig.slug;
+    $rootScope.clientBasePath = appConfig.clientBasePath;
     $rootScope.assistUrl = appConfig.assistUrl;
     $rootScope.assistCredentials = appConfig.assistCredentials;
     $rootScope.apiUrl = appConfig.apiUrl;
@@ -318,7 +319,7 @@ angular.module('app', [
 
             $state.go(toStateName, toParams);
           }, () => {
-            $window.location.href = `${appConfig.basePath + appConfig.slug}/logout`;
+            $window.location.href = `${appConfig.clientBasePath + appConfig.slug}/logout`;
           });
 
         return false;

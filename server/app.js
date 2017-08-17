@@ -115,18 +115,18 @@ class AceCms {
 
       const querystring = Object.keys(req.query).length ? `?${qs.stringify(req.query)}` : '';
 
-      res.redirect(`${config.basePath + slug}/login${querystring}`);
+      res.redirect(`${config.clientBasePath + slug}/login${querystring}`);
     };
 
-    app.get(`${config.basePath}authorise`, (req, res) => {
+    app.get(`${config.routerBasePath}authorise`, (req, res) => {
       if (!req.query.code) {
-        res.redirect(config.basePath);
+        res.redirect(config.clientBasePath);
         return;
       }
 
       const slug = JSON.parse(req.query.state).slug;
 
-      const authenticate = passport.authenticate('auth0', { failureRedirect: `${config.basePath + slug}/login` });
+      const authenticate = passport.authenticate('auth0', { failureRedirect: `${config.clientBasePath + slug}/login` });
 
       authenticate(req, res, (error) => {
         if (error) {
@@ -160,14 +160,14 @@ class AceCms {
 
             req.session.apiToken = apiToken;
 
-            res.redirect(config.basePath + slug);
+            res.redirect(config.clientBasePath + slug);
           })
           .catch((reason) => {
             console.error(reason);
 
             req.session.errorMessage = reason.toString();
 
-            res.redirect(`${config.basePath + slug}/login`);
+            res.redirect(`${config.clientBasePath + slug}/login`);
           });
       });
     });
@@ -176,7 +176,7 @@ class AceCms {
 
     const apiRouter = express.Router();
 
-    app.use(`${config.apiUrl}`, apiRouter);
+    app.use(`${config.apiRouterPath}`, apiRouter);
 
     AceApiServer(apiRouter, apiConfig, authMiddleware);
 
@@ -184,7 +184,7 @@ class AceCms {
 
     const router = express.Router({ mergeParams: true });
 
-    app.use(`${config.basePath}:slug/`, router);
+    app.use(`${config.routerBasePath}:slug/`, router);
 
     /* Static */
 
@@ -251,7 +251,7 @@ class AceCms {
 
       const data = {
         slug,
-        basePath: config.basePath,
+        clientBasePath: config.clientBasePath,
         environment: config.environment,
         version: VERSION,
         forceHttps: config.forceHttps,
@@ -291,7 +291,7 @@ class AceCms {
       const slug = req.params.slug;
       req.logout();
       req.session.destroy(() => {
-        res.redirect(`${config.basePath + slug}/login?success=logout`);
+        res.redirect(`${config.clientBasePath + slug}/login?success=logout`);
       });
     });
 
@@ -305,7 +305,7 @@ class AceCms {
 
       res.render('index', {
         slug,
-        basePath: config.basePath,
+        clientBasePath: config.clientBasePath,
         environment: config.environment,
         version: VERSION,
         assistUrl: config.assist.url,

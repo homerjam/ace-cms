@@ -4,9 +4,11 @@ module.exports = {
   forceHttps: process.env.FORCE_HTTPS ? JSON.parse(process.env.FORCE_HTTPS) : false,
   forceWww: process.env.FORCE_WWW ? JSON.parse(process.env.FORCE_WWW) : false,
 
-  basePath: process.env.BASE_PATH || '/',
+  routerBasePath: process.env.ROUTER_BASE_PATH || '/',
+  clientBasePath: process.env.CLIENT_BASE_PATH || '/',
 
-  apiUrl: process.env.API_URL || '',
+  apiRouterPath: process.env.API_ROUTER_PATH || '/api',
+  apiUrl: process.env.API_URL || '/api',
 
   session: {
     secret: process.env.SESSION_SECRET,
