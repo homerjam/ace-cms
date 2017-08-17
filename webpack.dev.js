@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
@@ -24,15 +25,17 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: {
+          test: path.resolve(__dirname, 'node_modules'),
+          exclude: path.resolve(__dirname, 'node_modules/icc'),
+        },
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: [
-                ['es2015', { modules: false }],
-              ],
+              presets: ['es2015', 'es2017'],
               plugins: [
+                'transform-runtime',
                 ['angularjs-annotate', { explicitOnly: false }],
               ],
             },

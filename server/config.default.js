@@ -1,8 +1,6 @@
 module.exports = {
   environment: process.env.ENVIRONMENT || 'development',
 
-  slugs: process.env.SLUGS,
-
   forceHttps: process.env.FORCE_HTTPS ? JSON.parse(process.env.FORCE_HTTPS) : false,
   forceWww: process.env.FORCE_WWW ? JSON.parse(process.env.FORCE_WWW) : false,
 

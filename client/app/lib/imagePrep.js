@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import { Buffer } from 'buffer';
 import extend from 'lodash/extend';
 import arrayBufferConcat from 'array-buffer-concat';
-import { parse } from 'babel-loader?{presets:["es2015"]}!icc';
+import { parse } from 'icc';
 import loadImage from 'blueimp-load-image';
 import 'blueimp-canvas-to-blob';
 
@@ -57,7 +57,7 @@ class ImagePrep {
           // Convert the profile ArrayBuffer into a normal buffer for the `icc` parser module
           const buffer = new Buffer(data.iccProfile.byteLength);
           const view = new Uint8Array(data.iccProfile);
-          for (let i = 0; i < buffer.length; ++i) {
+          for (let i = 0; i < buffer.length; i++) {
             buffer[i] = view[i];
           }
 

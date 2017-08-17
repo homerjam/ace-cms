@@ -1,5 +1,3 @@
-import angular from 'angular';
-
 import Action from './action.class';
 
 const ActionFactory = ($rootScope) => {

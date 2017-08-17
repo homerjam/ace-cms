@@ -101,7 +101,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
                   .ok('Upload')
                   .cancel('Cancel')
               )
-              .then(upload, cancel);
+                .then(upload, cancel);
               return;
             }
 
@@ -114,7 +114,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
                   .ok('Upload')
                   .cancel('Cancel')
               )
-              .then(upload, cancel);
+                .then(upload, cancel);
               return;
             }
 
@@ -127,7 +127,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
                   .ok('Upload')
                   .cancel('Cancel')
               )
-              .then(upload, cancel);
+                .then(upload, cancel);
               return;
             }
 

@@ -16,11 +16,11 @@
 
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <link rel="stylesheet" href="<%= basePath %>font/roboto/font.css?v=<%= version %>">
+    <link rel="stylesheet" href="<%= basePath + slug %>/font/roboto/font.css?v=<%= version %>">
 
 <% if (environment === 'production') { %>
 
-    <link rel="stylesheet" href="<%= basePath %>build/css/bundle.css?v=<%= version %>">
+    <link rel="stylesheet" href="<%= basePath + slug %>/build/css/bundle.css?v=<%= version %>">
 
 <% } %>
 

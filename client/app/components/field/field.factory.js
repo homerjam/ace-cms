@@ -1,5 +1,3 @@
-import angular from 'angular';
-
 import Field from './field.class';
 
 const FieldFactory = ($rootScope) => {

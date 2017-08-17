@@ -1,5 +1,4 @@
 class Action {
-  /* @ngInject */
   constructor(options = {}) {
     this.name = 'Action Name';
 

@@ -7,10 +7,10 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
   devtool: 'source-map',
 
-  entry: path.join(__dirname, 'client', 'app', 'app'),
+  entry: './client/app/app.js',
 
   output: {
-    path: path.join(__dirname, 'public', 'build'),
+    path: path.resolve(__dirname, 'public/build'),
     filename: 'js/bundle.js',
   },
 
@@ -49,15 +49,17 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: {
+          test: path.resolve(__dirname, 'node_modules'),
+          exclude: path.resolve(__dirname, 'node_modules/icc'),
+        },
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: [
-                ['es2015', { modules: false }],
-              ],
+              presets: ['es2015', 'es2017'],
               plugins: [
+                'transform-runtime',
                 ['angularjs-annotate', { explicitOnly: false }],
               ],
             },
