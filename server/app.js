@@ -90,8 +90,8 @@ class AceCms {
         const jwt = new AceApi.Jwt(apiConfig);
 
         req.session.apiToken = jwt.signToken({
+          slug,
           userId: apiConfig.dev.userId,
-          slug: req.session.slug || apiConfig.dev.slug,
           role: apiConfig.dev.role,
         });
 

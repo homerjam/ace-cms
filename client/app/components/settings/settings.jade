@@ -4,59 +4,70 @@ md-toolbar
       md-icon(md-icon-set="material-icons") menu
     h2 Settings
     span(flex)
-    md-button(ng-click='vm.save()', ng-disabled='vm.form.$invalid') Save
+    md-button(ng-click="vm.save()", ng-disabled="vm.form.$invalid") Save
 
 md-content
 
-  form(name='vm.form', role='form', novalidate)
+  form(name="vm.form", role="form", novalidate)
 
-
-    md-subheader.md-no-sticky.field-toolbar
-      md-toolbar.md-menu-toolbar
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
         .md-toolbar-tools
           h3 General
 
     div(flex, layout="column", layout-margin)
       br
 
-      md-input-container(ng-if='::$root.$isSuperUser')
+      md-input-container(ng-if="::$root.$isSuperUser")
         label Client Name
-        input(ng-model='vm.config.client.name', aria-label="Client Name")
+        input(ng-model="vm.config.client.name", aria-label="Client Name")
 
-      md-input-container(ng-if='::$root.$isSuperUser')
+      md-input-container(ng-if="::$root.$isSuperUser")
         label Website URL
-        input(ng-model='vm.config.client.baseUrl', aria-label="Website URL")
+        input(ng-model="vm.config.client.baseUrl", aria-label="Website URL")
 
-      md-input-container(ng-if='::$root.$isSuperUser')
+      md-input-container(ng-if="::$root.$isSuperUser")
         label Google Analytics View ID
-        input(ng-model='vm.config.client.gaView', aria-label="Google Analytics View ID")
+        input(ng-model="vm.config.client.gaView", aria-label="Google Analytics View ID")
 
       md-input-container
         label Metadata Description
-        textarea(ng-model='vm.config.client.metadata.description')
+        textarea(ng-model="vm.config.client.metadata.description")
 
-    span(ng-if='::$root.$isSuperUser')
+    span(ng-if="::$root.$isSuperUser")
 
-      md-subheader.md-no-sticky.field-toolbar
-        md-toolbar.md-menu-toolbar
+      md-subheader.md-no-sticky
+        md-toolbar.md-menu-toolbar.md-secondary
+          .md-toolbar-tools
+            h3 Assets
+
+      div(flex, layout="column", layout-margin)
+        br
+
+        md-input-container
+          label Slug
+          input(ng-model="vm.config.assets.slug", aria-label="Assets Slug")
+
+      md-subheader.md-no-sticky
+        md-toolbar.md-menu-toolbar.md-secondary
           .md-toolbar-tools
             h3 Modules / Providers
 
       div(flex, layout="column", layout-margin)
 
         md-input-container
-          md-checkbox(ng-model='vm.config.moduleEnabled.ecommerce', aria-label='E-commerce module') E-commerce module
+          md-checkbox(ng-model="vm.config.moduleEnabled.ecommerce", aria-label="E-commerce module") E-commerce module
 
         md-input-container
-          md-checkbox(ng-model='vm.config.providerEnabled.instagram', aria-label='Instagram') Instagram provider
+          md-checkbox(ng-model="vm.config.providerEnabled.instagram", aria-label="Instagram") Instagram provider
 
         md-input-container
-          md-checkbox(ng-model='vm.config.providerEnabled.vimeo', aria-label='Vimeo') Vimeo provider
+          md-checkbox(ng-model="vm.config.providerEnabled.vimeo", aria-label="Vimeo") Vimeo provider
 
     span(ng-show="vm.config.providerEnabled.instagram")
 
-      md-subheader.md-no-sticky.field-toolbar
-        md-toolbar.md-menu-toolbar
+      md-subheader.md-no-sticky
+        md-toolbar.md-menu-toolbar.md-secondary
           .md-toolbar-tools
             h3 Instagram
             span(flex)
@@ -75,8 +86,8 @@ md-content
 
     span(ng-show="vm.config.providerEnabled.vimeo")
 
-      md-subheader.md-no-sticky.field-toolbar
-        md-toolbar.md-menu-toolbar
+      md-subheader.md-no-sticky
+        md-toolbar.md-menu-toolbar.md-secondary
           .md-toolbar-tools
             h3 Vimeo
             span(flex)

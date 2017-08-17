@@ -29,7 +29,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
     isUploading = true;
 
     const uploadOptions = {
-      slug: $rootScope.slug,
+      slug: $rootScope.assetSlug,
     };
 
     const settings = field.settings || {};
@@ -50,7 +50,7 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
     }
 
     flow = new Flow({
-      target: `${$rootScope.assistUrl}/${$rootScope.slug}/file/upload`,
+      target: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/upload`,
       query: {
         options: JSON.stringify(uploadOptions),
       },

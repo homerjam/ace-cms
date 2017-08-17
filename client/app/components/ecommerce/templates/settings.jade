@@ -4,14 +4,14 @@ md-toolbar
       md-icon(md-icon-set="material-icons") menu
     h2 E-commerce Settings
     span(flex)
-    md-button(ng-click='vm.save()', ng-disabled='vm.form.$invalid') Save
+    md-button(ng-click="vm.save()", ng-disabled="vm.form.$invalid") Save
 
 md-content
 
-  form(name='vm.form', role='form', novalidate)
+  form(name="vm.form", role="form", novalidate)
 
-    md-subheader.md-no-sticky.field-toolbar
-      md-toolbar.md-menu-toolbar
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
         .md-toolbar-tools
           h3 General
 
@@ -21,26 +21,26 @@ md-content
 
       md-input-container
         label Store Name
-        input(ng-model='vm.config.module.ecommerce.storeName', aria-label="Store Name")
+        input(ng-model="vm.config.module.ecommerce.storeName", aria-label="Store Name")
 
       md-input-container
         label Email Sender Name
-        input(ng-model='vm.config.module.ecommerce.emailSenderName', aria-label="Email Sender Name")
+        input(ng-model="vm.config.module.ecommerce.emailSenderName", aria-label="Email Sender Name")
 
       md-input-container
         label Email Sender Address
-        input(ng-model='vm.config.module.ecommerce.emailSenderAddress', aria-label="Email Sender Address")
+        input(ng-model="vm.config.module.ecommerce.emailSenderAddress", aria-label="Email Sender Address")
 
       md-input-container
         label Currency
         md-select(ng-model="vm.config.module.ecommerce.currencySymbol")
           md-option(ng-repeat="option in ['£']", value="{{option}}") {{option}}
 
-      md-input-container(ng-if='::$root.$isSuperUser')
-        md-checkbox(ng-model='vm.config.module.ecommerce.testMode', aria-label='Test mode?') Test Mode
+      md-input-container(ng-if="::$root.$isSuperUser")
+        md-checkbox(ng-model="vm.config.module.ecommerce.testMode", aria-label="Test mode?") Test Mode
 
-    md-subheader.md-no-sticky.field-toolbar
-      md-toolbar.md-menu-toolbar
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
         .md-toolbar-tools
           h3 Stripe
           span(flex)

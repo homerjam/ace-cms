@@ -10,11 +10,11 @@ class EntityController {
     vm.entity = vm.entities[0] || {};
 
     if (vm.entity.schema && ConfigFactory.getSchema(vm.entity.schema)) {
-      vm.schema = ConfigFactory.getSchema(vm.entity.schema);
+      vm.schema = _.cloneDeep(ConfigFactory.getSchema(vm.entity.schema));
     }
 
     if (vm.mode === 'singular' && $stateParams.id && ConfigFactory.getSchema($stateParams.id)) {
-      vm.schema = ConfigFactory.getSchema($stateParams.id);
+      vm.schema = _.cloneDeep(ConfigFactory.getSchema($stateParams.id));
       vm.entity._id = `entity.${vm.schema.slug}`;
     }
 
@@ -341,7 +341,7 @@ class EntityController {
     });
 
     vm.fieldOptions = (fieldSlug) => {
-      const field = ConfigFactory.getField(vm.entity.schema, fieldSlug);
+      const field = ConfigFactory.getField(vm.schema.slug, fieldSlug);
       field.entityId = vm.entity._id;
       field.entityMode = vm.mode;
       return field;

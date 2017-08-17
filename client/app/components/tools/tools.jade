@@ -8,11 +8,11 @@ md-content
 
   div(flex, layout="row", layout-margin)
 
-    md-button.md-raised.md-primary(href="{{:: $root.apiUrl + '/tools/export-db' }}", target="_blank") Export Database
+    md-button.md-raised.md-primary(href="{{ $root.apiUrl + '/tools/export-db?apiToken=' + $root.apiToken }}", target="_blank") Export Database
 
   div(flex, layout="row", layout-margin)
 
-    form(action="{{:: $root.apiUrl + '/tools/import-db' }}", method="post", enctype="multipart/form-data")
+    form(action="{{ $root.apiUrl + '/tools/import-db?apiToken=' + $root.apiToken }}", method="post", enctype="multipart/form-data")
       label(for="import-db")
         md-button.md-raised.md-primary Import Database
       input(id="import-db", name="payload", type="file", ace-file-change="vm.importDbSelected($event, files)")

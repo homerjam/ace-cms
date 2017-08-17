@@ -17,7 +17,7 @@ class FieldImageController {
 
     vm.download = () => {
       const fileName = vm.fieldModel.value.original.fileName.replace(/^(#|\?)/, '_');
-      $window.open(`${$rootScope.assistUrl}/${$rootScope.slug}/file/download/${vm.fieldModel.value.fileName}/${fileName}`);
+      $window.open(`${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.fileName}/${fileName}`);
     };
 
     vm.dzi = () => {
@@ -25,7 +25,7 @@ class FieldImageController {
         template: dziTemplate,
         controllerAs: 'vm',
         inputs: {
-          image: [$rootScope.assistUrl, $rootScope.slug, vm.fieldModel.value.dzi.dir, vm.fieldModel.value.dzi.fileName].join('/'),
+          image: [$rootScope.assistUrl, $rootScope.assetSlug, vm.fieldModel.value.dzi.dir, vm.fieldModel.value.dzi.fileName].join('/'),
         },
       });
     };
@@ -49,16 +49,16 @@ class FieldImageController {
     vm.preview = () => {
       HelperFactory.mediaPreview([{
         type: 'image',
-        src: [$rootScope.assistUrl, $rootScope.slug, 'transform', 'h:1000;q:80', vm.fieldModel.value.fileName].join('/'),
+        src: [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', 'h:1000;q:80', vm.fieldModel.value.fileName].join('/'),
       }], 0);
     };
 
-    vm.getThumbnail = settings => (vm.fieldModel.value ? [$rootScope.assistUrl, $rootScope.slug, 'transform', settings, vm.fieldModel.value.fileName].join('/') : null);
+    vm.getThumbnail = settings => (vm.fieldModel.value ? [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', settings, vm.fieldModel.value.fileName].join('/') : null);
 
     const settings = vm.fieldOptions.settings || {};
 
     const uploadOptions = {
-      slug: $rootScope.slug,
+      slug: $rootScope.assetSlug,
     };
 
     uploadOptions.resize = {
@@ -77,7 +77,7 @@ class FieldImageController {
     const imageExtensions = 'jpg,jpeg,png,svg';
 
     vm.flowOptions = {
-      target: `${$rootScope.assistUrl}/${$rootScope.slug}/file/upload`,
+      target: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/upload`,
       query: {
         options: JSON.stringify(uploadOptions),
       },

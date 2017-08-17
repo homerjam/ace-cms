@@ -245,7 +245,6 @@ angular.module('app', [
 
     /* Constants */
 
-    $rootScope.slug = appConfig.slug;
     $rootScope.basePath = appConfig.basePath;
     $rootScope.assistUrl = appConfig.assistUrl;
     $rootScope.assistCredentials = appConfig.assistCredentials;
@@ -256,9 +255,9 @@ angular.module('app', [
 
     /* Locale */
 
-    // $rootScope.$on('$localeChangeSuccess', (event) => {
-    //   $log.log('$localeChangeSuccess', event);
-    // });
+    $rootScope.$on('$localeChangeSuccess', (event) => {
+      // $log.log('$localeChangeSuccess', event);
+    });
 
     tmhDynamicLocale.set('en-gb');
 
@@ -310,8 +309,10 @@ angular.module('app', [
 
       if (!configLoaded) {
         ConfigFactory.loadConfig()
-          .then(() => {
+          .then((config) => {
             configLoaded = true;
+
+            $rootScope.assetSlug = config.assets && config.assets.slug ? config.assets.slug : appConfig.slug;
 
             $timeout(renewToken, tokenRefreshDelay);
 

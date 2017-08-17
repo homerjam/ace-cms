@@ -30,7 +30,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       return null;
     }
 
-    return [$rootScope.assistUrl, $rootScope.slug, 'proxy', 'transform', transformSettings, thumbnail.thumbnailUrl.replace(/https?:\/\//, '')].join('/');
+    return [$rootScope.assistUrl, $rootScope.assetSlug, 'proxy', 'transform', transformSettings, thumbnail.thumbnailUrl.replace(/https?:\/\//, '')].join('/');
   };
 
   service.getFieldThumbnailUrl = (field, transformSettings = 'h:200;q:60') => {

@@ -33,7 +33,7 @@ export default angular.module('ace.videoPreview', [])
         let showVideo = (video) => {
           $scope.encoding = false;
 
-          $scope.thumbnail = `https://${video.bucket}.s3.amazonaws.com/${$rootScope.slug}/${video.mediaType}/${video.thumbnail}`;
+          $scope.thumbnail = `https://${video.bucket}.s3.amazonaws.com/${$rootScope.assetSlug}/${video.mediaType}/${video.thumbnail}`;
         };
 
         let checkJob = (jobId) => {
