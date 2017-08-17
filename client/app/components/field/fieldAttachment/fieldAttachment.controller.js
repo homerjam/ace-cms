@@ -7,6 +7,9 @@ class FieldAttachmentController {
 
     vm.flowOptions = {
       target: `${appConfig.apiUrl}/upload`,
+      headers: {
+        'X-Api-Token': $rootScope.apiToken,
+      },
       query: {
         options: JSON.stringify(vm.fieldOptions),
       },
@@ -49,11 +52,11 @@ class FieldAttachmentController {
         progress: (flow) => {
           vm.progress = Math.round(flow.progress() * 100);
         },
-        error: (flow, message) => {
+        error: (flow, error) => {
           $mdDialog.show(
             $mdDialog.alert()
               .title('Upload Error')
-              .textContent(message)
+              .textContent(error.message || error)
               .ok('Close')
           );
         },

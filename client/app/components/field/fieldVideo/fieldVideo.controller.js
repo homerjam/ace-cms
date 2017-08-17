@@ -1,12 +1,15 @@
 class FieldVideoController {
   /* @ngInject */
-  constructor ($scope, $window, $http, $timeout, $mdDialog, appConfig) {
+  constructor ($rootScope, $scope, $window, $http, $timeout, $mdDialog, appConfig) {
     const vm = this;
 
     const videoExtensions = 'gif,mp4,avi,mov,webm,mkv,flv,ogg,ogv,qt,wmv,mpg,m4v';
 
     vm.flowOptions = {
       target: `${appConfig.apiUrl}/upload`,
+      headers: {
+        'X-Api-Token': $rootScope.apiToken,
+      },
       query: {
         options: JSON.stringify(vm.fieldOptions),
       },
@@ -51,11 +54,11 @@ class FieldVideoController {
         progress: (flow) => {
           vm.progress = Math.round(flow.progress() * 100);
         },
-        error: (flow, message) => {
+        error: (flow, error) => {
           $mdDialog.show(
             $mdDialog.alert()
               .title('Upload Error')
-              .textContent(message)
+              .textContent(error.message || error)
               .ok('Close')
           );
         },
@@ -68,16 +71,16 @@ class FieldVideoController {
           id: vm.fieldModel.value.metadata.zencoder.job.id,
         },
       })
-      .then((response) => {
-        const job = response.data;
+        .then((response) => {
+          const job = response.data;
 
-        if (/pending|waiting|processing/.test(job.jobState)) {
-          $timeout(checkZencoderJob, 10000);
-          return;
-        }
+          if (/pending|waiting|processing/.test(job.jobState)) {
+            $timeout(checkZencoderJob, 10000);
+            return;
+          }
 
-        vm.fieldModel.value.metadata.zencoder = job;
-      });
+          vm.fieldModel.value.metadata.zencoder = job;
+        });
     }
 
     vm.download = () => {
