@@ -16,12 +16,12 @@ const helmet = require('helmet');
 const useragent = require('express-useragent');
 const passport = require('passport');
 
-const AceApi = require('../../ace-api');
-const AceApiServer = require('../../ace-api-server');
+const AceApi = require('ace-api');
+const AceApiServer = require('ace-api-server');
 
 const packageJson = require('../package.json');
 const defaultConfig = require('./config.default');
-const defaultApiConfig = require('../../ace-api/config.default');
+const defaultApiConfig = require('ace-api/config.default');
 
 const VERSION = packageJson.version;
 const API_TOKEN_EXPIRES_IN = 7200;
