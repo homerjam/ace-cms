@@ -319,7 +319,7 @@ class EntityGridController {
           EntityFactory.deleteEntities(items, forever)
             .then((data) => {
               if (!data.error) {
-                // @TODO: replace with splice
+                // TODO: replace with splice
                 getResults(true);
               }
             });
@@ -339,7 +339,7 @@ class EntityGridController {
           EntityFactory.restoreEntities(items)
             .then((data) => {
               if (!data.error) {
-                // @TODO: replace with splice
+                // TODO: replace with splice
                 getResults(true);
               }
             });
@@ -359,7 +359,7 @@ class EntityGridController {
           EntityFactory.emptyTrash()
             .then((data) => {
               if (!data.error) {
-                // @TODO: replace with splice
+                // TODO: replace with splice
                 getResults(true);
               }
             });

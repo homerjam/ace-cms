@@ -222,7 +222,7 @@ class FileController {
           FileFactory.deleteFiles(items)
             .then((data) => {
               if (!data.error) {
-                // @TODO: replace with splice
+                // TODO: replace with splice
                 getResults(true);
               }
             });
@@ -242,7 +242,7 @@ class FileController {
           FileFactory.emptyTrash()
             .then((data) => {
               if (!data.error) {
-                // @TODO: replace with splice
+                // TODO: replace with splice
                 getResults(true);
               }
             });

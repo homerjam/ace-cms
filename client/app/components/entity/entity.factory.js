@@ -165,7 +165,8 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
         return null;
       }
 
-      field.type = 'entityField';
+      field.fieldType = fieldOpts.type; // TODO: remove fieldType
+
       field.type = fieldOpts.type;
 
       field.value = FieldFactory.field(fieldOpts.type).toDb(field.value, fieldOpts.settings);
