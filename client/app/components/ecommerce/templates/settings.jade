@@ -56,3 +56,25 @@ md-content
         img.md-avatar(gravatar-src="vm.config.provider.stripe.account.email", gravatar-size="100")
         .md-list-item-text
           a(href="https://dashboard.stripe.com", target="_blank") {{vm.config.provider.stripe.account.display_name}}
+
+
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
+        .md-toolbar-tools
+          h3 CreateSend
+
+    div(flex, layout="column", layout-margin)
+
+      br
+
+      md-input-container
+        label Client ID
+        input(ng-model="vm.config.module.ecommerce.createsendClientId", aria-label="CreateSend Client ID")
+
+      md-input-container
+        label Client API Key
+        input(ng-model="vm.config.module.ecommerce.createsendClientApiKey", aria-label="CreateSend Client API Key")
+
+      md-input-container
+        label Checkout Subscriber List ID
+        input(ng-model="vm.config.module.ecommerce.createsendCheckoutSubscriberListId", aria-label="CreateSend Checkout Subscriber List ID")
