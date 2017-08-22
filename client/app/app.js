@@ -319,7 +319,7 @@ angular.module('app', [
 
             $state.go(toStateName, toParams);
           }, () => {
-            // $window.location.href = `${appConfig.clientBasePath + appConfig.slug}/logout`;
+            $window.location.href = `${appConfig.clientBasePath + appConfig.slug}/logout`;
           });
 
         return false;
