@@ -186,9 +186,16 @@ class AceCms {
 
     const apiRouter = express.Router();
 
-    app.use(`${config.apiRouterPath}`, apiRouter);
+    app.use(config.apiRouterPath, apiRouter);
 
     AceApiServer(apiRouter, apiConfig, authMiddleware);
+
+    /* Auth Redirect */
+
+    app.get(`${config.routerBasePath}_auth/:provider`, (req, res) => {
+      res.status(req.query.error ? 500 : 200);
+      res.send(`${req.params.provider}: ${(req.query.error_description ? req.query.error_description : 'successfully authenticated')}`);
+    });
 
     /* Router */
 

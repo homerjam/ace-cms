@@ -83,7 +83,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
     })
       .then((response) => {
         SatellizerConfig.providers[provider].clientId = response.data.clientId;
-        SatellizerConfig.providers[provider].redirectUri = `${$window.location.origin}${appConfig.apiUrl}/auth/${provider}`;
+        SatellizerConfig.providers[provider].redirectUri = `${$window.location.origin + appConfig.clientBasePath}_auth/${provider}`;
         SatellizerConfig.providers[provider].url = `${appConfig.apiUrl}/auth/${provider}`;
         SatellizerConfig.providers[provider].popupOptions = {};
 
