@@ -99,30 +99,35 @@ class AceCms {
         return;
       }
 
-      if (req.isAuthenticated()) {
-        let payload = jwt.verifyToken(req.session.apiToken);
+      if (req.isAuthenticated() && req.session.apiToken) {
+        try {
+          let payload = jwt.verifyToken(req.session.apiToken);
 
-        payload = {
-          userId: payload.userId,
-          slug: payload.slug,
-          role: payload.role,
-        };
+          payload = {
+            userId: payload.userId,
+            slug: payload.slug,
+            role: payload.role,
+          };
 
-        if (payload.role !== 'super' && payload.slug !== slug) {
-          res.status(401).send('Not authorised');
+          if (payload.role !== 'super' && payload.slug !== slug) {
+            res.status(401).send('Not authorised');
+            return;
+          }
+
+          if (payload.role === 'super') {
+            payload.slug = slug;
+          }
+
+          req.session.apiToken = jwt.signToken(payload, {
+            expiresIn: API_TOKEN_EXPIRES_IN,
+          });
+
+          next();
+
           return;
+        } catch (error) {
+          //
         }
-
-        if (payload.role === 'super') {
-          payload.slug = slug;
-        }
-
-        req.session.apiToken = jwt.signToken(payload, {
-          expiresIn: API_TOKEN_EXPIRES_IN,
-        });
-
-        next();
-        return;
       }
 
       if (req.xhr || (req.headers.accept && /json/i.test(req.headers.accept))) {
