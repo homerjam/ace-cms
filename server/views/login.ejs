@@ -110,7 +110,7 @@ a {
     socialButtonStyle: 'big',
 		auth: {
 			responseType: 'code',
-			redirectUrl: window.location.protocol + '//' + window.location.host + '<%= locals.clientBasePath %>authorise',
+			redirectUrl: window.location.protocol + '//' + window.location.host + '<%= locals.clientBasePath %>_authorise',
 			params: {
 				state: '<%= locals.slug %>',
 				scope: 'openid email',

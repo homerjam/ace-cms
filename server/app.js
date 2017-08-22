@@ -89,11 +89,13 @@ class AceCms {
       const jwt = new AceApi.Jwt(apiConfig);
 
       if (config.environment === 'development') {
-        req.session.apiToken = jwt.signToken({
-          slug,
-          userId: apiConfig.dev.userId,
-          role: apiConfig.dev.role,
-        });
+        if (slug) {
+          req.session.apiToken = jwt.signToken({
+            slug,
+            userId: apiConfig.dev.userId,
+            role: apiConfig.dev.role,
+          });
+        }
 
         next();
         return;
@@ -109,13 +111,18 @@ class AceCms {
             role: payload.role,
           };
 
-          if (payload.role !== 'super' && payload.slug !== slug) {
-            res.status(401).send('Not authorised');
-            return;
-          }
+          if (slug) {
+            if (payload.role !== 'super' && payload.slug !== slug) {
+              res.status(401).send({
+                code: 401,
+                message: 'Not authorised',
+              });
+              return;
+            }
 
-          if (payload.role === 'super') {
-            payload.slug = slug;
+            if (payload.role === 'super') {
+              payload.slug = slug;
+            }
           }
 
           req.session.apiToken = jwt.signToken(payload, {
@@ -126,7 +133,7 @@ class AceCms {
 
           return;
         } catch (error) {
-          //
+          console.error(error);
         }
       }
 
@@ -140,7 +147,7 @@ class AceCms {
       res.redirect(`${config.clientBasePath + slug}/login${querystring}`);
     };
 
-    app.get(`${config.routerBasePath}authorise`, (req, res) => {
+    app.get(`${config.routerBasePath}_authorise`, (req, res) => {
       if (!req.query.code) {
         res.redirect(config.clientBasePath);
         return;
