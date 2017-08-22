@@ -67,27 +67,23 @@ class FieldAttachmentController {
       $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}&filename=${vm.fieldModel.value.original.fileName}`);
     };
 
-    vm.fileUrl = () => {
-      // const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.value.original.fileName}?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}`;
-      const fileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.value.metadata.s3.bucket}/${vm.fieldModel.value.metadata.s3.src}/${vm.fieldModel.value.original.fileName}?apiToken=${$rootScope.apiToken}`;
+    vm.fileUrl = async () => {
+      const apiToken = (await $http.get(`${appConfig.apiUrl}/token`, { params: { slug: appConfig.slug, role: 'guest' } })).data.token;
 
-      const fullUrl = `${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}${fileUrl}`;
+      const apiFileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.value.metadata.s3.bucket}/${vm.fieldModel.value.metadata.s3.src}/${vm.fieldModel.value.original.fileName}?apiToken=${apiToken}`;
+
+      const locationUrl = `${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}`;
+
+      const fileUrl = /https?:\/\//.test(apiFileUrl) ? apiFileUrl : locationUrl + apiFileUrl;
 
       $mdDialog.show(
         $mdDialog.prompt()
           .title('File URL')
           .placeholder('File URL')
           .ariaLabel('File URL')
-          .initialValue(fullUrl)
+          .initialValue(fileUrl)
           .ok('Close')
       );
-
-      // $mdDialog.show(
-      //   $mdDialog.alert()
-      //     .title('File URL')
-      //     .textContent(fullUrl)
-      //     .ok('Close')
-      // );
     };
   }
 }
