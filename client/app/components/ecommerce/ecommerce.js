@@ -55,7 +55,7 @@ const ecommerceModule = angular.module('ecommerce', [
     'ngInject';
 
     return (input, currencySymbol) => {
-      currencySymbol = currencySymbol || $rootScope.$config.module.ecommerce.currencySymbol;
+      currencySymbol = currencySymbol || $rootScope.$config.module.ecommerce.currency.symbol;
       return currencySymbol + $filter('toFixed')(input);
     };
   })
@@ -67,7 +67,7 @@ const ecommerceModule = angular.module('ecommerce', [
       if (!charge) {
         return '';
       }
-      const currencySymbol = $rootScope.$config.module.ecommerce.currencySymbol;
+      const currencySymbol = $rootScope.$config.module.ecommerce.currency.symbol;
       if (charge.status === 'failed') {
         return 'Unpaid';
       }

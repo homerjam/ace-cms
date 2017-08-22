@@ -36,6 +36,13 @@ class EcommerceController {
         });
     };
 
+    vm.currencies = [
+      {
+        iso: 'GBP',
+        symbol: '£',
+      },
+    ];
+
     /* Shared */
 
     vm.selected = [];

@@ -33,8 +33,8 @@ md-content
 
       md-input-container
         label Currency
-        md-select(ng-model="vm.config.module.ecommerce.currencySymbol")
-          md-option(ng-repeat="option in ['£']", value="{{option}}") {{option}}
+        md-select(ng-model="vm.config.module.ecommerce.currency" ng-model-options="{trackBy: '$value.iso'}")
+          md-option(ng-repeat="currency in vm.currencies", ng-value="currency") {{currency.iso}} ({{currency.symbol}})
 
       md-input-container(ng-if="::$root.$isSuperUser")
         md-checkbox(ng-model="vm.config.module.ecommerce.testMode", aria-label="Test mode?") Test Mode
@@ -48,7 +48,7 @@ md-content
           span(ng-show="vm.config.provider.stripe")
             md-button(ng-click="vm.config.provider.stripe = null") Disconnect
 
-    div(flex, layout="row", layout-margin)
+    div(flex, layout="column", layout-margin)
 
       .md-subhead(ng-show="!vm.config.provider.stripe") Connect your Stripe account
 
@@ -57,24 +57,17 @@ md-content
         .md-list-item-text
           a(href="https://dashboard.stripe.com", target="_blank") {{vm.config.provider.stripe.account.display_name}}
 
+    span(ng-if="::$root.$isSuperUser")
 
-    md-subheader.md-no-sticky
-      md-toolbar.md-menu-toolbar.md-secondary
-        .md-toolbar-tools
-          h3 CreateSend
+      md-subheader.md-no-sticky
+        md-toolbar.md-menu-toolbar.md-secondary
+          .md-toolbar-tools
+            h3 CreateSend
 
-    div(flex, layout="column", layout-margin)
+      div(flex, layout="column", layout-margin)
 
-      br
+        br
 
-      md-input-container
-        label Client ID
-        input(ng-model="vm.config.module.ecommerce.createsendClientId", aria-label="CreateSend Client ID")
-
-      md-input-container
-        label Client API Key
-        input(ng-model="vm.config.module.ecommerce.createsendClientApiKey", aria-label="CreateSend Client API Key")
-
-      md-input-container
-        label Checkout Subscriber List ID
-        input(ng-model="vm.config.module.ecommerce.createsendCheckoutSubscriberListId", aria-label="CreateSend Checkout Subscriber List ID")
+        md-input-container
+          label Checkout Subscriber List ID
+          input(ng-model="vm.config.module.ecommerce.createsend.checkoutSubscriberListId", aria-label="CreateSend Checkout Subscriber List ID")

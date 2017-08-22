@@ -64,6 +64,9 @@ md-content
         md-input-container
           md-checkbox(ng-model="vm.config.providerEnabled.vimeo", aria-label="Vimeo") Vimeo provider
 
+        md-input-container
+          md-checkbox(ng-model="vm.config.providerEnabled.createsend", aria-label="CreateSend") CreateSend provider
+
     span(ng-show="vm.config.providerEnabled.instagram")
 
       md-subheader.md-no-sticky
@@ -104,3 +107,21 @@ md-content
           .md-list-item-text
             a(href="{{vm.config.provider.vimeo.user.link}}", target="_blank") {{vm.config.provider.vimeo.user.name}}
 
+    span(ng-show="$root.$isSuperUser && vm.config.providerEnabled.createsend")
+
+      md-subheader.md-no-sticky
+        md-toolbar.md-menu-toolbar.md-secondary
+          .md-toolbar-tools
+            h3 CreateSend
+
+      div(flex, layout="column", layout-margin)
+
+        br
+
+        md-input-container
+          label Client ID
+          input(ng-model="vm.config.provider.createsend.clientId", aria-label="CreateSend Client ID")
+
+        md-input-container
+          label Client API Key
+          input(ng-model="vm.config.provider.createsend.clientApiKey", aria-label="CreateSend Client API Key")
