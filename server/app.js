@@ -146,7 +146,7 @@ class AceCms {
         return;
       }
 
-      const slug = JSON.parse(req.query.state).slug;
+      const slug = req.query.state;
 
       const authenticate = passport.authenticate('auth0', { failureRedirect: `${config.clientBasePath + slug}/login` });
 

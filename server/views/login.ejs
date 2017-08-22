@@ -112,7 +112,7 @@ a {
 			responseType: 'code',
 			redirectUrl: window.location.protocol + '//' + window.location.host + '<%= locals.clientBasePath %>authorise',
 			params: {
-				state: JSON.stringify({ slug: '<%= locals.slug %>' }),
+				state: '<%= locals.slug %>',
 				scope: 'openid email',
 			},
 		},
