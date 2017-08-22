@@ -86,9 +86,9 @@ class AceCms {
 
       req.session.referer = req.originalUrl;
 
-      if (config.environment === 'development') {
-        const jwt = new AceApi.Jwt(apiConfig);
+      const jwt = new AceApi.Jwt(apiConfig);
 
+      if (config.environment === 'development') {
         req.session.apiToken = jwt.signToken({
           slug,
           userId: apiConfig.dev.userId,
@@ -100,16 +100,33 @@ class AceCms {
       }
 
       if (req.isAuthenticated()) {
+        let payload = jwt.verifyToken(req.session.apiToken);
+
+        payload = {
+          userId: payload.userId,
+          slug: payload.slug,
+          role: payload.role,
+        };
+
+        if (payload.role !== 'super' && payload.slug !== slug) {
+          res.status(401).send('Not authorised');
+          return;
+        }
+
+        if (payload.role === 'super') {
+          payload.slug = slug;
+        }
+
+        req.session.apiToken = jwt.signToken(payload, {
+          expiresIn: API_TOKEN_EXPIRES_IN,
+        });
+
         next();
         return;
       }
 
       if (req.xhr || (req.headers.accept && /json/i.test(req.headers.accept))) {
-        res.status(401);
-        res.send({
-          code: 401,
-          message: 'Not authorised',
-        });
+        res.status(401).send('Not authorised');
         return;
       }
 
@@ -141,8 +158,7 @@ class AceCms {
 
         auth.authoriseUser(slug, userId)
           .then((user) => {
-            // req.session.accessToken = req.authInfo.access_token;
-            // req.session.idToken = req.authInfo.id_token;
+            const jwt = new AceApi.Jwt(apiConfig);
 
             const payload = {
               userId,
@@ -150,15 +166,9 @@ class AceCms {
               role: user.role,
             };
 
-            // _.merge(req.session, payload);
-
-            const jwt = new AceApi.Jwt(apiConfig);
-
-            const apiToken = jwt.signToken(payload, {
+            req.session.apiToken = jwt.signToken(payload, {
               expiresIn: API_TOKEN_EXPIRES_IN,
             });
-
-            req.session.apiToken = apiToken;
 
             res.redirect(config.clientBasePath + slug);
           })
