@@ -86,8 +86,8 @@ html
 
   body
     .wrapper
-      if locals.client
-        h2= locals.client.name
+      if client
+        h2= client.name
         br
 
       if locals.errorMessage
@@ -98,7 +98,8 @@ html
         .message.success.mdl-shadow--2dp
           span= locals.successMessage
 
-      #login-form.mdl-shadow--2dp
+      if client
+        #login-form.mdl-shadow--2dp
 
     script(src="https://cdn.auth0.com/js/lock/10.6/lock.min.js")
 
