@@ -6,7 +6,7 @@ md-toolbar
 
 md-content
 
-  div(layout="row", layout-padding, layout-wrap)
+  div(layout="row" layout-padding layout-wrap)
 
     div(flex="100")
       md-card
@@ -14,7 +14,7 @@ md-content
           md-card-title-text
             h4.md-headline Hi {{$root.$user.firstName}}, welcome back.
 
-    div(flex="60")
+    div(flex-gt-xs="60" flex="100")
       md-card
         md-card-title
           md-card-title-text
@@ -24,7 +24,7 @@ md-content
             .chart__wrapper
               ace-c3(options="vm.sessionsChart")
 
-    div(flex="40")
+    div(flex-gt-xs="40" flex="100")
       md-card
         md-card-title
           md-card-title-text

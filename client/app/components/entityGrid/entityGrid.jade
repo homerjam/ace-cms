@@ -5,9 +5,12 @@ div(layout="column", style="position: absolute; width: 100%; height: 100%")
       span(ng-show="::vm.mode !== 'modal'")
         md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
           md-icon(md-icon-set="material-icons") menu
-      h3 {{vm.heading}}&nbsp;
-        span(ng-show="vm.selected.length === 0") ({{vm.totalItems}})
-        span(ng-show="vm.selected.length > 0") ({{vm.selected.length}}/{{vm.totalItems}})
+
+      h3
+        span(hide show-gt-xs ng-show="vm.selected.length > 0") {{vm.selected.length}}/
+        span {{vm.totalItems}} &nbsp;
+        span {{vm.heading}}
+
       span(flex)
 
       span(ng-show="::vm.mode !== 'trash' && vm.mode !== 'modal'")
@@ -19,17 +22,17 @@ div(layout="column", style="position: absolute; width: 100%; height: 100%")
       span(ng-show="::vm.mode === 'trash'")
         md-button.md-icon-button(ng-click="vm.restoreSelected(vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Restore")
           md-icon(md-font-set="material-icons") settings_backup_restore
-        md-button.md-icon-button(ng-click="vm.deleteSelected(vm.selected, true)", ng-disabled="vm.selected.length < 1", aria-label="Delete Forever")
+        md-button.md-icon-button(hide show-gt-xs ng-click="vm.deleteSelected(vm.selected, true)", ng-disabled="vm.selected.length < 1", aria-label="Delete Forever")
           md-icon(md-font-set="material-icons") delete_forever
         md-button.md-icon-button(ng-click="vm.emptyTrash()", aria-label="Empty Trash")
           md-icon(md-font-set="material-icons") delete_sweep
 
-      md-button.md-icon-button(ng-click="vm.selectAll()", aria-label="Select all")
+      md-button.md-icon-button(hide show-gt-xs ng-click="vm.selectAll()", aria-label="Select all")
         md-icon(md-font-set="mdi", md-font-icon="mdi-select")
-      md-button.md-icon-button(ng-click="vm.selectNone()", aria-label="Select none")
+      md-button.md-icon-button(hide show-gt-xs ng-click="vm.selectNone()", aria-label="Select none")
         md-icon(md-font-set="mdi", md-font-icon="mdi-select-off")
 
-      md-menu(ng-show="::vm.filterFields.length")
+      md-menu(hide show-gt-xs ng-show="::vm.filterFields.length")
         md-button.md-icon-button(ng-click="$mdMenu.open()", aria-label="Filter")
           md-icon(md-font-set="material-icons") filter_list
         md-menu-content(width="4")

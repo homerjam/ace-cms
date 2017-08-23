@@ -36,4 +36,13 @@ entity {
   md-toolbar h2 *:not(:last-child):after {
     content: " > ";
   }
+
+  .entity-title {
+    overflow: hidden;
+
+    h2 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
 }

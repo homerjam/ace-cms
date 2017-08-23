@@ -1,19 +1,41 @@
-include header
+<!doctype html>
+html(ng-app="app" ng-strict-di)
 
-app(layout="row") Loading...
+  head
 
-script.
-  var appConfig = {
-    slug: '!{slug}',
-    clientBasePath: '!{clientBasePath}',
-    assistUrl: '!{assistUrl}',
-    assistCredentials: '!{assistCredentials}',
-    apiUrl: '!{apiUrl}',
-    apiToken: '!{apiToken}',
-  };
+    base(href= clientBasePath + slug + '/')
 
-if locals.environment !== 'production'
-  script(src="/dev/js/bundle.js")
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
 
-else
-  script(src=clientBasePath + slug + '/build/js/bundle.js?v=' + version)
+    meta(name="google" content="notranslate")
+    meta(name="pinterest" content="nopin")
+
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title= pageTitle
+
+    link(rel="stylesheet" href= clientBasePath + slug + '/font/roboto/font.css')
+
+    if environment === 'production'
+      link(rel="stylesheet" href= clientBasePath + slug + '/build/css/bundle.css?v=' + version)
+
+  body
+
+    app(layout="row") Loading...
+
+    script.
+      var appConfig = {
+        slug: '!{slug}',
+        clientBasePath: '!{clientBasePath}',
+        assistUrl: '!{assistUrl}',
+        assistCredentials: '!{assistCredentials}',
+        apiUrl: '!{apiUrl}',
+        apiToken: '!{apiToken}',
+      };
+
+    if locals.environment !== 'production'
+      script(src="/dev/js/bundle.js")
+
+    else
+      script(src=clientBasePath + slug + '/build/js/bundle.js?v=' + version)

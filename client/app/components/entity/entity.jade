@@ -2,22 +2,23 @@ md-toolbar(ng-if="::!vm.entity.trashed")
   .md-toolbar-tools
     md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
       md-icon(md-icon-set="material-icons") menu
-    h2
-      span(ng-show="::vm.modeBreadcrumb", hide-xs, hide-sm) {{::vm.modeBreadcrumb}}
-      a(ng-if=":: !vm.schema.settings.singular && vm.mode !== 'new'" ui-sref="entityGrid({schemaSlug: vm.schema.slug})", hide-xs, hide-sm) {{::vm.schema.name | pluralize}}
-      span(ng-if=":: vm.schema.settings.singular || vm.mode === 'new'") {{::vm.schema.name}}
-      span(ng-if="vm.title", ng-bind-html="vm.title")
-    span(flex)
+
+    .entity-title(flex)
+      h2
+        span(ng-show="::vm.modeBreadcrumb", hide-xs, hide-sm) {{::vm.modeBreadcrumb}}
+        a(ng-if=":: !vm.schema.settings.singular && vm.mode !== 'new'" ui-sref="entityGrid({schemaSlug: vm.schema.slug})", hide-xs, hide-sm) {{::vm.schema.name | pluralize}}
+        span(ng-if=":: vm.schema.settings.singular || vm.mode === 'new'") {{::vm.schema.name}}
+        span(ng-if="vm.title", ng-bind-html="vm.title")
 
     md-button(ng-show="::vm.mode !== 'batchUpload' && !vm.isModal", ng-click="vm.saveEntity()", ng-disabled="vm.entityForm.$invalid") Save
 
     md-button.md-icon-button(ng-show="::vm.mode === 'normal' && !vm.isModal", ng-click="vm.deleteEntity()", aria-label="Delete")
       md-icon(md-font-set="material-icons") delete
 
-    md-button.md-icon-button(ng-show="::vm.mode === 'normal' && vm.prevEntityId", ng-click="vm.prevEntity()", aria-label="Previous Entity")
+    md-button.md-icon-button(hide show-gt-xs ng-show="::vm.mode === 'normal' && vm.prevEntityId", ng-click="vm.prevEntity()", aria-label="Previous Entity")
       md-icon(md-font-set="material-icons") navigate_before
 
-    md-button.md-icon-button(ng-show="::vm.mode === 'normal' && vm.nextEntityId", ng-click="vm.nextEntity()", aria-label="Next Entity")
+    md-button.md-icon-button(hide show-gt-xs ng-show="::vm.mode === 'normal' && vm.nextEntityId", ng-click="vm.nextEntity()", aria-label="Next Entity")
       md-icon(md-font-set="material-icons") navigate_next
 
     md-menu(ng-show="::(vm.mode === 'normal' || vm.mode === 'singular') && !vm.isModal")
