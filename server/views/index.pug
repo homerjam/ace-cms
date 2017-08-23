@@ -16,4 +16,4 @@ if locals.environment !== 'production'
   script(src="/dev/js/bundle.js")
 
 else
-  script(src="!{clientBasePath + slug}/build/js/bundle.js?v=!{version}")
+  script(src=clientBasePath + slug + '/build/js/bundle.js?v=' + version)
