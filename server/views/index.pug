@@ -1,0 +1,19 @@
+include header
+
+app(layout="row") Loading...
+
+script.
+  var appConfig = {
+    slug: '!{slug}',
+    clientBasePath: '!{clientBasePath}',
+    assistUrl: '!{assistUrl}',
+    assistCredentials: '!{assistCredentials}',
+    apiUrl: '!{apiUrl}',
+    apiToken: '!{apiToken}',
+  };
+
+if locals.environment !== 'production'
+  script(src="/dev/js/bundle.js")
+
+else
+  script(src="!{clientBasePath + slug}/build/js/bundle.js?v=!{version}")

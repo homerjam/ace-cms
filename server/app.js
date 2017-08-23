@@ -35,7 +35,7 @@ class AceCms {
 
     app.use(helmet());
     app.set('views', `${__dirname}/views`);
-    app.set('view engine', 'ejs');
+    app.set('view engine', 'pug');
     app.use(errorHandler());
     app.use(logger('dev'));
     app.use(cookieParser());
@@ -290,6 +290,7 @@ class AceCms {
           clientId: config.auth0.clientId,
           domain: config.auth0.domain,
         },
+        pageTitle: config.pageTitle,
       };
 
       req.session.errorMessage = null;
@@ -342,6 +343,7 @@ class AceCms {
         apiUrl: config.apiUrl,
         apiToken: req.session.apiToken,
         session: req.session,
+        pageTitle: config.pageTitle,
       });
     }
 
