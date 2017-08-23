@@ -95,7 +95,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
   };
 
   service.getFieldThumbnail = (field) => {
-    if (!field.value) {
+    if (!field || !field.value) {
       return null;
     }
 
@@ -108,25 +108,27 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     return thumbnail;
   };
 
-  service.getEntityThumbnail = (entity) => {
-    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailFields[0];
+  const getThumbnailField = (entity) => {
+    const thumbnailFields = ConfigFactory.getSchema(entity.schema).thumbnailFields;
 
-    if (thumbnailFieldSlug && entity.fields[thumbnailFieldSlug]) {
-      return service.getFieldThumbnail(entity.fields[thumbnailFieldSlug]);
+    if (!thumbnailFields) {
+      return null;
     }
 
-    return null;
+    let thumbnailField = null;
+
+    thumbnailFields.forEach((fieldSlug) => {
+      if (!thumbnailField && entity.fields[fieldSlug]) {
+        thumbnailField = entity.fields[fieldSlug];
+      }
+    });
+
+    return thumbnailField;
   };
 
-  service.getEntityThumbnailUrl = (entity, transformSettings) => {
-    const thumbnailFieldSlug = ConfigFactory.getSchema(entity.schema).thumbnailFields[0];
+  service.getEntityThumbnail = entity => service.getFieldThumbnail(getThumbnailField(entity));
 
-    if (thumbnailFieldSlug && entity.fields[thumbnailFieldSlug]) {
-      return HelperFactory.getFieldThumbnailUrl(entity.fields[thumbnailFieldSlug], transformSettings);
-    }
-
-    return null;
-  };
+  service.getEntityThumbnailUrl = (entity, transformSettings) => HelperFactory.getFieldThumbnailUrl(getThumbnailField(entity), transformSettings);
 
   function prepEntityToDb (entity, schemaSlug) {
     entity = angular.copy(entity);
