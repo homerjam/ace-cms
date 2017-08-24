@@ -26,11 +26,12 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
 
     if (headers) {
       const userId = headers('x-user-id');
-      Config.users.forEach((user, i) => {
-        if (user.id === userId) {
-          User = Config.users[i];
-        }
-      });
+      User = _.find(Config.users, { id: userId });
+      if (!User) {
+        User = {
+          id: userId,
+        };
+      }
       $rootScope.$user = User;
 
       const role = headers('x-role');

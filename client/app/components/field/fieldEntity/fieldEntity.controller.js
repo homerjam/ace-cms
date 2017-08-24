@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import he from 'he/he';
 
 class FieldEntityController {
@@ -9,7 +10,13 @@ class FieldEntityController {
       vm.fieldModel.value = [];
     }
 
-    vm.schemas = vm.fieldOptions.settings.schemas.map(schema => ({
+    const schemas = _.get(vm.fieldOptions, 'settings.schemas', []);
+
+    if (!schemas.length) {
+      $log.error(`No schemas specified for '${vm.fieldOptions.name}' field`);
+    }
+
+    vm.schemas = schemas.map(schema => ({
       name: ConfigFactory.getSchema(schema).name,
       slug: schema,
     }));
@@ -26,13 +33,17 @@ class FieldEntityController {
     };
 
     vm.search = query => $q((resolve, reject) => {
-      const schemas = vm.fieldOptions.settings.schemas.map(schema => `schema:${schema}`);
+      let schemas = _.get(vm.fieldOptions, 'settings.schemas', []);
 
       if (!schemas.length) {
-        $log.error('No schemas specified');
+        $log.error(`No schemas specified for '${vm.fieldOptions.name}' field`);
 
-        return resolve([]);
+        resolve([]);
+
+        return;
       }
+
+      schemas = schemas.map(schema => `schema:${schema}`);
 
       const and = ['!trashed:true', `(${schemas.join(' OR ')})`];
 

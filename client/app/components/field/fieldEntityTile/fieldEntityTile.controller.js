@@ -2,14 +2,20 @@ import _ from 'lodash';
 
 class FieldEntityTileController {
   /* @ngInject */
-  constructor ($rootScope, $scope, ConfigFactory, EntityFactory, HelperFactory) {
+  constructor ($rootScope, $scope, $log, ConfigFactory, EntityFactory, HelperFactory) {
     const vm = this;
 
     if (!vm.fieldModel.value) {
       vm.fieldModel.value = [];
     }
 
-    vm.schemas = vm.fieldOptions.settings.schemas.map(schema => ({
+    const schemas = _.get(vm.fieldOptions, 'settings.schemas', []);
+
+    if (!schemas.length) {
+      $log.error(`No schemas specified for '${vm.fieldOptions.name}' field`);
+    }
+
+    vm.schemas = schemas.map(schema => ({
       name: ConfigFactory.getSchema(schema).name,
       slug: schema,
     }));

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import angular from 'angular';
 
 const FileFactory = ($http, $q, $log, ConfigFactory, appConfig) => {
@@ -55,7 +56,7 @@ const FileFactory = ($http, $q, $log, ConfigFactory, appConfig) => {
   });
 
   service.createFile = file => $q((resolve, reject) => {
-    file = angular.copy(file);
+    file = _.merge({}, file);
 
     file.type = 'file';
     file.uploadedBy = ConfigFactory.getUser().id;

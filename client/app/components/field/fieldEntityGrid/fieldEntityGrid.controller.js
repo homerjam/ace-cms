@@ -1,15 +1,22 @@
+import _ from 'lodash';
 import angular from 'angular';
 
 class FieldEntityGridController {
   /* @ngInject */
-  constructor($timeout, EntityFactory, ConfigFactory, HelperFactory, uiGridConstants) {
+  constructor($timeout, $log, EntityFactory, ConfigFactory, HelperFactory, uiGridConstants) {
     const vm = this;
 
     if (!vm.fieldModel.value) {
       vm.fieldModel.value = [];
     }
 
-    vm.schemas = vm.fieldOptions.settings.schemas.map(schema => ({
+    const schemas = _.get(vm.fieldOptions, 'settings.schemas', []);
+
+    if (!schemas.length) {
+      $log.error(`No schemas specified for '${vm.fieldOptions.name}' field`);
+    }
+
+    vm.schemas = schemas.map(schema => ({
       name: ConfigFactory.getSchema(schema).name,
       slug: schema,
     }));
