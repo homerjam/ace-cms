@@ -118,8 +118,13 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     let thumbnailField = null;
 
     thumbnailFields.forEach((fieldSlug) => {
-      if (!thumbnailField && entity.fields[fieldSlug]) {
-        thumbnailField = entity.fields[fieldSlug];
+      const field = entity.fields[fieldSlug];
+      if (!thumbnailField && field && field.value) {
+        const value = _.isArray(field.value) ? field.value[0] : field.value;
+        if (!value) {
+          return;
+        }
+        thumbnailField = field;
       }
     });
 
