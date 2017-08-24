@@ -169,14 +169,14 @@ angular.module('app', [
 
           const $mdDialog = $injector.get('$mdDialog');
           const appConfig = $injector.get('appConfig');
-          const message = response.data.message || response.data.error;
+          const message = response.data.message || response.data.error || response.data;
 
           $mdDialog.show(
             $mdDialog.alert()
               .title('Not Authorised')
               .htmlContent(`
                 <p>${message}</p>
-                <p>Please <a href="${$window.location.origin + appConfig.clientBasePath + appConfig.slug}/logout" target="_blank">login</a></p>
+                <!--<p>Please <a href="${$window.location.origin + appConfig.clientBasePath + appConfig.slug}/logout" target="_blank">login</a></p>-->
               `)
               .ok('Close')
           );
