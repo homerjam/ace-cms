@@ -23,7 +23,7 @@ md-content
             // md-icon(md-font-set="material-icons") dashboard
             span {{ schema.name | pluralize }}
 
-    md-menu(md-offset="220 0", ng-show="$root.$config.taxonomies.length")
+    md-menu(md-offset="220 0", ng-show="$root.$config.taxonomies.length || $root.$isSuperUser")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('taxonomy', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") format_list_bulleted
         p Taxonomy
@@ -54,12 +54,12 @@ md-content
             // md-icon(md-font-set="material-icons") dashboard
             span Settings
 
-    md-menu(md-offset="220 0")
+    md-menu(md-offset="220 0" ng-show="uploadSchemas.length")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('batchUpload', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") file_upload
         p Upload
       md-menu-content(width="4")
-        md-menu-item(ng-repeat="schema in $root.$config.schemas | batchUploadSchemas")
+        md-menu-item(ng-repeat="schema in $root.$config.schemas | batchUploadSchemas as uploadSchemas")
           md-button(ui-sref="batchUploadEntity({schemaSlug: schema.slug})")
             // md-icon(md-font-set="material-icons") dashboard
             span {{ schema.name }}
