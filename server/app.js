@@ -303,7 +303,7 @@ class AceCms {
             res.render('login', data);
           },
           (error) => {
-            data.errorMessage = `Client not found: ${slug}`;
+            data.errorMessage = `Account ID not found: ${slug}`;
             res.render('login', data);
           }
         );

@@ -98,13 +98,12 @@ html
         .message.success.mdl-shadow--2dp
           span= locals.successMessage
 
-      if client
-        #login-form.mdl-shadow--2dp
+      #login-form.mdl-shadow--2dp
 
     script(src="https://cdn.auth0.com/js/lock/10.6/lock.min.js")
 
     script.
-      var lock = new Auth0Lock('!{locals.auth0.clientId}', '!{locals.auth0.domain}', {
+      var lock = new Auth0Lock('!{auth0.clientId}', '!{auth0.domain}', {
         theme: {
           logo: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
           primaryColor: '#607D8B',
@@ -113,11 +112,12 @@ html
         socialButtonStyle: 'big',
         auth: {
           responseType: 'code',
-          redirectUrl: window.location.protocol + '//' + window.location.host + '!{locals.clientBasePath}_authorise',
+          redirectUrl: window.location.protocol + '//' + window.location.host + '!{clientBasePath}_authorise',
           params: {
-            state: '!{locals.slug}',
+            state: '!{slug}',
             scope: 'openid email',
           },
         },
+        allowSignUp: !{client ? 'true' : 'false'},
       });
       lock.show();
