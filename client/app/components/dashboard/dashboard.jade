@@ -8,11 +8,11 @@ md-content
 
   div(layout="row" layout-padding layout-wrap)
 
-    //- div(flex="100")
-    //-   md-card
-    //-     md-card-title
-    //-       md-card-title-text
-    //-         h4.md-headline Hi {{$root.$user.firstName}}, welcome back.
+    div(flex="100")
+      md-card
+        md-card-title
+          md-card-title-text
+            h4.md-headline Hi {{$root.$user.firstName || $root.$user.id}}!
 
     div(flex-gt-xs="60" flex="100")
       md-card
