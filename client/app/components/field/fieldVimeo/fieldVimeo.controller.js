@@ -38,6 +38,7 @@ class FieldVimeoController {
           },
           headers: {
             Accept: 'application/vnd.vimeo.*+json;version=3.2',
+            'X-Api-Token': undefined,
           },
         })
           .then((response) => {
