@@ -147,7 +147,10 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
 
   service.getMdChipCollection = scope => scope.$parent.$mdChipsCtrl.items;
 
-  service.getMdChipIndex = scope => scope.$parent.$mdChipsCtrl.items.indexOf(scope.$parent.$chip);
+  service.getMdChipIndex = function getMdChipIndex (scope) {
+    console.log(this, scope);
+    scope.$parent.$mdChipsCtrl.items.indexOf(scope.$parent.$chip);
+  };
 
   return service;
 };

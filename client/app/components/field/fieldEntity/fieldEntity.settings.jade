@@ -14,7 +14,7 @@ md-dialog(aria-label="Field Settings")
             md-autocomplete(md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="schema in vm.schemas", md-item-text="schema.name", placeholder="Schema(s)", md-min-length="0")
               span(md-highlight-text="vm.searchText") {{schema.name}}
             md-chip-template
-              span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{ $chip | schemaName }}
+              span(ace-sortable, item="$chip", collection="$mdChipsCtrl.items", draggable-selector="'md-chip'") {{ $chip | schemaName }}
 
           md-button.md-icon-button(aria-label="New schema", ng-click="vm.newSchema(vm.settings.schemas, $event)")
             md-icon(md-font-set="material-icons") add

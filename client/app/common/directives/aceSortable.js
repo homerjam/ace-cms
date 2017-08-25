@@ -19,6 +19,7 @@ export default angular.module('ace.sortable', [])
       const vm = this;
 
       vm.collection = $parse($attrs.collection)($scope);
+      vm.item = $parse($attrs.item)($scope);
       vm.index = $parse($attrs.index)($scope);
       vm.axis = $parse($attrs.axis)($scope);
       vm.draggableSelector = $parse($attrs.draggableSelector)($scope);
@@ -37,6 +38,20 @@ export default angular.module('ace.sortable', [])
 
       const move = function (from, to) {
         this.splice(to, 0, this.splice(from, 1)[0]);
+      };
+
+      const getCollection = () => {
+        return angular.isFunction(vm.collection) ? vm.collection($scope) : vm.collection;
+      };
+
+      const getIndex = () => {
+        let index;
+        if (vm.item) {
+          index = getCollection().indexOf(vm.item);
+        } else {
+          index = angular.isFunction(vm.index) ? vm.index($scope) : $parse($attrs.index)($scope);
+        }
+        return index;
       };
 
       if (vm.draggableSelector) {
@@ -76,7 +91,7 @@ export default angular.module('ace.sortable', [])
 
           const dataTransfer = event.dataTransfer || event.originalEvent.dataTransfer;
 
-          const index = angular.isFunction(vm.index) ? vm.index($scope) : $parse($attrs.index)($scope);
+          const index = getIndex();
 
           dataTransfer.effectAllowed = 'copyMove';
           dataTransfer.dropEffect = 'move';
@@ -127,7 +142,7 @@ export default angular.module('ace.sortable', [])
         event.preventDefault();
 
         const droppedItemIndex = parseInt((event.dataTransfer || event.originalEvent.dataTransfer).getData('text/plain'), 10);
-        const currentIndex = angular.isFunction(vm.index) ? vm.index($scope) : $parse($attrs.index)($scope);
+        const currentIndex = getIndex();
         let newIndex = null;
 
         if (dropPosition === 'before') {
@@ -149,8 +164,8 @@ export default angular.module('ace.sortable', [])
         dropTimeout = $timeout(() => {
           dropPosition = null;
 
-          $scope.$apply(() => {
-            const collection = angular.isFunction(vm.collection) ? vm.collection($scope) : vm.collection;
+          $scope.$parent.$apply(() => {
+            const collection = getCollection();
 
             const changeEvent = $scope.$emit('aceSortable:change', {
               collection,

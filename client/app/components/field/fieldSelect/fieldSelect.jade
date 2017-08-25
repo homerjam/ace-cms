@@ -38,4 +38,4 @@ div(flex, layout="row", layout-margin)
           )
           span(md-highlight-text="vm.searchText") {{item.title}}
         md-chip-template
-          span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip.title}}
+          span(ace-sortable, item="$chip", collection="$mdChipsCtrl.items", draggable-selector="'md-chip'") {{$chip.title}}

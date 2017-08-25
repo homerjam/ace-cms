@@ -11,7 +11,7 @@ md-dialog(aria-label="Field Settings")
 
         md-chips(ng-model="vm.settings.options", placeholder="Options", secondary-placeholder="+Option")
           md-chip-template
-            span(ace-sortable, index="$root.$helper.getMdChipIndex", collection="$root.$helper.getMdChipCollection", draggable-selector="'md-chip'") {{$chip}}
+            span(ace-sortable, item="$chip", collection="$mdChipsCtrl.items", draggable-selector="'md-chip'") {{$chip}}
         br
 
         md-input-container.md-block

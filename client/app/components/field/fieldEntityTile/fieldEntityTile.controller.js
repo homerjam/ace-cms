@@ -255,14 +255,6 @@ class FieldEntityTileController {
         }
       }
     };
-
-    vm.getIndex = (scope) => {
-      return scope.$parent.$index;
-    };
-
-    vm.getCollection = (scope) => {
-      return vm.fieldModel.value;
-    };
   }
 }
 

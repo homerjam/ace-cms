@@ -6,6 +6,10 @@ class FieldEntityController {
   constructor($scope, $q, $log, ConfigFactory, EntityFactory) {
     const vm = this;
 
+    $scope.$on('aceSortable:change', (event, obj) => {
+      console.log(event, obj);
+    });
+
     if (!vm.fieldModel.value && vm.fieldOptions.settings.multiple) {
       vm.fieldModel.value = [];
     }
