@@ -8,11 +8,11 @@ md-content
 
   div(layout="row" layout-padding layout-wrap)
 
-    div(flex="100")
-      md-card
-        md-card-title
-          md-card-title-text
-            h4.md-headline Hi {{$root.$user.firstName}}, welcome back.
+    //- div(flex="100")
+    //-   md-card
+    //-     md-card-title
+    //-       md-card-title-text
+    //-         h4.md-headline Hi {{$root.$user.firstName}}, welcome back.
 
     div(flex-gt-xs="60" flex="100")
       md-card
@@ -20,7 +20,9 @@ md-content
           md-card-title-text
             h4.md-headline Sessions
         md-card-content
-          .chart.chart--sessions
+          p(ng-if="!vm.sessionsChart") Sessions info will appear here pending setup
+
+          .chart.chart--sessions(ng-if="vm.sessionsChart")
             .chart__wrapper
               ace-c3(options="vm.sessionsChart")
 
@@ -30,15 +32,14 @@ md-content
           md-card-title-text
             h4.md-headline Top Referrals
         md-card-content
+          p(ng-if="!vm.referrals") Referrals info will appear here pending setup
 
-          md-table-container
+          md-table-container(ng-if="vm.referrals")
             table(md-table)
-
               thead(md-head)
                 tr(md-row)
                   th(md-column) Source
                   th(md-column) Sessions
-
               tbody(md-body)
                 tr(md-row, ng-repeat="referral in vm.referrals")
                   td(md-cell)

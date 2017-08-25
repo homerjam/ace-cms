@@ -11,7 +11,7 @@
   pointer-events: none;
 
   .modal-dialog {
-    min-width: 856px;
+    min-width: calc(100vw - 72px);
     pointer-events: auto;
   }
 

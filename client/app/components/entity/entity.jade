@@ -59,11 +59,12 @@ md-content(mode="{{vm.mode}}")
           md-checkbox.md-primary.field-apply(ng-if="::vm.mode === 'batchEdit'", ng-model="vm.batchPublish", aria-label="Apply to all?")
           h3 Published
 
-    div(flex, layout="row", layout-margin, style="height: 112px")
+    div(flex, layout="column", layout-margin)
 
-      div(flex)
-        md-checkbox(ng-model="vm.entity.published", ng-change="vm.batchPublish = true", aria-label="Published?") Published on ...
-        md-datepicker(ng-model="vm.entity.publishedAt", md-placeholder="Choose date", ng-disabled="!vm.entity.published", ng-change="vm.batchPublish = true")
+      md-input-container
+        md-checkbox(ng-model="vm.entity.published", ng-change="vm.batchPublish = true", aria-label="Published?") Published
+
+      md-datepicker(ng-model="vm.entity.publishedAt", md-placeholder="Choose date", ng-disabled="!vm.entity.published", ng-change="vm.batchPublish = true")
 
   form(name="vm.entityForm", novalidate, role="form")
 

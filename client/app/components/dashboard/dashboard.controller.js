@@ -26,7 +26,6 @@ class DashboardController {
     const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
 
     if (config.client.gaView) {
-      // var now = moment();
 
       HelperFactory.analytics({
         ids: `ga:${config.client.gaView}`,
