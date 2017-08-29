@@ -80,11 +80,11 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     title = $filter('trimify')(title);
 
     if (schema.slugTemplate && schema.slugTemplate !== '') {
-      slug = _.camelCase(Handlebars.compile(schema.slugTemplate)(fields));
+      slug = _.kebabCase(Handlebars.compile(schema.slugTemplate)(fields));
       slug = $filter('trimify')(slug);
 
     } else {
-      slug = _.camelCase(title);
+      slug = _.kebabCase(title);
     }
 
     // Decode entities

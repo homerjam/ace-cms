@@ -17,23 +17,25 @@ class TaxonomyController {
 
     let originalTerms = angular.copy(vm.taxonomy.terms);
 
-    const isChanged = $transitions.onStart({ to: '*' }, (trans) => {
-      if (!angular.equals(originalTerms, vm.taxonomy.terms)) {
-        const confirm = $mdDialog.confirm()
-          .textContent('You have unsaved changes, are you sure?')
-          .cancel('Cancel')
-          .ok('Confirm');
+    const isUnchanged = () => angular.equals(originalTerms, angular.copy(vm.taxonomy.terms));
 
-        $mdDialog
-          .show(confirm)
-          .then(() => {
-            isChanged();
-            $state.go(trans.to().name, trans.params('to'));
-          });
+    // const hasChanged = $transitions.onStart({ to: '*' }, (trans) => {
+    //   if (!isUnchanged()) {
+    //     const confirm = $mdDialog.confirm()
+    //       .textContent('You have unsaved changes, are you sure?')
+    //       .cancel('Cancel')
+    //       .ok('Confirm');
 
-        return false;
-      }
-    });
+    //     $mdDialog
+    //       .show(confirm)
+    //       .then(() => {
+    //         hasChanged();
+    //         $state.go(trans.to().name, trans.params('to'));
+    //       });
+
+    //     return false;
+    //   }
+    // });
 
     const editChild = (scope, prevTitle) => {
       const childNodes = scope.childNodes();
@@ -130,7 +132,7 @@ class TaxonomyController {
           TaxonomyFactory.updateTerm({
             id: scope.$modelValue.id,
             title: scope.$modelValue.title,
-            slug: _.camelCase(scope.$modelValue.title),
+            slug: _.kebabCase(scope.$modelValue.title),
           })
             .then(
               (response) => {
@@ -160,9 +162,11 @@ class TaxonomyController {
         return true;
       },
       dropped() {
-        if (!angular.equals(originalTerms, vm.taxonomy.terms)) {
-          vm.save();
-        }
+        $timeout(() => {
+          if (!angular.equals(originalTerms, vm.taxonomy.terms)) {
+            vm.save();
+          }
+        });
       },
     };
 
@@ -175,7 +179,7 @@ class TaxonomyController {
     };
 
     const slugifyTerms = (term) => {
-      term.slug = _.camelCase(term.title);
+      term.slug = _.kebabCase(term.title);
 
       (term.terms || []).forEach((term) => {
         slugifyTerms(term);
@@ -183,11 +187,11 @@ class TaxonomyController {
     };
 
     vm.save = () => {
-      const taxonomy = angular.fromJson(angular.toJson(vm.taxonomy));
-
-      taxonomy.terms.forEach((term) => {
+      vm.taxonomy.terms.forEach((term) => {
         slugifyTerms(term);
       });
+
+      const taxonomy = angular.fromJson(angular.toJson(vm.taxonomy));
 
       TaxonomyFactory.updateTaxonomy(taxonomy)
         .then(

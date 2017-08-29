@@ -26,6 +26,7 @@ class DashboardController {
     const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
 
     if (config.client.gaView) {
+      vm.gaView = config.client.gaView;
 
       HelperFactory.analytics({
         ids: `ga:${config.client.gaView}`,
@@ -88,7 +89,7 @@ class DashboardController {
           sessions: row[2],
         }));
 
-        vm.referrals = data.slice(0, 10);
+        vm.referrals = data.slice(0, 5);
       });
 
     }

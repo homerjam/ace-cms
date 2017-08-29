@@ -11,7 +11,7 @@ class FieldSelectController {
 
     vm.search = query => $q((resolve, reject) => {
       const options = (vm.fieldOptions.settings.options || []).map(option => ({
-        slug: _.camelCase(option),
+        slug: _.kebabCase(option),
         title: option,
         type: 'option',
       }));

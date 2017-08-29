@@ -98,7 +98,7 @@ class FieldTaxonomyController {
       const term = TaxonomyFactory.getNewTerm();
 
       term.title = chip;
-      term.slug = _.camelCase(chip);
+      term.slug = _.kebabCase(chip);
 
       TaxonomyFactory.createTerm(vm.fieldOptions.settings.taxonomy, term);
 
