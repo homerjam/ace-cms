@@ -1,7 +1,7 @@
 class Field {
   constructor(config = {}) {
     this.name = 'Field Name';
-    this.dataType = null; // string|number|boolean
+    // this.dataType = null; // string|number|boolean|array
     this.thumbnailField = false;
     this.gridOptions = {
       style: 'string', // string|thumbnail

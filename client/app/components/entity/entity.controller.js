@@ -340,12 +340,15 @@ class EntityController {
       });
     });
 
-    vm.fieldOptions = (fieldSlug) => {
-      const field = ConfigFactory.getField(vm.schema.slug, fieldSlug);
-      field.entityId = vm.entity._id;
-      field.entityMode = vm.mode;
-      return field;
-    };
+    const fieldOptions = _.reduce(vm.schema.fields, (obj = {}, field) => {
+      obj[field.slug] = _.merge({}, ConfigFactory.getField(vm.schema.slug, field.slug), {
+        entityId: vm.entity._id,
+        entityMode: vm.mode,
+      });
+      return obj;
+    }, {});
+
+    vm.fieldOptions = fieldSlug => fieldOptions[fieldSlug];
 
   }
 }

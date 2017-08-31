@@ -29,7 +29,7 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
   const service = {};
 
   const slugPattern = (existing, slug) => (({
-    test: function (existing, slug, value) {
+    test: function test(existing, slug, value) {
       const validRegExp = /^[^\d][a-zA-Z0-9]*$/;
       const existsRegExp = new RegExp(`^(${existing.join('|')})$`);
       return validRegExp.test(value) && (!existsRegExp.test(value) || value === slug);
