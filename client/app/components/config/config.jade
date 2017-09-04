@@ -1,0 +1,78 @@
+md-toolbar
+  .md-toolbar-tools
+    md-button.md-icon-button.menu-toggle(hide-gt-md, ng-click="$root.toggleMainMenu()", aria-label="Toggle menu")
+      md-icon(md-icon-set="material-icons") menu
+    h2 Config
+    span(flex)
+    md-button(ng-click="vm.save()", ng-disabled="vm.form.$invalid") Save
+
+md-content
+
+  form(name="vm.form", role="form", novalidate)
+
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
+        .md-toolbar-tools
+          h3 General
+
+    div(flex, layout="column", layout-margin)
+      br
+
+      md-input-container
+        label Client Name
+        input(ng-model="vm.config.client.name", aria-label="Client Name")
+
+      md-input-container
+        label Website URL
+        input(ng-model="vm.config.client.baseUrl", aria-label="Website URL")
+
+      md-input-container
+        label Google Analytics View ID
+        input(ng-model="vm.config.client.gaView", aria-label="Google Analytics View ID")
+
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
+        .md-toolbar-tools
+          h3 Assets
+
+    div(flex, layout="column", layout-margin)
+      br
+
+      md-input-container
+        label Slug
+        input(ng-model="vm.config.assets.slug", aria-label="Assets Slug")
+
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
+        .md-toolbar-tools
+          h3 Modules / Providers
+
+    div(flex, layout="column", layout-margin)
+
+      md-input-container
+        md-checkbox(ng-model="vm.config.moduleEnabled.ecommerce", aria-label="E-commerce module") E-commerce module
+
+      md-input-container
+        md-checkbox(ng-model="vm.config.providerEnabled.instagram", aria-label="Instagram") Instagram provider
+
+      md-input-container
+        md-checkbox(ng-model="vm.config.providerEnabled.vimeo", aria-label="Vimeo") Vimeo provider
+
+      md-input-container
+        md-checkbox(ng-model="vm.config.providerEnabled.createsend", aria-label="CreateSend") CreateSend provider
+
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
+        .md-toolbar-tools
+          h3 CreateSend
+
+    div(flex, layout="column", layout-margin)
+      br
+
+      md-input-container
+        label Client ID
+        input(ng-model="vm.config.provider.createsend.clientId", aria-label="CreateSend Client ID")
+
+      md-input-container
+        label Client API Key
+        input(ng-model="vm.config.provider.createsend.clientApiKey", aria-label="CreateSend Client API Key")

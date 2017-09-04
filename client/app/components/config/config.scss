@@ -1,0 +1,13 @@
+config {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+
+  [flex] {
+    position: relative;
+  }
+
+  .md-subheader-inner {
+    padding: 0 !important;
+  }
+}

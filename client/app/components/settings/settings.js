@@ -1,6 +1,7 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import settingsComponent from './settings.component';
+import SettingsFactory from './settings.factory';
 
 const settingsModule = angular.module('settings', [
   uiRouter,
@@ -22,6 +23,8 @@ const settingsModule = angular.module('settings', [
         },
       });
   })
+
+  .factory('SettingsFactory', SettingsFactory)
 
   .directive('settings', settingsComponent);
 

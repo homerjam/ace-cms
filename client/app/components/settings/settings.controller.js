@@ -1,12 +1,12 @@
 class SettingsController {
   /* @ngInject */
-  constructor(ConfigFactory) {
+  constructor(ConfigFactory, SettingsFactory) {
     const vm = this;
 
     vm.config = ConfigFactory.getConfig();
 
     vm.save = () => {
-      ConfigFactory.saveConfig(vm.config);
+      SettingsFactory.save(vm.config.client);
     };
 
     vm.authenticateWithProvider = (provider) => {

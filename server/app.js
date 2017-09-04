@@ -116,6 +116,7 @@ class AceCms {
               res.status(401).send({
                 code: 401,
                 message: 'Not authorised',
+                slug,
               });
               return;
             }
@@ -138,7 +139,11 @@ class AceCms {
       }
 
       if (req.xhr || (req.headers.accept && /json/i.test(req.headers.accept))) {
-        res.status(401).send('Not authorised');
+        res.status(401).send({
+          code: 401,
+          message: 'Not authorised',
+          slug,
+        });
         return;
       }
 
