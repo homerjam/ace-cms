@@ -60,13 +60,17 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              // sourceMap: true,
+              sourceMap: true,
+              importLoaders: 1,
             },
           },
           {
-            loader: 'autoprefixer-loader',
+            loader: 'postcss-loader',
             options: {
-              browsers: ['last 2 versions', 'Explorer >= 9'],
+              sourceMap: true,
+              plugins: () => [
+                require('autoprefixer')(),
+              ],
             },
           },
           {
@@ -84,13 +88,17 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              // sourceMap: true,
+              sourceMap: true,
+              importLoaders: 1,
             },
           },
           {
-            loader: 'autoprefixer-loader',
+            loader: 'postcss-loader',
             options: {
-              browsers: ['last 2 versions', 'Explorer >= 9'],
+              sourceMap: true,
+              plugins: () => [
+                require('autoprefixer')(),
+              ],
             },
           },
         ],
