@@ -35,7 +35,12 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
       $rootScope.$user = User;
 
       const role = headers('x-role');
+
       $rootScope.$isSuperUser = role === 'super';
+
+      if (role !== 'super') {
+        $rootScope.$permissions = _.find(Config.roles, { slug: role }).permissions;
+      }
     }
 
     notifyObservers();

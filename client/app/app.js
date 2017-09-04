@@ -291,7 +291,7 @@ angular.module('app', [
         }
 
         required.forEach((permission) => {
-          if (!$rootScope.user.permissions[permission]) {
+          if (!$rootScope.$permissions[permission]) {
             authorised = false;
           }
         });

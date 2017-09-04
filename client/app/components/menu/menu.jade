@@ -36,7 +36,7 @@ md-content
             md-icon(md-font-set="material-icons") add
             span New Taxonomy
 
-    md-menu(md-offset="220 0", ng-show="($root.$user.permissions.ecommerce || $root.$isSuperUser) && $root.$config.moduleEnabled.ecommerce")
+    md-menu(md-offset="220 0", ng-show="($root.$permissions.ecommerce || $root.$isSuperUser) && $root.$config.moduleEnabled.ecommerce")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('ecommerce', $root.$state.current.name)}")
         md-icon(md-font-set="material-icons") shopping_cart
         p E-commerce
@@ -74,11 +74,11 @@ md-content
       md-icon(md-font-set="material-icons") folder
       p Files
 
-    md-list-item(ui-sref="user", ui-sref-active="active", ng-show="$root.$user.permissions.user || $root.$isSuperUser")
+    md-list-item(ui-sref="user", ui-sref-active="active", ng-show="$root.$permissions.user || $root.$isSuperUser")
       md-icon(md-font-set="material-icons") people
       p Users
 
-    md-list-item(ui-sref="settings", ui-sref-active="active", ng-show="$root.$user.permissions.settings || $root.$isSuperUser")
+    md-list-item(ui-sref="settings", ui-sref-active="active", ng-show="$root.$permissions.settings || $root.$isSuperUser")
       md-icon(md-font-set="material-icons") settings
       p Settings
 
