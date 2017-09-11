@@ -6,14 +6,6 @@ class FieldKeyValueController {
     if (!vm.fieldModel.value) {
       vm.fieldModel.value = [];
     }
-
-    vm.getIndex = (scope) => {
-      return scope.$parent.$index;
-    };
-
-    vm.getCollection = (scope) => {
-      return vm.fieldModel.value;
-    };
   }
 }
 
