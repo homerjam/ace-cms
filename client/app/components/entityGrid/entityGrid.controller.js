@@ -2,6 +2,9 @@ import _ from 'lodash';
 import angular from 'angular';
 import he from 'he/he';
 
+const GRID_RESTORE_DELAY = 2000;
+const GRID_RESTORE_SCROLL_FOCUS_OFFSET = 5;
+
 class EntityGridController {
   /* @ngInject */
   constructor ($rootScope, $scope, $state, $stateParams, $transitions, $q, $filter, $log, $timeout, $window, $mdDialog, HelperFactory, EntityGridFactory, ConfigFactory, EntityFactory, BatchFactory, uiGridConstants) {
@@ -97,6 +100,78 @@ class EntityGridController {
       allowCellFocus: false,
     });
 
+    const state = EntityGridFactory.states[$stateParams.schemaSlug || 'trash'];
+
+    const onRegisterApi = (gridApi) => {
+      vm.gridApi = gridApi;
+
+      gridApi.core.on.renderingComplete($scope, (grid) => {
+        if (vm.mode === 'normal' && state) {
+          bookmarks = state.bookmarks;
+          vm.grid.data = state.data;
+          vm.items = state.data;
+          vm.totalItems = state.totalItems;
+          vm.searchTerm = state.searchTerm;
+          vm.page = state.page;
+          vm.sortColumns = state.sortColumns;
+          vm.filters = state.filters;
+          vm.showSearch = vm.searchTerm !== '';
+
+          applyEdits();
+
+        } else {
+          getResults(true);
+        }
+
+        $timeout(() => {
+          grid.core.handleWindowResize();
+
+          if (vm.mode === 'normal' && state) {
+            gridApi.saveState.restore(vm, state.state);
+
+            $timeout(() => {
+              gridApi.core.scrollTo(vm.grid.data[state.state.scrollFocus.rowVal.row + GRID_RESTORE_SCROLL_FOCUS_OFFSET]);
+            });
+          }
+        }, GRID_RESTORE_DELAY);
+      });
+
+      gridApi.core.on.sortChanged($scope, (grid, sortColumns) => {
+        sort(sortColumns);
+      });
+
+      let lastClick = 0;
+      let lastRow;
+
+      gridApi.selection.on.rowSelectionChanged($scope, (row, event) => {
+        if (event) {
+          if (event.timeStamp - lastClick < 300 && row === lastRow) {
+            if (vm.mode !== 'modal') {
+              vm.editSelected([row.entity]);
+            }
+          }
+          lastClick = event.timeStamp;
+          lastRow = row;
+        }
+
+        vm.selected = gridApi.selection.getSelectedRows();
+      });
+
+      gridApi.selection.on.rowSelectionChangedBatch($scope, () => {
+        vm.selected = gridApi.selection.getSelectedRows();
+      });
+
+      gridApi.infiniteScroll.on.needLoadMoreData($scope, () => {
+        if (vm.items.length < vm.totalItems) {
+          vm.page++;
+
+          getResults().then(() => {
+            gridApi.infiniteScroll.dataLoaded();
+          });
+        }
+      });
+    };
+
     vm.grid = {
       data: vm.items,
       rowHeight: hasImageColumn ? 100 : 50,
@@ -110,46 +185,8 @@ class EntityGridController {
       enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
       appScopeProvider: vm,
       excessRows: 20,
-      saveScroll: true,
       saveSelection: true,
-      onRegisterApi(gridApi) {
-        vm.gridApi = gridApi;
-
-        gridApi.core.on.sortChanged($scope, (grid, sortColumns) => {
-          sort(sortColumns);
-        });
-
-        let lastClick = 0;
-        let lastRow;
-
-        gridApi.selection.on.rowSelectionChanged($scope, (row, event) => {
-          if (event) {
-            if (event.timeStamp - lastClick < 300 && row === lastRow) {
-              if (vm.mode !== 'modal') {
-                vm.editSelected([row.entity]);
-              }
-            }
-            lastClick = event.timeStamp;
-            lastRow = row;
-          }
-
-          vm.selected = gridApi.selection.getSelectedRows();
-        });
-
-        gridApi.selection.on.rowSelectionChangedBatch($scope, () => {
-          vm.selected = gridApi.selection.getSelectedRows();
-        });
-
-        gridApi.infiniteScroll.on.needLoadMoreData($scope, () => {
-          if (vm.items.length < vm.totalItems) {
-            vm.page++;
-
-            getResults().then(() => {
-              gridApi.infiniteScroll.dataLoaded();
-            });
-          }
-        });
-      },
+      onRegisterApi,
     };
 
     function search (term) {
@@ -430,34 +467,6 @@ class EntityGridController {
       });
 
       vm.grid.data = vm.items;
-    }
-
-    const state = EntityGridFactory.states[$stateParams.schemaSlug || 'trash'];
-
-    if (vm.mode === 'normal' && state) {
-      bookmarks = state.bookmarks;
-      vm.grid.data = state.data;
-      vm.items = state.data;
-      vm.totalItems = state.totalItems;
-      vm.searchTerm = state.searchTerm;
-      vm.page = state.page;
-      vm.sortColumns = state.sortColumns;
-      vm.filters = state.filters;
-      vm.showSearch = vm.searchTerm !== '';
-
-      applyEdits();
-
-      $timeout(() => {
-        vm.gridApi.saveState.restore(vm, state.state);
-      });
-    } else {
-      $timeout(() => {
-        getResults(true);
-
-        $timeout(() => {
-          angular.element($window).triggerHandler('resize');
-        });
-      });
     }
   }
 }
