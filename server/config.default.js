@@ -14,7 +14,7 @@ module.exports = {
 
   session: {
     secret: process.env.SESSION_SECRET,
-    ttl: process.env.SESSION_TTL || 7200,
+    ttl: process.env.SESSION_TTL,
   },
 
   auth0: {

@@ -64,8 +64,8 @@ class AceCms {
         store: new RedisStore({
           host: config.redis.host,
           port: config.redis.port,
-          ttl: config.session.ttl,
           pass: config.redis.password,
+          ttl: config.session.ttl ? parseInt(config.session.ttl, 10) : 7200,
         }),
         secret: config.session.secret,
         resave: true,
