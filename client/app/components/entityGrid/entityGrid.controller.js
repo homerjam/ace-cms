@@ -267,11 +267,8 @@ class EntityGridController {
           type = '<string>';
 
         } else {
-          const columnOptions = HelperFactory.getColumnOptions(columnName);
-          if (columnOptions && columnOptions.style !== 'thumbnail') {
-            columnName = `fields.${columnName}`;
-            type = '<string>';
-          }
+          columnName = `fields.${columnName}`;
+          type = '<string>';
         }
 
         options.sort.push(`${direction}sort.${columnName}${type}`);
