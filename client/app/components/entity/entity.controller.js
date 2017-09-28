@@ -181,6 +181,8 @@ class EntityController {
               if (!entity.fields[field.slug]) {
                 entity.fields[field.slug] = {};
               }
+              entity.fields[field.slug].type = field.type;
+              entity.fields[field.slug].fieldType = field.type; // TODO: remove fieldType
               entity.fields[field.slug].value = vm.entity.fields[field.slug].value;
             }
           }
