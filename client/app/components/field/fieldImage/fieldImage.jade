@@ -38,6 +38,6 @@ div(flex, layout="row", layout-margin)
       tr
         td Filesize
         td {{vm.fieldModel.value.fileSize | fileSize}}
-      tr
+      tr(ng-if="vm.fieldModel.value.dzi")
         td DZI
         td {{vm.fieldModel.value.dzi.fileSize | fileSize}}
