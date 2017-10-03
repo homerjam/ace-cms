@@ -42,6 +42,10 @@ class EntityController {
     vm.entity.published = vm.entity.published === undefined || vm.entity.published === null ? true : vm.entity.published;
     vm.entity.publishedAt = vm.entity.publishedAt === undefined || vm.entity.publishedAt === null ? new Date() : vm.entity.publishedAt;
 
+    vm.options = {
+      batchPublish: false,
+    };
+
     $log.log('schema', vm.schema);
     $log.log('entity', vm.entity);
 
@@ -174,32 +178,9 @@ class EntityController {
         return;
       }
 
-      const entities = vm.entities.map((entity) => {
-        angular.forEach(vm.schema.fields, (field) => {
-          if (vm.mode !== 'batchEdit' || field.apply) {
-            if (vm.entity.fields[field.slug]) {
-              if (!entity.fields[field.slug]) {
-                entity.fields[field.slug] = {};
-              }
-              entity.fields[field.slug].type = field.type;
-              entity.fields[field.slug].fieldType = field.type; // TODO: remove fieldType
-              entity.fields[field.slug].value = vm.entity.fields[field.slug].value;
-            }
-          }
-        });
-
-        if (vm.batchPublish) {
-          entity.published = vm.entity.published;
-          entity.publishedAt = vm.entity.publishedAt;
-        }
-
-        return entity;
-      });
-
-      EntityFactory.updateEntities(entities)
+      EntityFactory.updateEntities(vm.entities, vm.entity, vm.schema, vm.options)
         .then((entities) => {
           vm.entityForm.$setPristine();
-          BatchFactory.setRecentEdits(entities);
         }, $log.error);
     };
 
@@ -237,9 +218,9 @@ class EntityController {
               $state.go('trash');
 
             } else {
-              BatchFactory.setRecentTrashed([vm.entity]);
-
-              vm.back();
+              $state.go('entityGrid', {
+                schemaSlug: vm.schema.slug,
+              });
             }
           });
         });
@@ -259,12 +240,6 @@ class EntityController {
         $state.go('entityGrid', {
           schemaSlug: vm.schema.slug,
         });
-
-      } else if (vm.mode === 'batchUpload') {
-        $state.go('selectSchema');
-
-      } else if ($state.previous) {
-        $window.history.back();
 
       } else {
         $state.go('entityGrid', {
@@ -289,15 +264,19 @@ class EntityController {
     }
 
     vm.nextEntity = () => {
-      $state.go('entity', {
+      vm.modal.close();
+
+      EntityFactory.editEntities([{
         id: vm.nextEntityId,
-      });
+      }]);
     };
 
     vm.prevEntity = () => {
-      $state.go('entity', {
+      vm.modal.close();
+
+      EntityFactory.editEntities([{
         id: vm.prevEntityId,
-      });
+      }]);
     };
 
     vm.dropdownMore = (vm.schema.actions || []).map(action => ({

@@ -14,7 +14,7 @@ const EntityGridFactory = ($http, $q, appConfig) => {
 
   service.search = params => $q((resolve, reject) => {
     const defaultParams = {
-      q: '*:*',
+      query: '*:*',
       sort: '<score>',
       limit: 100,
       include_docs: true,

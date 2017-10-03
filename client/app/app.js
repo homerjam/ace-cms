@@ -227,12 +227,13 @@ angular.module('app', [
     const tokenRefreshDelay = 3600 * 1000;
 
     const setApiToken = (apiToken) => {
+      localStorage.setItem('apiToken', apiToken);
       appConfig.apiToken = apiToken;
       $rootScope.apiToken = apiToken;
       $http.defaults.headers.common['X-Api-Token'] = apiToken;
     };
 
-    setApiToken(appConfig.apiToken);
+    setApiToken($location.search().apiToken || localStorage.getItem('apiToken'));
 
     const renewToken = async (forceRenew = false) => {
       if (!$document[0].hidden || forceRenew) {

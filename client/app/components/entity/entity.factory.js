@@ -240,12 +240,32 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
       }, reject);
   });
 
-  service.updateEntities = entities => $q((resolve, reject) => {
-    const arrayMode = angular.isArray(entities);
+  service.updateEntities = (entities, entity, schema, options) => $q((resolve, reject) => {
+    entities = entities.map((_entity) => {
+      if (entity && schema) {
+        angular.forEach(schema.fields, (field) => {
+          if (!field.apply) {
+            return;
+          }
 
-    entities = !arrayMode ? [entities] : entities;
+          if (entity.fields[field.slug]) {
+            if (!_entity.fields[field.slug]) {
+              _entity.fields[field.slug] = {};
+            }
+            _entity.fields[field.slug].type = field.type;
+            _entity.fields[field.slug].fieldType = field.type; // TODO: remove fieldType
+            _entity.fields[field.slug].value = entity.fields[field.slug].value;
+          }
+        });
 
-    entities = entities.map(entity => prepEntityToDb(entity));
+        if (options && options.batchPublish) {
+          _entity.published = entity.published;
+          _entity.publishedAt = entity.publishedAt;
+        }
+      }
+
+      return prepEntityToDb(_entity);
+    });
 
     $http({
       method: 'PUT',
@@ -263,7 +283,9 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
           });
         });
 
-        resolve(arrayMode ? entities : entities[0]);
+        $rootScope.$broadcast('EntityFactory:updateEntities', entities);
+
+        resolve(entities);
       }, reject);
   });
 
@@ -313,21 +335,25 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
       }, reject);
   });
 
-  service.editEntity = entity => $q((resolve, reject) => {
+  service.editEntities = entities => $q((resolve, reject) => {
+    const mode = entities.length > 1 ? 'batchEdit' : entities[0].trashed ? 'trash' : 'normal';
+    const id = entities.map(entity => entity.id || entity._id);
+
     service.getById({
-      id: entity._id || entity.id,
+      id,
       children: 1,
     }).then((entities) => {
       ModalService.showModal({
         template: entityModalTemplate,
         controllerAs: 'vm',
         inputs: {
-          mode: 'normal',
+          mode,
           entities,
         },
       }).then((modal) => {
-        modal.result.then((entity) => {
-          service.updateEntities(entity).then(resolve, reject);
+        modal.result.then((vm) => {
+          service.updateEntities(entities, vm.entity, vm.schema, vm.options)
+            .then(resolve, reject);
         });
       });
     });

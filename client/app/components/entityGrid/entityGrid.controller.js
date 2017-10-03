@@ -2,7 +2,8 @@ import _ from 'lodash';
 import angular from 'angular';
 import he from 'he/he';
 
-const GRID_RESTORE_DELAY = 2000;
+const GRID_RESTORE_DELAY = 100;
+const GRID_INITIAL_RESIZE_DELAY = 2000;
 const GRID_RESTORE_SCROLL_FOCUS_OFFSET = 5;
 
 class EntityGridController {
@@ -14,6 +15,7 @@ class EntityGridController {
     vm.selected = [];
     vm.totalItems = 0;
     vm.searchTerm = '';
+    vm.showSearch = false;
     vm.page = 0;
     vm.filters = [];
     vm.sortColumns = [
@@ -100,40 +102,46 @@ class EntityGridController {
       allowCellFocus: false,
     });
 
-    const state = EntityGridFactory.states[$stateParams.schemaSlug || 'trash'];
+    const state = EntityGridFactory.states[schemaSlugs[0]];
 
     const onRegisterApi = (gridApi) => {
       vm.gridApi = gridApi;
 
       gridApi.core.on.renderingComplete($scope, (grid) => {
-        if (vm.mode === 'normal' && state) {
+        if (state) {
           bookmarks = state.bookmarks;
           vm.grid.data = state.data;
           vm.items = state.data;
           vm.totalItems = state.totalItems;
           vm.searchTerm = state.searchTerm;
+          vm.showSearch = state.showSearch;
           vm.page = state.page;
           vm.sortColumns = state.sortColumns;
           vm.filters = state.filters;
           vm.showSearch = vm.searchTerm !== '';
 
-          applyEdits();
+          // applyEdits();
 
+          $timeout(() => {
+            gridApi.core.handleWindowResize();
+
+            if (state) {
+              gridApi.saveState.restore(vm, state.state);
+
+              if (state.state.scrollFocus.rowVal) {
+                $timeout(() => {
+                  gridApi.core.scrollTo(vm.grid.data[state.state.scrollFocus.rowVal.row + GRID_RESTORE_SCROLL_FOCUS_OFFSET]);
+                });
+              }
+            }
+          }, GRID_RESTORE_DELAY);
         } else {
           getResults(true);
         }
 
         $timeout(() => {
-          grid.core.handleWindowResize();
-
-          if (vm.mode === 'normal' && state) {
-            gridApi.saveState.restore(vm, state.state);
-
-            $timeout(() => {
-              gridApi.core.scrollTo(vm.grid.data[state.state.scrollFocus.rowVal.row + GRID_RESTORE_SCROLL_FOCUS_OFFSET]);
-            });
-          }
-        }, GRID_RESTORE_DELAY);
+          gridApi.core.handleWindowResize();
+        }, GRID_INITIAL_RESIZE_DELAY);
       });
 
       gridApi.core.on.sortChanged($scope, (grid, sortColumns) => {
@@ -146,6 +154,8 @@ class EntityGridController {
       gridApi.selection.on.rowSelectionChanged($scope, (row, event) => {
         if (event) {
           if (event.timeStamp - lastClick < 300 && row === lastRow) {
+            // Double click
+
             if (vm.mode !== 'modal') {
               vm.editSelected([row.entity]);
             }
@@ -216,7 +226,7 @@ class EntityGridController {
       }
 
       const options = {
-        q: [],
+        query: [],
         sort: [],
         page: vm.page,
         bookmark: bookmarks[vm.page - 1] || null,
@@ -225,7 +235,7 @@ class EntityGridController {
 
       if (vm.mode !== 'trash') {
         const schemas = schemaSlugs.map(slug => `schema:${slug}`);
-        options.q.push(`(${schemas.join(' OR ')})`);
+        options.query.push(`(${schemas.join(' OR ')})`);
       }
 
       if (vm.searchTerm !== '') {
@@ -242,16 +252,16 @@ class EntityGridController {
           });
         });
 
-        options.q.push(`(${fieldTerms.join(' OR ')})`);
+        options.query.push(`(${fieldTerms.join(' OR ')})`);
       }
 
       vm.filters.forEach((filter) => {
         if (filter.value) {
-          options.q.push(`fields.${filter.fieldSlug}:"${filter.value.toLowerCase()}"`);
+          options.query.push(`fields.${filter.fieldSlug}:"${filter.value.toLowerCase()}"`);
         }
       });
 
-      options.q = options.q.join(' AND ');
+      options.query = options.query.join(' AND ');
 
       vm.sortColumns.forEach((column) => {
         const direction = column.sort.direction === uiGridConstants.ASC ? '-' : '';
@@ -290,6 +300,8 @@ class EntityGridController {
 
           vm.grid.data = vm.items;
 
+          saveState();
+
           deferred.resolve();
         })
         .finally(() => {
@@ -325,17 +337,19 @@ class EntityGridController {
       });
     };
 
-    vm.editSelected = (items) => {
-      const ids = items.map(item => item._id);
-
-      if (ids.length > 1) {
-        BatchFactory.setEntityIds(ids);
-        $state.go('batchEdit');
-      } else {
-        $state.go('entity', {
-          id: ids[0],
+    $scope.$on('EntityFactory:updateEntities', (event, entities) => {
+      vm.items.forEach((item) => {
+        entities.forEach((entity) => {
+          if (item._id && item._id === entity._id) {
+            angular.extend(item, entity);
+          }
         });
-      }
+      });
+      vm.grid.data = vm.items;
+    });
+
+    vm.editSelected = (items) => {
+      EntityFactory.editEntities(items);
     };
 
     vm.deleteSelected = (items, forever) => {
@@ -427,44 +441,38 @@ class EntityGridController {
 
     /* State */
 
-    // Record last grid state and options per schema on exit
-    const onStateChangStart = $transitions.onStart({ to: '*' }, (trans) => {
-      onStateChangStart();
-
-      if (vm.mode !== 'modal') {
-        EntityGridFactory.states[$stateParams.schemaSlug || 'trash'] = {
+    function saveState() {
+      if (schemaSlugs[0]) {
+        EntityGridFactory.states[schemaSlugs[0]] = {
           bookmarks,
           data: vm.grid.data,
           totalItems: vm.totalItems,
           searchTerm: vm.searchTerm,
+          showSearch: vm.showSearch,
           page: vm.page,
           sortColumns: vm.sortColumns,
           filters: vm.filters,
           state: vm.gridApi.saveState.save(),
         };
       }
+    }
+
+    // Record last grid state and options per schema on destroy
+    vm.$onDestroy = () => {
+      saveState();
+    };
+
+    $scope.$watch(() => vm.showSearch, () => {
+      $timeout(() => {
+        vm.gridApi.core.handleWindowResize();
+      });
     });
 
-    function applyEdits () {
-      const edits = BatchFactory.getRecentEdits(true);
-      const trashed = BatchFactory.getRecentTrashed(true);
-
-      vm.items.forEach((item, i) => {
-        edits.forEach((entity) => {
-          if (item._id && item._id === entity._id) {
-            angular.extend(item, entity);
-          }
-        });
-
-        trashed.forEach((entity) => {
-          if (item._id && item._id === entity._id) {
-            vm.items.splice(i, 1);
-          }
-        });
+    $scope.$watch(() => vm.filters.length, () => {
+      $timeout(() => {
+        vm.gridApi.core.handleWindowResize();
       });
-
-      vm.grid.data = vm.items;
-    }
+    });
   }
 }
 

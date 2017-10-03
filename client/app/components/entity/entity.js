@@ -10,32 +10,6 @@ const entityModule = angular.module('entity', [
   .config(($stateProvider) => {
     'ngInject';
 
-    $stateProvider.state('batchEdit', {
-      url: '/entity/batch',
-      resolve: {
-        entities(EntityFactory, BatchFactory) {
-          return EntityFactory.getById({
-            id: BatchFactory.getEntityIds(),
-            children: 1,
-          });
-        },
-      },
-      views: {
-        'content@': {
-          template: '<entity mode="batchEdit" entities="vm.entities"></entity>',
-          controller(entities) {
-            'ngInject';
-
-            this.entities = entities;
-          },
-          controllerAs: 'vm',
-        },
-      },
-      data: {
-        permissions: 'entityRead,entityUpdate',
-      },
-    });
-
     $stateProvider.state('newEntity', {
       url: '/entity/new/{schemaSlug:[a-zA-Z0-9_-]{2,50}}',
       resolve: {

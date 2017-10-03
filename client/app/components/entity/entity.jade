@@ -10,18 +10,18 @@ md-toolbar(ng-if="::!vm.entity.trashed")
         span(ng-if=":: vm.schema.settings.singular || vm.mode === 'new'") {{::vm.schema.name}}
         span(ng-if="vm.title", ng-bind-html="vm.title")
 
-    md-button(ng-show="::vm.mode !== 'batchUpload' && !vm.isModal", ng-click="vm.saveEntity()", ng-disabled="vm.entityForm.$invalid") Save
+    md-button(ng-click="vm.saveEntity()", ng-disabled="vm.entityForm.$invalid") Save
 
-    md-button.md-icon-button(ng-show="::vm.mode === 'normal' && !vm.isModal", ng-click="vm.deleteEntity()", aria-label="Delete")
-      md-icon(md-font-set="material-icons") delete
+    //- md-button.md-icon-button(ng-show="::vm.mode === 'normal' && !vm.modal", ng-click="vm.deleteEntity()", aria-label="Delete")
+    //-   md-icon(md-font-set="material-icons") delete
 
-    md-button.md-icon-button(hide show-gt-xs ng-show="::vm.mode === 'normal' && vm.prevEntityId", ng-click="vm.prevEntity()", aria-label="Previous Entity")
+    md-button.md-icon-button(hide show-gt-xs ng-show=":: vm.mode === 'normal' && vm.modal && vm.prevEntityId", ng-click="vm.prevEntity()", aria-label="Previous Entity")
       md-icon(md-font-set="material-icons") navigate_before
 
-    md-button.md-icon-button(hide show-gt-xs ng-show="::vm.mode === 'normal' && vm.nextEntityId", ng-click="vm.nextEntity()", aria-label="Next Entity")
+    md-button.md-icon-button(hide show-gt-xs ng-show=":: vm.mode === 'normal' && vm.modal && vm.nextEntityId", ng-click="vm.nextEntity()", aria-label="Next Entity")
       md-icon(md-font-set="material-icons") navigate_next
 
-    md-menu(ng-show="::(vm.mode === 'normal' || vm.mode === 'singular') && !vm.isModal")
+    md-menu(ng-show=":: vm.mode === 'normal' || vm.mode === 'singular'")
       md-button.md-icon-button(ng-click="$mdMenu.open()", aria-label="More")
         md-icon(md-font-set="material-icons") more_vert
       md-menu-content(width="4")
@@ -56,15 +56,15 @@ md-content(mode="{{vm.mode}}")
     md-subheader.md-no-sticky
       md-toolbar.md-menu-toolbar.md-secondary
         .md-toolbar-tools
-          md-checkbox.md-primary.field-apply(ng-if="::vm.mode === 'batchEdit'", ng-model="vm.batchPublish", aria-label="Apply to all?")
+          md-checkbox.md-primary.field-apply(ng-if="::vm.mode === 'batchEdit'", ng-model="vm.options.batchPublish", aria-label="Apply to all?")
           h3 Published
 
     div(flex, layout="column", layout-margin)
 
       md-input-container
-        md-checkbox(ng-model="vm.entity.published", ng-change="vm.batchPublish = true", aria-label="Published?") Published
+        md-checkbox(ng-model="vm.entity.published", ng-change="vm.options.batchPublish = true", aria-label="Published?") Published
 
-      md-datepicker(ng-model="vm.entity.publishedAt", md-placeholder="Choose date", ng-disabled="!vm.entity.published", ng-change="vm.batchPublish = true")
+      md-datepicker(ng-model="vm.entity.publishedAt", md-placeholder="Choose date", ng-disabled="!vm.entity.published", ng-change="vm.options.batchPublish = true")
 
   form(name="vm.entityForm", novalidate, role="form")
 

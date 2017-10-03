@@ -4,8 +4,6 @@ const BatchFactory = () => {
   const service = {};
 
   let entityIds = [];
-  let recentEdits = [];
-  let recentTrashed = [];
 
   service.setEntityIds = (ids) => {
     entityIds = ids;
@@ -45,34 +43,6 @@ const BatchFactory = () => {
     });
 
     return entity;
-  };
-
-  service.setRecentEdits = (entities) => {
-    recentEdits = entities;
-  };
-
-  service.getRecentEdits = (clear) => {
-    const tmp = recentEdits;
-
-    if (clear) {
-      recentEdits = [];
-    }
-
-    return tmp;
-  };
-
-  service.setRecentTrashed = (entities) => {
-    recentTrashed = entities;
-  };
-
-  service.getRecentTrashed = (clear) => {
-    const tmp = recentTrashed;
-
-    if (clear) {
-      recentTrashed = [];
-    }
-
-    return tmp;
   };
 
   return service;

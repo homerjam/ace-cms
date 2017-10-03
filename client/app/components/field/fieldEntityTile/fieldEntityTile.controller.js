@@ -63,8 +63,8 @@ class FieldEntityTileController {
     vm.entityEdit = (event, entity) => {
       event.stopPropagation();
 
-      EntityFactory.editEntity(entity).then((updatedEntity) => {
-        vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1, updatedEntity);
+      EntityFactory.editEntities([entity]).then((updatedEntities) => {
+        vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1, updatedEntities[0]);
       });
     };
 

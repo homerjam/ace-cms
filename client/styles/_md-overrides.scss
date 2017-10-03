@@ -143,3 +143,8 @@ md-dialog-content {
     flex-basis: 20% !important;
   }
 }
+
+.modal-body md-toolbar {
+  position: sticky;
+  top: 0;
+}

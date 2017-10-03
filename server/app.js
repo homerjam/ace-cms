@@ -89,53 +89,24 @@ class AceCms {
       const jwt = new AceApi.Jwt(apiConfig);
 
       if (config.environment === 'development') {
-        if (slug) {
-          req.session.apiToken = jwt.signToken({
+        if (!req.query.apiToken && !req.headers['x-api-token']) {
+          const apiToken = jwt.signToken({
             slug,
             userId: apiConfig.dev.userId,
             role: apiConfig.dev.role,
           });
+
+          res.redirect(`${config.clientBasePath + slug + req.url}?apiToken=${apiToken}`);
+          return;
         }
 
         next();
         return;
       }
 
-      if (req.isAuthenticated() && req.session.apiToken) {
-        try {
-          let payload = jwt.verifyToken(req.session.apiToken);
-
-          payload = {
-            userId: payload.userId,
-            slug: payload.slug,
-            role: payload.role,
-          };
-
-          if (slug) {
-            if (payload.role !== 'super' && payload.slug !== slug) {
-              res.status(401).send({
-                code: 401,
-                message: 'Not authorised',
-                slug,
-              });
-              return;
-            }
-
-            if (payload.role === 'super') {
-              payload.slug = slug;
-            }
-          }
-
-          req.session.apiToken = jwt.signToken(payload, {
-            expiresIn: API_TOKEN_EXPIRES_IN,
-          });
-
-          next();
-
-          return;
-        } catch (error) {
-          console.error(error);
-        }
+      if (req.isAuthenticated()) {
+        next();
+        return;
       }
 
       if (req.xhr || (req.headers.accept && /json/i.test(req.headers.accept))) {
@@ -183,11 +154,11 @@ class AceCms {
               role: user.role,
             };
 
-            req.session.apiToken = jwt.signToken(payload, {
+            const apiToken = jwt.signToken(payload, {
               expiresIn: API_TOKEN_EXPIRES_IN,
             });
 
-            res.redirect(config.clientBasePath + slug);
+            res.redirect(`${config.clientBasePath + slug}?apiToken=${apiToken}`);
           })
           .catch((reason) => {
             console.error(reason);
@@ -346,7 +317,6 @@ class AceCms {
         assistUrl: config.assist.url,
         assistCredentials,
         apiUrl: config.apiUrl,
-        apiToken: req.session.apiToken,
         session: req.session,
         pageTitle: config.pageTitle,
       });
