@@ -185,6 +185,23 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
 
     entity.thumbnail = service.getEntityThumbnail(entity);
 
+    entity = _.pick(entity, [
+      '_id',
+      '_rev',
+      'type',
+      'schema',
+      'title',
+      'slug',
+      'fields',
+      'createdAt',
+      'createdBy',
+      'modifiedAt',
+      'modifiedBy',
+      'published',
+      'publishedAt',
+      'thumbnail',
+    ]);
+
     return entity;
   }
 
