@@ -233,7 +233,11 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     })
       .then((response) => {
         if (EntityGridFactory.states[entity.schema]) {
-          delete EntityGridFactory.states[entity.schema];
+          EntityGridFactory.states[entity.schema].data.unshift(entity);
+          EntityGridFactory.states[entity.schema].state.selection = [{
+            row: 0,
+            identity: false,
+          }];
         }
 
         resolve(response.data);
@@ -371,8 +375,8 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
       },
     }).then((modal) => {
       modal.result
-        .then((entity) => {
-          service.createEntity(schemaSlug, entity)
+        .then((vm) => {
+          service.createEntity(schemaSlug, vm.entity)
             .then((entity) => {
               resolve(entity);
             }, reject);

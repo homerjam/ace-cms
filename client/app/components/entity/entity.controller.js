@@ -197,6 +197,10 @@ class EntityController {
 
       EntityFactory.createEntity(vm.schema.slug, entity)
         .then((entity) => {
+          if (vm.modal) {
+            vm.modal.close();
+          }
+
           $state.go('entity', {
             id: entity._id,
           });
@@ -264,7 +268,9 @@ class EntityController {
     }
 
     vm.nextEntity = () => {
-      vm.modal.close();
+      if (vm.modal) {
+        vm.modal.close();
+      }
 
       EntityFactory.editEntities([{
         id: vm.nextEntityId,
@@ -272,7 +278,9 @@ class EntityController {
     };
 
     vm.prevEntity = () => {
-      vm.modal.close();
+      if (vm.modal) {
+        vm.modal.close();
+      }
 
       EntityFactory.editEntities([{
         id: vm.prevEntityId,
