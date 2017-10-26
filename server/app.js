@@ -24,7 +24,7 @@ const defaultConfig = require('./config.default');
 const defaultApiConfig = require('ace-api/config.default');
 
 const VERSION = packageJson.version;
-const API_TOKEN_EXPIRES_IN = 7200;
+const API_TOKEN_EXPIRES_IN = 86400;
 
 /* App */
 
@@ -319,6 +319,10 @@ class AceCms {
         apiUrl: config.apiUrl,
         session: req.session,
         pageTitle: config.pageTitle,
+        auth0: {
+          clientId: config.auth0.clientId,
+          domain: config.auth0.domain,
+        },
       });
     }
 
