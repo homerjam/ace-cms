@@ -30,9 +30,9 @@ const aceCms = new AceCms(app);
 const server = http.createServer(aceCms);
 
 server.on('listening', () => {
-  console.log(`Express server listening on port ${PORT}`);
+  console.log(`Running: http://localhost:${PORT + CLIENT_BASE_PATH + DEV_SLUG}`);
 
-  opn(`http://localhost:${PORT + CLIENT_BASE_PATH + DEV_SLUG}`);
+  // opn(`http://localhost:${PORT + CLIENT_BASE_PATH + DEV_SLUG}`);
 });
 
 server.listen(PORT);
