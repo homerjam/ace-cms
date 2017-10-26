@@ -249,6 +249,8 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
       },
     })
       .then((response) => {
+        entity = response.data;
+
         if (EntityGridFactory.states[entity.schema]) {
           EntityGridFactory.states[entity.schema].data.unshift(entity);
           EntityGridFactory.states[entity.schema].state.selection = [{
@@ -257,7 +259,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
           }];
         }
 
-        resolve(response.data);
+        resolve(entity);
       }, reject);
   });
 
