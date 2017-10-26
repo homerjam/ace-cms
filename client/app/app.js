@@ -312,6 +312,11 @@ angular.module('app', [
       if (!configLoaded) {
         ConfigFactory.loadConfig()
           .then((config) => {
+            if (config.slug !== appConfig.slug) {
+              $window.location.href = `${appConfig.clientBasePath + appConfig.slug}/logout`;
+              return;
+            }
+
             configLoaded = true;
 
             $rootScope.assetSlug = config.assets && config.assets.slug ? config.assets.slug : appConfig.slug;
