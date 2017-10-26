@@ -31,6 +31,10 @@ html(ng-app="app" ng-strict-di)
         assistUrl: '!{assistUrl}',
         assistCredentials: '!{assistCredentials}',
         apiUrl: '!{apiUrl}',
+        auth0: {
+          clientId: '!{auth0.clientId}',
+          domain: '!{auth0.domain}',
+        },
       };
 
     if locals.environment !== 'production'
