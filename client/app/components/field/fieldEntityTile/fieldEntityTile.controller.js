@@ -20,6 +20,8 @@ class FieldEntityTileController {
       slug: schema,
     }));
 
+    vm.selected = [];
+
     function getInsertPoint () {
       let insertPoint = -1;
       vm.fieldModel.value.forEach((item, i) => {
@@ -72,6 +74,12 @@ class FieldEntityTileController {
       event.stopPropagation();
 
       vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1);
+    };
+
+    vm.removeSelected = () => {
+      vm.fieldModel.value = vm.fieldModel.value.filter(item => !item.$selected);
+
+      vm.selected = [];
     };
 
     vm.getGridColumnFieldSlugs = schemaSlug =>
@@ -227,6 +235,7 @@ class FieldEntityTileController {
           item.$selected = false;
         });
         item.$selected = !wasSelected;
+        vm.selected = vm.fieldModel.value.filter(item => item.$selected);
         return;
       }
 
@@ -235,22 +244,24 @@ class FieldEntityTileController {
         return;
       }
 
+      vm.selected = vm.fieldModel.value.filter(item => item.$selected);
+
       let i;
       const index = vm.fieldModel.value.indexOf(item);
-      const selected = [];
+      const selectedIndexes = [];
 
       vm.fieldModel.value.forEach((item, i) => {
         if (item.$selected) {
-          selected.push(i);
+          selectedIndexes.push(i);
         }
       });
 
-      if (index < selected[0]) {
-        for (i = index; i < selected[0]; i++) {
+      if (index < selectedIndexes[0]) {
+        for (i = index; i < selectedIndexes[0]; i++) {
           vm.fieldModel.value[i].$selected = true;
         }
-      } else if (index > selected[selected.length - 1]) {
-        for (i = selected[0]; i <= index; i++) {
+      } else if (index > selectedIndexes[selectedIndexes.length - 1]) {
+        for (i = selectedIndexes[0]; i <= index; i++) {
           vm.fieldModel.value[i].$selected = true;
         }
       }
