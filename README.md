@@ -12,10 +12,6 @@ Once you've setup up CouchDB/Cloudant add the URL with credentials to the config
 
     DB_URL=https://username:password@username.cloudant.com
 
-ACE is multi-site so you'll need to create an authorisation database to map users to their accounts upon sign in, we'll refer to this as the `auth` database. Create one and push the `auth` design docs from `studiothomas/ace-api` to it. Then add the `auth` db name to the config:
-
-    AUTH_DB_NAME=auth
-
 #### Session
 
 ACE uses redis to persist session data. [Redis Labs](https://redislabs.com/pricing) have a free tier you can use for testing/development.
@@ -64,9 +60,6 @@ ACE uses a separate app to store images, you'll need to deploy this following th
 
 	SESSION_SECRET=
 	SESSION_TTL=
-
-	# The database used during authorisation to map users to slugs (in production)
-	AUTH_DB_NAME=
 
     # Used to sign JWTs
 	AUTH_TOKEN_SECRET=
