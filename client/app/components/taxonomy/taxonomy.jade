@@ -6,6 +6,12 @@ md-toolbar
     span(flex)
     md-button.md-icon-button(ng-if="::$root.$isSuperUser", ng-click="vm.delete($event)", aria-label="Delete")
       md-icon(md-font-set="material-icons") delete
+    md-button.md-icon-button(ng-click="vm.sort('desc')", aria-label="Sort Descending")
+      md-icon(md-font-set="mdi", md-font-icon="mdi-sort-descending")
+    md-button.md-icon-button(ng-click="vm.expandAll()", aria-label="Expand All")
+      md-icon(md-font-set="mdi", md-font-icon="mdi-playlist-plus")
+    md-button.md-icon-button(ng-click="vm.collapseAll()", aria-label="Collapse All")
+      md-icon(md-font-set="mdi", md-font-icon="mdi-playlist-minus")
     md-button.md-fab.md-mini(ng-click="vm.newTerm()", aria-label="New Term")
       md-icon(md-font-set="material-icons") add
 

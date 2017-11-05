@@ -178,6 +178,22 @@ class TaxonomyController {
       $scope.$broadcast('angular-ui-tree:expand-all');
     };
 
+    const sortTerms = (terms, direction = 'desc') => {
+      terms = terms.sort((a, b) => (direction === 'desc' ? a.title > b.title : a.title < b.title));
+
+      terms.forEach((term) => {
+        if (term.terms) {
+          sortTerms(term.terms);
+        }
+      });
+    };
+
+    vm.sort = (direction) => {
+      sortTerms(vm.taxonomy.terms, direction);
+
+      vm.save();
+    };
+
     const slugifyTerms = (term) => {
       term.slug = _.kebabCase(term.title);
 
