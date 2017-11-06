@@ -72,7 +72,8 @@ class TaxonomyController {
 
     vm.removeNode = ($event, scope) => {
       const confirm = $mdDialog.confirm()
-        .textContent('Delete term?')
+        .title('Delete Term')
+        .textContent(`Are you sure you want to delete ${scope.$modelValue.title}, it will also be removed from all entities?`)
         .cancel('Cancel')
         .ok('Delete');
 
