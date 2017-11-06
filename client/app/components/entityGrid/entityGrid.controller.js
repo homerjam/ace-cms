@@ -241,13 +241,28 @@ class EntityGridController {
       if (vm.searchTerm !== '') {
         const fieldTerms = [];
 
+        const excludeWords = [
+          'a',
+          'and',
+          'at',
+          'in',
+          'is',
+          'of',
+          'on',
+          'or',
+          'the',
+          'to',
+        ];
+        const re = new RegExp(`\\b(${excludeWords.join('|')})\\b`, 'gi');
+        const searchTerm = (vm.searchTerm || '').replace(re, '').replace(/[ ]{2,}/, ' ');
+
         schemas.forEach((schema) => {
           schema.fields.forEach((field) => {
             if (/image|video/.test(field.type)) {
-              fieldTerms.push(`fields.${field.slug}.fileName:${vm.searchTerm}*`);
-              fieldTerms.push(`fields.${field.slug}.original.fileName:${vm.searchTerm}*`);
+              fieldTerms.push(`fields.${field.slug}.fileName:${searchTerm}*`);
+              fieldTerms.push(`fields.${field.slug}.original.fileName:${searchTerm}*`);
             } else {
-              fieldTerms.push(`fields.${field.slug}:${vm.searchTerm}*`);
+              fieldTerms.push(`fields.${field.slug}:${searchTerm}*`);
             }
           });
         });
