@@ -180,7 +180,7 @@ class TaxonomyController {
     };
 
     const sortTerms = (terms, direction = 'desc') => {
-      terms = terms.sort((a, b) => (direction === 'desc' ? a.title > b.title : a.title < b.title));
+      terms = terms.sort((a, b) => ((direction === 'desc' ? a.title > b.title : a.title < b.title) ? 1 : -1));
 
       terms.forEach((term) => {
         if (term.terms) {
