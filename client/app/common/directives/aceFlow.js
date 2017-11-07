@@ -33,7 +33,6 @@ export default angular.module('ace.flow', [])
         vm.$onInit = () => {
           $timeout(() => {
             const browse = $element[0].querySelectorAll('[ace-flow-browse]');
-            console.log(browse);
             flow.assignBrowse(browse);
 
             const drop = $element[0].querySelectorAll('[ace-flow-drop]');
