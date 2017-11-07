@@ -92,44 +92,54 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
               // file.cancel();
             }
 
-            if (!result.profile) {
-              $mdDialog.show(
-                $mdDialog.confirm()
-                  .multiple(true)
-                  .title('Upload Warning')
-                  .textContent(`${fileName} has no colour profile, for best results please convert to sRGB`)
-                  .ok('Upload')
-                  .cancel('Cancel')
-              )
-                .then(upload, cancel);
-              return;
+            if (
+              !result.profile
+              || (result.profile && result.profile.colorSpace !== 'RGB')
+              || (result.profile && result.profile.colorSpace === 'RGB' && !/sRGB/i.test(result.profile.description))
+            ) {
+              file._validProfile = false;
+            } else {
+              file._validProfile = true;
             }
 
-            if (result.profile && result.profile.colorSpace !== 'RGB') {
-              $mdDialog.show(
-                $mdDialog.confirm()
-                  .multiple(true)
-                  .title('Upload Warning')
-                  .textContent(`${fileName} is in ${result.profile.colorSpace} colour space, for best results please convert to sRGB`)
-                  .ok('Upload')
-                  .cancel('Cancel')
-              )
-                .then(upload, cancel);
-              return;
-            }
+            // if (!result.profile) {
+            //   $mdDialog.show(
+            //     $mdDialog.confirm()
+            //       .multiple(true)
+            //       .title('Upload Warning')
+            //       .textContent(`${fileName} has no colour profile, for best results please convert to sRGB`)
+            //       .ok('Upload')
+            //       .cancel('Cancel')
+            //   )
+            //     .then(upload, cancel);
+            //   return;
+            // }
 
-            if (result.profile && result.profile.colorSpace === 'RGB' && !/sRGB/i.test(result.profile.description)) {
-              $mdDialog.show(
-                $mdDialog.confirm()
-                  .multiple(true)
-                  .title('Upload Warning')
-                  .textContent(`${fileName} has ${result.profile.description} profile, for best results please convert to sRGB`)
-                  .ok('Upload')
-                  .cancel('Cancel')
-              )
-                .then(upload, cancel);
-              return;
-            }
+            // if (result.profile && result.profile.colorSpace !== 'RGB') {
+            //   $mdDialog.show(
+            //     $mdDialog.confirm()
+            //       .multiple(true)
+            //       .title('Upload Warning')
+            //       .textContent(`${fileName} is in ${result.profile.colorSpace} colour space, for best results please convert to sRGB`)
+            //       .ok('Upload')
+            //       .cancel('Cancel')
+            //   )
+            //     .then(upload, cancel);
+            //   return;
+            // }
+
+            // if (result.profile && result.profile.colorSpace === 'RGB' && !/sRGB/i.test(result.profile.description)) {
+            //   $mdDialog.show(
+            //     $mdDialog.confirm()
+            //       .multiple(true)
+            //       .title('Upload Warning')
+            //       .textContent(`${fileName} has ${result.profile.description} profile, for best results please convert to sRGB`)
+            //       .ok('Upload')
+            //       .cancel('Cancel')
+            //   )
+            //     .then(upload, cancel);
+            //   return;
+            // }
 
             upload();
           });

@@ -4,7 +4,8 @@ md-toolbar
       md-icon(md-icon-set="material-icons") menu
     h2 Batch Upload
     span(flex)
-    md-button(ng-click='vm.cancel()', ng-disabled="vm.uploadComplete || !vm.isUploading") Cancel
+    md-button(ng-click='vm.cancel()', ng-disabled="vm.uploadComplete") Cancel
+    md-button(ng-click='vm.continue()', ng-disabled="!vm.uploadComplete") Continue
 
 md-content
 
@@ -16,6 +17,7 @@ md-content
           th(md-column) Name
           th(md-column) Size
           th(md-column) Type
+          th(md-column) Profile
           th(md-column) Progress
           th(md-column) Status
 
@@ -24,5 +26,7 @@ md-content
           td(md-cell) {{file.name}}
           td(md-cell) {{file.size | fileSize}}
           td(md-cell) {{file.file.type}}
+          td(md-cell)
+            span(class="{{file._validProfile | crossCheck}}")
           td(md-cell) {{file.progress() * 100 | toFixed: 0}}%
           td(md-cell) {{file._status}}

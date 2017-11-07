@@ -1,4 +1,5 @@
-ace-flow(options="vm.flowOptions")
+.field-wrapper(ace-flow, options="vm.flowOptions")
+
   md-subheader.md-no-sticky
     md-toolbar.md-menu-toolbar.md-secondary
       .md-toolbar-tools
@@ -16,28 +17,32 @@ ace-flow(options="vm.flowOptions")
         md-button.md-icon-button(ng-show="vm.fieldModel.value.dzi", aria-label="Deep Zoom", ng-click="vm.dzi($event)", ng-disabled="!vm.fieldModel.value.fileName")
           md-icon(md-font-set="material-icons") zoom_out_map
 
-div(flex, layout="row", layout-margin)
+  div(flex="grow", layout="row", layout-margin)
 
-  div(flex, ng-show="vm.uploading")
-    div(ng-show="vm.uploading") Uploading {{ vm.progress || 0 }}%
+    div.dropzone(flex, layout="row", layout-align="center center", ng-show="!vm.fieldModel.value", ace-flow-drop, ace-flow-browse)
+      span Drop file(s) here
 
-  div(flex, ng-show="!vm.uploading && vm.fieldModel.value")
-    img(ng-src="{{vm.getThumbnail('h:500;q:60')}}")
+    div(flex, layout="row", layout-align="center center", ng-show="vm.uploading")
+      span Uploading {{ vm.progress || 0 }}%
 
-  div(flex, ng-show="!vm.uploading && vm.fieldModel.value")
-    table
-      tr
-        td Type
-        td {{vm.fieldModel.value.mimeType}}
-      tr
-        td Dimensions
-        td {{vm.fieldModel.value.metadata ? vm.fieldModel.value.metadata.width + '&times;' + vm.fieldModel.value.metadata.height : ''}}
-      tr
-        td Filename
-        td(title='{{vm.fieldModel.value.original.fileName}}') {{vm.fieldModel.value.original.fileName}}
-      tr
-        td Filesize
-        td {{vm.fieldModel.value.fileSize | fileSize}}
-      tr(ng-if="vm.fieldModel.value.dzi")
-        td DZI
-        td {{vm.fieldModel.value.dzi.fileSize | fileSize}}
+    div(flex, layout="row", layout-margin, ng-show="!vm.uploading && vm.fieldModel.value")
+      div(flex)
+        img(ng-src="{{vm.getThumbnail('h:500;q:60')}}")
+
+      div(flex)
+        table
+          tr
+            td Type
+            td {{vm.fieldModel.value.mimeType}}
+          tr
+            td Dimensions
+            td {{vm.fieldModel.value.metadata ? vm.fieldModel.value.metadata.width + '&times;' + vm.fieldModel.value.metadata.height : ''}}
+          tr
+            td Filename
+            td(title='{{vm.fieldModel.value.original.fileName}}') {{vm.fieldModel.value.original.fileName}}
+          tr
+            td Filesize
+            td {{vm.fieldModel.value.fileSize | fileSize}}
+          tr(ng-if="vm.fieldModel.value.dzi")
+            td DZI
+            td {{vm.fieldModel.value.dzi.fileSize | fileSize}}

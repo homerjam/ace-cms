@@ -1,6 +1,6 @@
 class BatchUploadController {
   /* @ngInject */
-  constructor($scope, $state, BatchUploadFactory) {
+  constructor($scope, $state, $stateParams, BatchUploadFactory) {
     const vm = this;
 
     vm.uploadComplete = false;
@@ -19,14 +19,18 @@ class BatchUploadController {
       });
 
       if (complete) {
-        $state.go('entityGrid', {
-          schemaSlug: entity.schema,
-        });
+        vm.uploadComplete = true;
       }
     });
 
     vm.cancel = () => {
       BatchUploadFactory.cancel();
+    };
+
+    vm.continue = () => {
+      $state.go('entityGrid', {
+        schemaSlug: $stateParams.schemaSlug,
+      });
     };
   }
 }

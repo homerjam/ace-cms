@@ -13,16 +13,14 @@ export default angular.module('ace.flow', [])
     controllerAs: 'vm',
 
     controller: ['$scope', '$element', '$timeout',
-      function ($scope, $element, $timeout) {
+      function aceFlow ($scope, $element, $timeout) {
         const vm = this;
 
         const flow = new Flow(vm.options);
 
         if (vm.options.events) {
           angular.forEach(vm.options.events, (callback, eventName) => {
-            flow.on(eventName, function () {
-              const args = Array.prototype.slice.call(arguments);
-
+            flow.on(eventName, (...args) => {
               args.unshift(flow);
 
               $timeout(() => {
@@ -35,6 +33,7 @@ export default angular.module('ace.flow', [])
         vm.$onInit = () => {
           $timeout(() => {
             const browse = $element[0].querySelectorAll('[ace-flow-browse]');
+            console.log(browse);
             flow.assignBrowse(browse);
 
             const drop = $element[0].querySelectorAll('[ace-flow-drop]');
