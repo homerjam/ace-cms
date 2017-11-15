@@ -24,6 +24,10 @@
 		padding: 0;
     max-height: calc(100vh - 128px);
     // overflow: auto;
+
+    md-content {
+      max-height: calc(100vh - 192px);
+    }
 	}
 
   .modal-header + .modal-body {

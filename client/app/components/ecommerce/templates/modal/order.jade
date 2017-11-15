@@ -1,8 +1,17 @@
-.modal-backdrop(ng-click="$modal.dismiss()")
+//- .modal-backdrop(ng-click="$modal.dismiss()")
+.modal-backdrop
 .modal
   .modal-dialog
     .modal-content
-      .modal-header
+      //- .modal-header
+      //-   md-toolbar
+      //-     .md-toolbar-tools
+      //-       h2 Order
+      //-       span(flex)
+      //-       md-button.md-icon-button(ng-click="$modal.dismiss()")
+      //-         md-icon(md-font-set="material-icons") close
+
+      .modal-body
 
         md-toolbar
           .md-toolbar-tools
@@ -11,134 +20,134 @@
             md-button.md-icon-button(ng-click="$modal.dismiss()")
               md-icon(md-font-set="material-icons") close
 
-      .modal-body(style="padding: 16px 0")
+        md-content
 
-        div(flex, layout="column", layout-margin)
+          div(flex, layout="column", layout-margin)
 
-          md-input-container(flex)
-            label Status
-            md-select(ng-model="vm.order.status")
-              md-option(ng-value="'pending'") Pending
-              md-option(ng-value="'fulfilled'") Fulfilled
-              md-option(ng-value="'refunded'") Refunded
+            br
 
-        div(flex, layout="row", layout-margin)
+            md-input-container(flex)
+              label Status
+              md-select(ng-model="vm.order.status")
+                md-option(ng-value="'pending'") Pending
+                md-option(ng-value="'fulfilled'") Fulfilled
+                md-option(ng-value="'refunded'") Refunded
 
-          md-button.md-raised.md-primary(ng-click="vm.refund()", ng-disabled="vm.order.charge.amountRefunded === vm.order.charge.amount") Refund
-          md-button(ng-if="::$root.$isSuperUser", ng-click="vm.previewEmailTemplate('orderReceipt')") Receipt
-          md-button(ng-if="::$root.$isSuperUser", ng-click="vm.previewEmailTemplate('orderNotification')") Notification
+          hr
 
-        hr
+          div(flex, layout="row", layout-margin)
 
-        div(flex, layout="row", layout-margin)
+            div(flex)
+              .md-caption Order ID
+              .md-subhead {{vm.order.orderId}}
 
-          div(flex)
-            .md-caption Order ID
-            .md-subhead {{vm.order.orderId}}
+            div(flex)
+              .md-caption Created
+              .md-subhead {{vm.order.created | date: 'short'}}
 
-          div(flex)
-            .md-caption Created
-            .md-subhead {{vm.order.created | date: 'short'}}
+          div(flex, layout="row", layout-margin)
 
-        div(flex, layout="row", layout-margin)
+            div(flex)
+              .md-caption Charge Status
+              .md-subhead {{vm.order.charge | chargeStatus}}
 
-          div(flex)
-            .md-caption Charge Status
-            .md-subhead {{vm.order.charge | chargeStatus}}
+            div(flex)
+              .md-caption Shipping Method
+              .md-subhead {{vm.order.shippingMethod.name}}
 
-          div(flex)
-            .md-caption Shipping Method
-            .md-subhead {{vm.order.shippingMethod.name}}
+          hr
 
-        hr
+          div(flex, layout="row", layout-margin)
 
-        div(flex, layout="row", layout-margin)
+            div(flex)
+              .md-caption Customer Name
+              .md-subhead {{vm.order.customer.name}}
 
-          div(flex)
-            .md-caption Customer Name
-            .md-subhead {{vm.order.customer.name}}
+            div(flex)
+              .md-caption Customer Email
+              .md-subhead
+                a(ng-href="mailto:{{vm.order.customer.email}}") {{vm.order.customer.email}}
 
-          div(flex)
-            .md-caption Customer Email
-            .md-subhead
-              a(ng-href="mailto:{{vm.order.customer.email}}") {{vm.order.customer.email}}
+              span(ng-show="::vm.order.customer.phone")
+                .md-caption Customer Phone Number
+                .md-subhead {{vm.order.customer.phone}}
+                br
 
-            span(ng-show="::vm.order.customer.phone")
-              .md-caption Customer Phone Number
-              .md-subhead {{vm.order.customer.phone}}
+          div(flex, layout="row", layout-margin)
+
+            div(flex)
+              .md-caption Shipping Address
+              .md-subhead {{vm.order.shippingAddress.street1}}<br ng-show="::vm.order.shippingAddress.street2">{{vm.order.shippingAddress.street2}}<br>{{vm.order.shippingAddress.city}}<br>{{vm.order.shippingAddress.zip}}<br>{{vm.order.shippingAddress.country | isoCountry}}
+
+            div(flex)
+              .md-caption Billing Address
+              .md-subhead {{vm.order.billingAddress.street1}}<br ng-show="::vm.order.billingAddress.street2">{{vm.order.billingAddress.street2}}<br>{{vm.order.billingAddress.city}}<br>{{vm.order.billingAddress.zip}}<br>{{vm.order.billingAddress.country | isoCountry}}
+
+          br
+
+          hr
+
+          div(flex, layout="row", layout-margin)
+
+            div(flex)
+              .md-caption Shipping Amount
+              .md-subhead {{vm.order.shippingMethod.amount | toFixed | currency}}
+
               br
 
-        div(flex, layout="row", layout-margin)
+              span(ng-show="::vm.order.tax.total")
+                .md-caption Tax
+                .md-subhead {{vm.order.tax.total | toFixed | currency}}
 
-          div(flex)
-            .md-caption Shipping Address
-            .md-subhead {{vm.order.shippingAddress.street1}}<br ng-show="::vm.order.shippingAddress.street2">{{vm.order.shippingAddress.street2}}<br>{{vm.order.shippingAddress.city}}<br>{{vm.order.shippingAddress.zip}}<br>{{vm.order.shippingAddress.country | isoCountry}}
+            div(flex)
+              .md-caption Subtotal
+              .md-subhead {{vm.order.subtotal | toFixed | currency}}
 
-          div(flex)
-            .md-caption Billing Address
-            .md-subhead {{vm.order.billingAddress.street1}}<br ng-show="::vm.order.billingAddress.street2">{{vm.order.billingAddress.street2}}<br>{{vm.order.billingAddress.city}}<br>{{vm.order.billingAddress.zip}}<br>{{vm.order.billingAddress.country | isoCountry}}
+              br
 
-        br
+              span(ng-show="::vm.order.discount.total")
+                .md-caption Discount
+                .md-subhead -{{vm.order.discount.total | toFixed | currency}} ({{vm.order.discount.name}})
 
-        hr
+          br
 
-        div(flex, layout="row", layout-margin)
+          hr
 
-          div(flex)
-            .md-caption Shipping Amount
-            .md-subhead {{vm.order.shippingMethod.amount | toFixed | currency}}
+          div(flex, layout="row", layout-margin)
 
-            br
+            div(flex)
+              .md-caption Total
+              .md-headline {{vm.order.total | toFixed | currency}}
 
-            span(ng-show="::vm.order.tax.total")
-              .md-caption Tax
-              .md-subhead {{vm.order.tax.total | toFixed | currency}}
+          br
 
-          div(flex)
-            .md-caption Subtotal
-            .md-subhead {{vm.order.subtotal | toFixed | currency}}
+          md-toolbar.md-table-toolbar.md-primary
+            .md-toolbar-tools Items
 
-            br
+          md-table-container
+            table(md-table)
 
-            span(ng-show="::vm.order.discount.total")
-              .md-caption Discount
-              .md-subhead -{{vm.order.discount.total | toFixed | currency}} ({{vm.order.discount.name}})
+              thead(md-head)
+                tr(md-row)
+                  th(md-column) Product
+                  th(md-column) Variant
+                  th(md-column) Quantity
+                  th(md-column) Price
 
-        br
+              tbody(md-body)
+                tr(md-row, ng-repeat="item in vm.order.items")
+                  td(md-cell)
+                    a(ui-sref="entity({id: item.metadata.product.id})") {{item.metadata.product.title || item.title}}
+                  td(md-cell)
+                    a(ui-sref="entity({id: item.metadata.variant.id})") {{item.metadata.variant.title || '-'}}
+                  td(md-cell) {{item.quantity}}
+                  td(md-cell) {{item.price | toFixed | currency}}
 
-        hr
+          br
 
-        div(flex, layout="row", layout-margin)
-
-          div(flex)
-            .md-caption Total
-            .md-headline {{vm.order.total | toFixed | currency}}
-
-        br
-
-        md-toolbar.md-table-toolbar.md-primary
-          .md-toolbar-tools Items
-
-        md-table-container
-          table(md-table)
-
-            thead(md-head)
-              tr(md-row)
-                th(md-column) Product
-                th(md-column) Variant
-                th(md-column) Quantity
-                th(md-column) Price
-
-            tbody(md-body)
-              tr(md-row, ng-repeat="item in vm.order.items")
-                td(md-cell)
-                  a(ui-sref="entity({id: item.metadata.product.id})") {{item.metadata.product.title || item.title}}
-                td(md-cell)
-                  a(ui-sref="entity({id: item.metadata.variant.id})") {{item.metadata.variant.title || '-'}}
-                td(md-cell) {{item.quantity}}
-                td(md-cell) {{item.price | toFixed | currency}}
-
-      // .modal-footer(layout="row")
-
-      //   span(flex)
-      //   md-button(ng-click="$modal.dismiss()") Close
+      .modal-footer(layout="row")
+        md-button.md-raised.md-primary(ng-click="vm.refund()", ng-disabled="vm.order.charge.amountRefunded === vm.order.charge.amount") Refund
+        md-button(ng-if="::$root.$isSuperUser", ng-click="vm.previewEmailTemplate('orderReceipt')") Receipt
+        md-button(ng-if="::$root.$isSuperUser", ng-click="vm.previewEmailTemplate('orderNotification')") Notification
+        //- span(flex)
+        //- md-button.md-default(ng-click="$modal.dismiss()") Close

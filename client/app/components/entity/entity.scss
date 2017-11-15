@@ -5,10 +5,6 @@ entity {
 
   md-content {
     overflow-x: hidden;
-
-    .modal-body & {
-      max-height: calc(100vh - 192px);
-    }
   }
 
   &[modal] {
