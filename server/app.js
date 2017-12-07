@@ -16,7 +16,7 @@ const helmet = require('helmet');
 const useragent = require('express-useragent');
 const passport = require('passport');
 
-const Api = require('../../ace-api');
+const Api = require('ace-api');
 // const ApiServer = require('ace-api-server');
 
 const packageJson = require('../package.json');
@@ -172,9 +172,7 @@ class AceCms {
     /* Register API Server */
 
     // const apiRouter = express.Router();
-
     // app.use(config.apiRouterPath, apiRouter);
-
     // ApiServer(apiRouter, apiConfig, authMiddleware);
 
     /* Auth Redirect */

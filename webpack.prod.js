@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const cssNano = require('cssnano');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
@@ -30,17 +31,17 @@ module.exports = {
       cssProcessorOptions: { discardComments: { removeAll: true } },
       canPrint: true,
     }),
-    new webpack.optimize.UglifyJsPlugin({
+    new UglifyJsPlugin({
       sourceMap: true,
-      mangle: {
-        screw_ie8: true,
-        keep_fnames: true,
+      uglifyOptions: {
+        mangle: {
+          keep_fnames: true,
+        },
+        compress: {
+          warnings: false,
+        },
+        comments: false,
       },
-      compress: {
-        screw_ie8: true,
-        warnings: false,
-      },
-      comments: false,
     }),
     new webpack.NoEmitOnErrorsPlugin(),
   ],
