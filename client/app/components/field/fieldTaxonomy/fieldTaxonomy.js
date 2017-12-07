@@ -21,7 +21,7 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
         }
 
         if (_.isArray(value.terms)) {
-          return value.terms.map(term => term.title).join(', ');
+          return value.terms.map(term => (term ? term.title : undefined)).filter(term => term).join(', ');
         }
 
         if (_.isObject(value.terms)) {
@@ -31,22 +31,10 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
         return value || '';
       },
       toDb(value, settings) {
-        let terms = value.terms || [];
-
-        if (!_.isArray(terms)) {
-          terms = [terms];
-        }
-
         return {
           taxonomy: settings.taxonomy,
-          terms,
+          terms: value.terms || [],
         };
-      },
-      fromDb(value, settings) {
-        if (!settings.multiple && value && value.terms && value.terms[0]) {
-          value.terms = value.terms[0];
-        }
-        return value;
       },
     });
 

@@ -1,7 +1,7 @@
 entity-grid {
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
+  height: 100%;
 
   [flex] {
     position: relative;
@@ -12,7 +12,8 @@ entity-grid {
   }
 
   &[mode="modal"] {
-    height: calc(100vh - 128px);
+    width: 80vw;
+    height: calc(100vh - 120px);
   }
 
   .search,

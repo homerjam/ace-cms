@@ -5,7 +5,7 @@ import Handlebars from 'handlebars/dist/handlebars';
 import selectEntityModalTemplate from './modal/selectEntity.jade';
 import entityModalTemplate from './modal/entity.jade';
 
-const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGridFactory, FieldFactory, ConfigFactory, HelperFactory, ModalService, appConfig) => {
+const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog, EntityGridFactory, FieldFactory, ConfigFactory, HelperFactory, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -102,7 +102,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
     const thumbnail = FieldFactory.field(field.type).thumbnail(field.value);
 
     if (thumbnail) {
-      thumbnail.ratio = isNaN(thumbnail.width / thumbnail.height) ? 0 : thumbnail.width / thumbnail.height;
+      thumbnail.ratio = _.isNaN(thumbnail.width / thumbnail.height) ? 0 : thumbnail.width / thumbnail.height;
     }
 
     return thumbnail;
@@ -358,65 +358,90 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, EntityGri
       }, reject);
   });
 
-  service.editEntities = entities => $q((resolve, reject) => {
+  service.editEntities = async (entities) => {
     const mode = entities.length > 1 ? 'batchEdit' : entities[0].trashed ? 'trash' : 'normal';
     const id = entities.map(entity => entity.id || entity._id);
 
-    service.getById({
-      id,
-      children: 1,
-    }).then((entities) => {
-      ModalService.showModal({
-        template: entityModalTemplate,
+    try {
+      entities = await service.getById({
+        id,
+        children: 1,
+      });
+
+      const entityDialog = {
+        controller: 'DefaultModalController',
+        bindToController: true,
         controllerAs: 'vm',
-        inputs: {
+        template: entityModalTemplate,
+        // targetEvent: event,
+        // clickOutsideToClose: true,
+        multiple: true,
+        locals: {
           mode,
           entities,
         },
-      }).then((modal) => {
-        modal.result.then((vm) => {
-          service.updateEntities(entities, vm.entity, vm.schema, vm.options)
-            .then(resolve, reject);
-        });
-      });
-    });
-  });
+      };
 
-  service.newEntity = schemaSlug => $q((resolve, reject) => {
-    ModalService.showModal({
-      template: entityModalTemplate,
+      const vm = await $mdDialog.show(entityDialog);
+
+      entities = await service.updateEntities(entities, vm.entity, vm.schema, vm.options);
+
+    } catch (error) {
+      return false;
+    }
+
+    return entities;
+  };
+
+  service.newEntity = async (schemaSlug) => {
+    const entityDialog = {
+      controller: 'DefaultModalController',
+      bindToController: true,
       controllerAs: 'vm',
-      inputs: {
+      template: entityModalTemplate,
+      // targetEvent: event,
+      // clickOutsideToClose: true,
+      multiple: true,
+      locals: {
         mode: 'new',
         entities: [{
           schema: schemaSlug,
         }],
       },
-    }).then((modal) => {
-      modal.result
-        .then((vm) => {
-          service.createEntity(schemaSlug, vm.entity)
-            .then((entity) => {
-              resolve(entity);
-            }, reject);
-        }, reject);
-    }, reject);
-  });
+    };
 
-  service.selectEntity = schemaSlug => $q((resolve, reject) => {
-    ModalService.showModal({
-      template: selectEntityModalTemplate,
+    try {
+      const vm = await $mdDialog.show(entityDialog);
+      const entity = await service.createEntity(schemaSlug, vm.entity);
+
+      return entity;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  service.selectEntity = async (schemaSlug) => {
+    const selectEntityDialog = {
+      controller: 'DefaultModalController',
+      bindToController: true,
       controllerAs: 'vm',
-      inputs: {
+      template: selectEntityModalTemplate,
+      // targetEvent: event,
+      // clickOutsideToClose: true,
+      multiple: true,
+      locals: {
         schemaSlug,
       },
-    }).then((modal) => {
-      modal.result
-        .then((selected) => {
-          resolve(selected);
-        }, reject);
-    }, reject);
-  });
+    };
+
+    try {
+      const selected = await $mdDialog.show(selectEntityDialog);
+
+      return selected;
+    } catch (error) {
+      return false;
+    }
+  };
 
   return service;
 };

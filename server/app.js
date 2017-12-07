@@ -16,12 +16,11 @@ const helmet = require('helmet');
 const useragent = require('express-useragent');
 const passport = require('passport');
 
-const AceApi = require('ace-api');
-const AceApiServer = require('ace-api-server');
+const Api = require('../../ace-api');
+// const ApiServer = require('ace-api-server');
 
 const packageJson = require('../package.json');
 const defaultConfig = require('./config.default');
-const defaultApiConfig = require('ace-api/config.default');
 
 const VERSION = packageJson.version;
 const API_TOKEN_EXPIRES_IN = 86400;
@@ -31,7 +30,7 @@ const API_TOKEN_EXPIRES_IN = 86400;
 class AceCms {
   constructor (app, config, apiConfig) {
     config = _.merge({}, defaultConfig, config);
-    apiConfig = _.merge({}, defaultApiConfig, apiConfig);
+    apiConfig = _.merge({}, Api.defaultConfig, apiConfig);
 
     app.use(helmet());
     app.set('views', `${__dirname}/views`);
@@ -86,7 +85,7 @@ class AceCms {
 
       req.session.referer = req.originalUrl;
 
-      const jwt = new AceApi.Jwt(apiConfig);
+      const jwt = new Api.Jwt(apiConfig);
 
       if (config.environment === 'development') {
         if (!req.query.apiToken && !req.headers['x-api-token']) {
@@ -142,11 +141,11 @@ class AceCms {
 
         const userId = req.user.emails[0].value; // TODO: Replace email as userId?
 
-        const auth = new AceApi.Auth(apiConfig);
+        const auth = new Api.Auth(apiConfig);
 
         auth.authoriseUser(slug, userId)
           .then((user) => {
-            const jwt = new AceApi.Jwt(apiConfig);
+            const jwt = new Api.Jwt(apiConfig);
 
             const payload = {
               userId,
@@ -172,11 +171,11 @@ class AceCms {
 
     /* Register API Server */
 
-    const apiRouter = express.Router();
+    // const apiRouter = express.Router();
 
-    app.use(config.apiRouterPath, apiRouter);
+    // app.use(config.apiRouterPath, apiRouter);
 
-    AceApiServer(apiRouter, apiConfig, authMiddleware);
+    // ApiServer(apiRouter, apiConfig, authMiddleware);
 
     /* Auth Redirect */
 
@@ -272,7 +271,7 @@ class AceCms {
       req.session.errorMessage = null;
       req.session.successMessage = null;
 
-      AceApi.Db.connect(apiConfig, slug).getAsync('config')
+      Api.Db.connect(apiConfig, slug).getAsync('config')
         .then(
           (config) => {
             data.client = config.client;
@@ -303,7 +302,7 @@ class AceCms {
 
     /* Index */
 
-    let assistCredentials = new Buffer(`${config.assist.username}:${passwordHash.generate(config.assist.password)}`);
+    let assistCredentials = Buffer.from(`${config.assist.username}:${passwordHash.generate(config.assist.password)}`);
     assistCredentials = assistCredentials.toString('base64');
 
     function index (req, res) {
@@ -326,15 +325,7 @@ class AceCms {
       });
     }
 
-    router.use(authMiddleware, (req, res) => {
-      // if (req.headers.accept && req.headers.accept.indexOf('application/json') > -1) {
-      //   res.status(404);
-      //   res.send('Not found');
-      //   return;
-      // }
-
-      index(req, res);
-    });
+    router.use(authMiddleware, index);
 
     return app;
   }

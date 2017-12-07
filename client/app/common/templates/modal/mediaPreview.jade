@@ -1,32 +1,26 @@
-.modal-backdrop(ng-click="$modal.dismiss()")
-.modal
-  .modal-dialog
-    .modal-content
-      .modal-header
+md-dialog(aria-label="Media Preview")
+  md-toolbar
+    .md-toolbar-tools
+      h2 Media Preview
+      span(flex)
+      md-button.md-icon-button(ng-click="vm.cancel()")
+        md-icon(md-font-set="material-icons") close
+  md-dialog-content
+    //- .md-dialog-content
 
-        md-toolbar
-          .md-toolbar-tools
-            h2 Media Preview
-            span(flex)
-            md-button.md-icon-button(ng-click="$modal.dismiss()")
-              md-icon(md-font-set="material-icons") close
+    div(layout="column", layout-margin)
 
-      .modal-body
+      .media-wrapper
+        span(ng-show="vm.media[vm.index].type === 'none'") No preview available
+        span(ng-show="vm.media[vm.index].type === 'image'")
+          img(style="max-width: 100%; vertical-align: bottom;", ng-src='{{vm.media[vm.index].src}}', ng-click='vm.index = vm.index < vm.media.length - 1 ? vm.index + 1 : 0')
+        span(ng-show="vm.media[vm.index].type === 'video'")
+          video(style="max-width: 100%;", controls)
+            source(ng-repeat='variant in vm.media[vm.index].variants', ng-src='{{variant.src}}', type='{{variant.mimeType}}')
 
-        div(layout="column", layout-margin)
-
-          .media-wrapper
-            span(ng-show="vm.media[vm.index].type === 'none'") No preview available
-            span(ng-show="vm.media[vm.index].type === 'image'")
-              img(style="max-width: 100%; vertical-align: bottom;", ng-src='{{vm.media[vm.index].src}}', ng-click='vm.index = vm.index < vm.media.length - 1 ? vm.index + 1 : 0')
-            span(ng-show="vm.media[vm.index].type === 'video'")
-              video(style="max-width: 100%;", controls)
-                source(ng-repeat='variant in vm.media[vm.index].variants', ng-src='{{variant.src}}', type='{{variant.mimeType}}')
-
-      .modal-footer(layout="row")
-
-        span(flex)
-        md-button.md-icon-button(ng-show="vm.media.length > 1", ng-click="vm.index = vm.index > 0 ? vm.index - 1 : vm.media.length - 1")
-          md-icon(md-font-set="material-icons") keyboard_arrow_left
-        md-button.md-icon-button(ng-show="vm.media.length > 1", ng-click="vm.index = vm.index < vm.media.length - 1 ? vm.index + 1 : 0")
-          md-icon(md-font-set="material-icons") keyboard_arrow_right
+  md-dialog-actions(layout="row")
+    span(flex)
+    md-button.md-icon-button(ng-show="vm.media.length > 1", ng-click="vm.index = vm.index > 0 ? vm.index - 1 : vm.media.length - 1")
+      md-icon(md-font-set="material-icons") keyboard_arrow_left
+    md-button.md-icon-button(ng-show="vm.media.length > 1", ng-click="vm.index = vm.index < vm.media.length - 1 ? vm.index + 1 : 0")
+      md-icon(md-font-set="material-icons") keyboard_arrow_right

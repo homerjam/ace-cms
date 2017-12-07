@@ -36,10 +36,14 @@ md-toolbar.md-secondary {
   color: black;
 }
 
+md-dialog {
+  max-height: calc(100vh - 60px);
+}
+
 md-dialog-content {
-  md-toolbar:first-child {
-    margin-top: -24px;
-  }
+  // md-toolbar:first-child {
+  //   margin-top: -24px;
+  // }
 
   md-table-container,
   .md-table-toolbar {

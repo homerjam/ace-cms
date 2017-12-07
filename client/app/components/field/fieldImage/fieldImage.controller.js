@@ -6,7 +6,7 @@ import ImagePrep from '../../../lib/imagePrep';
 
 class FieldImageController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $window, $mdDialog, BatchUploadFactory, FileFactory, HelperFactory, ModalService) {
+  constructor ($rootScope, $scope, $state, $window, $mdDialog, BatchUploadFactory, FileFactory, HelperFactory) {
     const vm = this;
 
     let mode = 'normal';
@@ -20,30 +20,57 @@ class FieldImageController {
       $window.open(`${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.fileName}/${fileName}`);
     };
 
-    vm.dzi = () => {
-      ModalService.showModal({
-        template: dziTemplate,
+    vm.dzi = async () => {
+      const dziDialog = {
+        controller: 'DefaultModalController',
+        bindToController: true,
         controllerAs: 'vm',
-        inputs: {
-          image: [$rootScope.assistUrl, $rootScope.assetSlug, vm.fieldModel.value.dzi.dir, vm.fieldModel.value.dzi.fileName].join('/'),
+        template: dziTemplate,
+        // targetEvent: event,
+        // clickOutsideToClose: true,
+        multiple: true,
+        locals: {
+          image: [
+            $rootScope.assistUrl,
+            $rootScope.assetSlug,
+            vm.fieldModel.value.dzi.dir,
+            vm.fieldModel.value.dzi.fileName].join('/'),
         },
-      });
+      };
+
+      try {
+        await $mdDialog.show(dziDialog);
+
+        return true;
+      } catch (error) {
+        return false;
+      }
     };
 
-    vm.crop = () => {
-      ModalService.showModal({
-        template: cropTemplate,
+    vm.crop = async () => {
+      const cropDialog = {
         controller: cropController,
+        bindToController: true,
         controllerAs: 'vm',
-        inputs: {
+        template: cropTemplate,
+        // targetEvent: event,
+        // clickOutsideToClose: true,
+        multiple: true,
+        locals: {
           availableCrops: vm.fieldOptions.settings.crops,
           image: vm.fieldModel.value,
         },
-      }).then((modal) => {
-        modal.result.then((crops) => {
-          vm.fieldModel.value.crops = crops;
-        });
-      });
+      };
+
+      try {
+        const crops = await $mdDialog.show(cropDialog);
+
+        vm.fieldModel.value.crops = crops;
+
+        return true;
+      } catch (error) {
+        return false;
+      }
     };
 
     vm.preview = () => {

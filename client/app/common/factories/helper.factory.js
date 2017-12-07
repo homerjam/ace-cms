@@ -2,7 +2,7 @@ import _ from 'lodash';
 import angular from 'angular';
 import * as modalTemplates from '../templates/modal';
 
-const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, FieldFactory, ModalService, appConfig) => {
+const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdDialog, FieldFactory, appConfig) => {
   'ngInject';
 
   const service = {};
@@ -97,14 +97,21 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
   };
 
   service.mediaPreview = (media, index) => {
-    ModalService.showModal({
-      template: modalTemplates.mediaPreview,
+    const mediaPreviewDialog = {
+      controller: 'DefaultModalController',
+      bindToController: true,
       controllerAs: 'vm',
-      inputs: {
+      template: modalTemplates.mediaPreview,
+      // targetEvent: event,
+      // clickOutsideToClose: true,
+      multiple: true,
+      locals: {
         media,
         index,
       },
-    });
+    };
+
+    $mdDialog.show(mediaPreviewDialog);
   };
 
   service.analytics = params => $q((resolve, reject) => {
@@ -148,7 +155,6 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
   service.getMdChipCollection = scope => scope.$parent.$mdChipsCtrl.items;
 
   service.getMdChipIndex = function getMdChipIndex (scope) {
-    console.log(this, scope);
     scope.$parent.$mdChipsCtrl.items.indexOf(scope.$parent.$chip);
   };
 

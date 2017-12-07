@@ -1,21 +1,14 @@
-.modal-backdrop(ng-click="$modal.dismiss()")
-.modal
-  .modal-dialog
-    .modal-content
-      // .modal-header
-      //   md-toolbar
-      //     .md-toolbar-tools
-      //       h2 Entity
-      //       span(flex)
-      //       md-button.md-icon-button(ng-click="$modal.dismiss()")
-      //         md-icon(md-font-set="material-icons") close
+md-dialog(aria-label="Select Entity")
 
-      .modal-body
+  md-dialog-content
 
-        entity-grid(mode="modal", schema="vm.schemaSlug", selected="vm.selected")
+    entity-grid(
+      mode="modal"
+      schema="vm.schemaSlug"
+      selected="vm.selected"
+    )
 
-      .modal-footer(layout="row")
-
-        span(flex)
-        md-button.md-accent(ng-click="$modal.close(vm.selected)") Select
-        md-button.md-default(ng-click="$modal.dismiss()") Close
+  md-dialog-actions(layout="row")
+    span(flex)
+    md-button(ng-click="vm.cancel()") Close
+    md-button.md-accent(ng-click="vm.ok(vm.selected)") Select

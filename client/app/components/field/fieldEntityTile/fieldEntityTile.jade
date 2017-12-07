@@ -29,7 +29,7 @@ md-subheader
 
 div(flex, layout="row", layout-padding, layout-wrap)
 
-  div.tile(flex, layout="column", ng-repeat="item in vm.fieldModel.value", ace-sortable, index="$index", collection="vm.fieldModel.value", handle-selector="'[ace-sortable-handle]'")
+  div.tile(flex, layout="column", ng-repeat="item in vm.fieldModel.value track by $index", ace-sortable, index="$index", collection="vm.fieldModel.value", handle-selector="'[ace-sortable-handle]'")
 
     md-card(flex, ng-click="vm.clickItem($event, item)", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch)
 

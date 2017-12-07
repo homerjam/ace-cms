@@ -9,6 +9,11 @@ class FieldSelectController {
       vm.fieldModel.value = [];
     }
 
+    vm.clear = () => {
+      vm.searchText = '';
+      vm.fieldModel.value[0] = undefined;
+    };
+
     vm.search = query => $q((resolve, reject) => {
       const options = (vm.fieldOptions.settings.options || []).map(option => ({
         slug: _.kebabCase(option),

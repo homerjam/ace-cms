@@ -70,6 +70,22 @@ class TaxonomyController {
       });
     };
 
+    const removeTermsById = (terms, id) => {
+      function _removeTerms(term) {
+        if (term.id === id) {
+          return false;
+        }
+
+        term.terms = (term.terms || []).filter(term => _removeTerms(term));
+
+        return true;
+      }
+
+      terms = terms.filter(term => _removeTerms(term));
+
+      return terms;
+    };
+
     vm.removeNode = ($event, scope) => {
       const confirm = $mdDialog.confirm()
         .title('Delete Term')
@@ -85,7 +101,7 @@ class TaxonomyController {
           })
             .then(
               (response) => {
-                scope.remove();
+                vm.taxonomy.terms = removeTermsById(vm.taxonomy.terms, scope.$modelValue.id);
 
                 vm.save();
               },
@@ -195,18 +211,22 @@ class TaxonomyController {
       vm.save();
     };
 
-    const slugifyTerms = (term) => {
-      term.slug = _.kebabCase(term.title);
+    const slugifyTerms = (terms) => {
+      function _slugifyTerms(term) {
+        term.slug = _.kebabCase(term.title);
 
-      (term.terms || []).forEach((term) => {
-        slugifyTerms(term);
+        (term.terms || []).forEach((term) => {
+          _slugifyTerms(term);
+        });
+      }
+      terms.forEach((term) => {
+        _slugifyTerms(term);
       });
+      return terms;
     };
 
     vm.save = () => {
-      vm.taxonomy.terms.forEach((term) => {
-        slugifyTerms(term);
-      });
+      vm.taxonomy.terms = slugifyTerms(vm.taxonomy.terms);
 
       const taxonomy = angular.fromJson(angular.toJson(vm.taxonomy));
 

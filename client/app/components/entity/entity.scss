@@ -8,10 +8,13 @@ entity {
   }
 
   &[modal] {
-    max-height: none;
-
     .menu-toggle {
       display: none;
+    }
+
+    md-content {
+      width: 80vw;
+      height: calc(100vh - 180px);
     }
   }
 

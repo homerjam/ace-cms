@@ -5,8 +5,8 @@
 }
 
 .ace-open-seadragon {
-	width: 100%;
-	height: calc(100vh - 20rem);
+	width: 70vw;
+	height: calc(100vh - 250px);
 
 	.openseadragon-container > div:not(.openseadragon-canvas) {
 		display: none;

@@ -104,7 +104,7 @@ const EcommerceFactory = ($rootScope, $window, $http, $q, $log, $mdDialog, Confi
         };
 
         vm.previewEmailTemplate = (template) => {
-          $window.open(`${appConfig.apiUrl}/ecommerce/order/message/${template}?orderId=${vm.order._id}&apiToken=${$rootScope.apiToken}`);
+          $window.open(`${appConfig.apiUrl}/ecommerce/order/message/${template}?orderId=${vm.order.orderId}&apiToken=${$rootScope.apiToken}`);
         };
       },
       controllerAs: 'vm',

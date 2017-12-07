@@ -1,35 +1,28 @@
-.modal-backdrop(ng-click="$modal.dismiss()")
-.modal
-  .modal-dialog
-    .modal-content
-      .modal-header
+md-dialog(aria-label="Crop")
+  md-toolbar
+    .md-toolbar-tools
+      h2 Crop
+      span(flex)
+      md-button.md-icon-button(ng-click="vm.cancel()")
+        md-icon(md-font-set="material-icons") close
+  md-dialog-content
+    .md-dialog-content
 
-        md-toolbar
-          .md-toolbar-tools
-            h2 Crop
-            span(flex)
-            md-button.md-icon-button(ng-click="$modal.dismiss()")
-              md-icon(md-font-set="material-icons") close
+      div(layout="row", layout-margin)
 
-      .modal-body
+        md-input-container(flex)
+          label Crop
+          md-select(ng-model="vm.activeCrop")
+            md-option(ng-repeat="crop in vm.availableCrops" ng-value="$index") {{crop.name}}
 
-        div(layout="row", layout-margin)
+        md-button(ng-click="vm.coords = {}", aria-label="Clear") Clear
 
-          md-input-container(flex)
-            label Crop
-            md-select(ng-model="vm.activeCrop")
-              md-option(ng-repeat="crop in vm.availableCrops" ng-value="$index") {{crop.name}}
+      div(layout="row", layout-margin)
 
-          md-button(ng-click="vm.coords = {}", aria-label="Clear") Clear
+        hj-cropify(coords="vm.coords", aspect-ratio="vm.cropSettings.ratio")
+          img(ng-style="vm.cropSize()", ng-src="{{vm.getThumbnail()}}")
 
-        div(layout="row", layout-margin)
-
-          hj-cropify(coords="vm.coords", aspect-ratio="vm.cropSettings.ratio")
-            img(ng-style="vm.cropSize()", ng-src="{{vm.getThumbnail()}}")
-
-      .modal-footer(layout="row")
-
-        span(flex)
-        md-button(ng-click="$modal.dismiss()") Cancel
-        md-button.md-primary.md-raised(ng-click="$modal.close(vm.crops)") Done
-
+  md-dialog-actions(layout="row")
+    span(flex)
+    md-button(ng-click="vm.cancel()") Cancel
+    md-button.md-accent(ng-click="vm.ok(vm.crops)") Ok

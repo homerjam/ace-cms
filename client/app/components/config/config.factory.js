@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, HelperFactory, ModalService, appConfig, $auth, SatellizerConfig) => {
+const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, HelperFactory, appConfig, $auth, SatellizerConfig) => {
   'ngInject';
 
   const service = {};

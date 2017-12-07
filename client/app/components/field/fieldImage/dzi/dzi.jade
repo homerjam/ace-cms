@@ -1,23 +1,15 @@
-.modal-backdrop(ng-click="$modal.dismiss()")
-.modal
-  .modal-dialog
-    .modal-content
-      .modal-header
+md-dialog(aria-label="Deep Zoom")
+  md-toolbar
+    .md-toolbar-tools
+      h2 Deep Zoom
+      span(flex)
+      md-button.md-icon-button(ng-click="vm.cancel()")
+        md-icon(md-font-set="material-icons") close
+  md-dialog-content
+    //- .md-dialog-content
 
-        md-toolbar
-          .md-toolbar-tools
-            h2 Deep Zoom
-            span(flex)
-            md-button.md-icon-button(ng-click="$modal.dismiss()")
-              md-icon(md-font-set="material-icons") close
+    ace-open-seadragon(src="{{vm.image}}", prefix-url="./img/openseadragon/images/")
 
-      .modal-body
-
-        div(layout="row", layout-margin)
-
-          ace-open-seadragon(src="{{vm.image}}", prefix-url="/img/openseadragon/images/")
-
-      .modal-footer(layout="row")
-
-        span(flex)
-        md-button(ng-click="$modal.dismiss()") Close
+  md-dialog-actions(layout="row")
+    span(flex)
+    md-button(ng-click="vm.cancel()") Close

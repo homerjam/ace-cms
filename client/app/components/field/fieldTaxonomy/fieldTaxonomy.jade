@@ -4,14 +4,23 @@ md-subheader.md-no-sticky
       md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
       h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
       span(flex)
-      md-button(ng-if="::!vm.fieldOptions.settings.multiple", ng-show='vm.searchText', ng-click='vm.clear()', aria-label="Clear") Clear
+      md-button(ng-if="!vm.fieldOptions.settings.multiple && vm.fieldModel.value.terms[0]", ng-click='vm.clear()', aria-label="Clear") Clear
 
 div(flex, layout="row", layout-margin)
 
   div(flex, layout="row")
 
     div(flex, ng-if="::!vm.fieldOptions.settings.multiple")
-      md-autocomplete(flex, md-no-cache="true", md-selected-item="vm.fieldModel.value.terms", md-search-text="vm.searchText", md-items="item in vm.search(vm.searchText)", md-item-text="item.title", md-floating-label="{{vm.fieldOptions.name}}", md-min-length="0")
+      md-autocomplete(
+        flex
+        md-no-cache="true"
+        md-selected-item="vm.fieldModel.value.terms[0]"
+        md-search-text="vm.searchText"
+        md-items="item in vm.search(vm.searchText)"
+        md-item-text="item.title"
+        md-floating-label="{{vm.fieldOptions.name}}"
+        md-min-length="0"
+      )
         md-item-template
           span(md-highlight-text="vm.searchText", md-highlight-flags="^i") {{item.title}}
         md-not-found No matches found.

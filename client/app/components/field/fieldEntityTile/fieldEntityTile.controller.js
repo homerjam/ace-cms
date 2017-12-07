@@ -45,21 +45,22 @@ class FieldEntityTileController {
         });
     };
 
-    vm.insertEntity = (schemaSlug) => {
-      EntityFactory.selectEntity(schemaSlug)
-        .then((selected) => {
-          const insertPoint = getInsertPoint();
+    vm.insertEntity = async (schemaSlug) => {
+      let selected = await EntityFactory.selectEntity(schemaSlug);
 
-          selected = _.reverse(selected);
+      const insertPoint = getInsertPoint();
 
-          selected.forEach((entity) => {
-            if (insertPoint > -1) {
-              vm.fieldModel.value.splice(insertPoint, 0, entity);
-            } else {
-              vm.fieldModel.value.push(entity);
-            }
-          });
+      selected = _.reverse(selected);
+
+      $scope.$apply(() => {
+        selected.forEach((entity) => {
+          if (insertPoint > -1) {
+            vm.fieldModel.value.splice(insertPoint, 0, entity);
+          } else {
+            vm.fieldModel.value.push(entity);
+          }
         });
+      });
     };
 
     vm.entityEdit = (event, entity) => {
@@ -196,9 +197,7 @@ class FieldEntityTileController {
       vm.fieldModel.value[vm.fieldModel.value.indexOf(item) + 1].groupBefore = item.groupAfter;
     };
 
-    $scope.$watch(() => {
-      return vm.fieldModel.value;
-    }, (newValue) => {
+    $scope.$watch(() => vm.fieldModel.value, (newValue) => {
       vm.fieldModel.value.forEach(setGroupSize);
       vm.fieldModel.value.forEach(testGroupSize);
     }, true);

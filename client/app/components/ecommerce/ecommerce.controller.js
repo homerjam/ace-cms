@@ -2,7 +2,7 @@ import angular from 'angular';
 
 class EcommerceController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $window, $http, $timeout, $q, $log, $mdDialog, EcommerceFactory, ConfigFactory, HelperFactory, ModalService, uiGridConstants, appConfig) {
+  constructor ($rootScope, $scope, $state, $window, $http, $timeout, $q, $log, $mdDialog, EcommerceFactory, ConfigFactory, HelperFactory, uiGridConstants, appConfig) {
     const vm = this;
 
     const ecommerceType = $state.current.data.ecommerceType;

@@ -21,7 +21,7 @@ const fieldSelectModule = angular.module('fieldSelect', [])
         }
 
         if (_.isArray(value)) {
-          return value.map(term => term.title).join(', ');
+          return value.map(option => (option ? option.title : undefined)).filter(option => option).join(', ');
         }
 
         if (_.isObject(value)) {
@@ -29,18 +29,6 @@ const fieldSelectModule = angular.module('fieldSelect', [])
         }
 
         return value || '';
-      },
-      toDb(value, settings) {
-        if (value && !_.isArray(value)) {
-          return [value];
-        }
-        return value;
-      },
-      fromDb(value, settings) {
-        if (!settings.multiple && value && value[0]) {
-          return value[0];
-        }
-        return value;
       },
     });
 

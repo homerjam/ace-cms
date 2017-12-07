@@ -1,15 +1,23 @@
+import _ from 'lodash';
 import angular from 'angular';
 
 class CropController {
   /* @ngInject */
-  constructor($rootScope, $scope, $window, availableCrops, image) {
+  constructor($rootScope, $scope, $window, $mdDialog, $timeout, availableCrops, image) {
     const vm = this;
+
+    vm.cancel = () => $mdDialog.cancel();
+    vm.ok = item => $mdDialog.hide(item);
 
     vm.crops = image.crops ? angular.copy(image.crops) : {};
     vm.availableCrops = availableCrops;
     vm.activeCrop = 0;
 
-    const setCrop = (crop) => {
+    const setCrop = () => {
+      vm.cropSettings = vm.availableCrops[vm.activeCrop];
+
+      const crop = vm.crops[vm.cropSettings.slug];
+
       if (crop) {
         vm.coords = {
           left: crop[0],
@@ -24,13 +32,7 @@ class CropController {
       }
     };
 
-    $scope.$watch(() => vm.activeCrop, (cropIndex) => {
-      vm.cropSettings = vm.availableCrops[vm.activeCrop];
-
-      const crop = vm.crops[vm.cropSettings.slug];
-
-      setCrop(crop);
-    });
+    $scope.$watch(() => vm.activeCrop, setCrop);
 
     $scope.$watch(() => vm.coords, (coords) => {
       if (!coords) {
@@ -39,12 +41,12 @@ class CropController {
 
       if (
         Object.keys(coords).length &&
-        !isNaN(coords.top) &&
-        !isNaN(coords.left) &&
-        !isNaN(coords.right) &&
-        !isNaN(coords.bottom) &&
-        !isNaN(coords.width) &&
-        !isNaN(coords.height)
+        !_.isNaN(coords.top) &&
+        !_.isNaN(coords.left) &&
+        !_.isNaN(coords.right) &&
+        !_.isNaN(coords.bottom) &&
+        !_.isNaN(coords.width) &&
+        !_.isNaN(coords.height)
       ) {
         vm.crops[vm.cropSettings.slug] = [coords.left, coords.top, coords.right, coords.bottom];
 
@@ -77,6 +79,7 @@ class CropController {
 
     vm.getThumbnail = () => [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', 'h:500;q:60', image.fileName].join('/');
 
+    $timeout(setCrop, 500);
   }
 }
 

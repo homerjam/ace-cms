@@ -59,11 +59,12 @@ class FieldTaxonomyController {
     }
 
     vm.clear = () => {
-      vm.fieldModel.value.terms = [];
+      vm.searchText = '';
+      vm.fieldModel.value.terms[0] = undefined;
     };
 
     vm.search = query => $q((resolve, reject) => {
-      const selected = _.isArray(vm.fieldModel.value.terms) ? vm.fieldModel.value.terms.map(term => term.id) : [];
+      const selected = _.isArray(vm.fieldModel.value.terms) ? vm.fieldModel.value.terms.map(term => (term ? term.id : undefined)) : [];
 
       const filteredOptions = options.filter((term) => {
         if (selected.indexOf(term.id) > -1) {
