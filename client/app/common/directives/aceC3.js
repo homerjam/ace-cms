@@ -7,7 +7,7 @@ export default angular.module('ace.c3', [])
     bindings: {
       options: '<',
     },
-    controller: function ($scope, $element, $window, $timeout) {
+    controller ($scope, $element, $window, $timeout) {
       const ctrl = this;
 
       let chart;

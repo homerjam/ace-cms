@@ -300,26 +300,36 @@ class AceCms {
 
     /* Index */
 
+    let appStyles = fs.readdirSync(path.resolve(__dirname, '../public/build/css'));
+    appStyles = appStyles.filter(script => /\.css$/.test(script)).sort().reverse();
+
+    let appScripts = fs.readdirSync(path.resolve(__dirname, '../public/build/js'));
+    appScripts = appScripts.filter(script => /\.js$/.test(script)).sort().reverse();
+
     let assistCredentials = Buffer.from(`${config.assist.username}:${passwordHash.generate(config.assist.password)}`);
     assistCredentials = assistCredentials.toString('base64');
 
     function index (req, res) {
-      const slug = req.params.slug;
+      const { slug } = req.params;
+      const { apiToken } = req.query;
 
       res.render('index', {
-        slug,
-        clientBasePath: config.clientBasePath,
         environment: config.environment,
         version: VERSION,
+        clientBasePath: config.clientBasePath,
+        pageTitle: config.pageTitle,
+        slug,
+        session: req.session,
+        apiUrl: config.apiUrl,
+        apiToken,
         assistUrl: config.assist.url,
         assistCredentials,
-        apiUrl: config.apiUrl,
-        session: req.session,
-        pageTitle: config.pageTitle,
         auth0: {
           clientId: config.auth0.clientId,
           domain: config.auth0.domain,
         },
+        appStyles,
+        appScripts,
       });
     }
 

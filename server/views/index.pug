@@ -18,7 +18,8 @@ html(ng-app="app" ng-strict-di)
     link(rel="stylesheet" href= clientBasePath + slug + '/font/roboto/font.css')
 
     if environment === 'production'
-      link(rel="stylesheet" href= clientBasePath + slug + '/build/css/bundle.css?v=' + version)
+      each style in appStyles
+        link(rel="stylesheet" href= clientBasePath + slug + '/build/css/' + style)
 
   body
 
@@ -31,6 +32,7 @@ html(ng-app="app" ng-strict-di)
         assistUrl: '!{assistUrl}',
         assistCredentials: '!{assistCredentials}',
         apiUrl: '!{apiUrl}',
+        apiToken: '!{apiToken}',
         auth0: {
           clientId: '!{auth0.clientId}',
           domain: '!{auth0.domain}',
@@ -41,4 +43,5 @@ html(ng-app="app" ng-strict-di)
       script(src="/dev/js/bundle.js")
 
     else
-      script(src=clientBasePath + slug + '/build/js/bundle.js?v=' + version)
+      each script in appScripts
+        script(src=clientBasePath + slug + '/build/js/' + script)

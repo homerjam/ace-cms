@@ -13,7 +13,7 @@
   "scripts": {
     "start": "nodemon index --exec 'node -r dotenv/config' --inspect --watch server",
     "dev": "node -r dotenv/config dev",
-    "build": "webpack --config webpack.prod.js --env=prod --progress --profile --colors"
+    "build": "webpack -p --config webpack.prod.js --env=prod --progress --profile --colors"
   },
   "engines": {
     "node": "8.x"
@@ -75,6 +75,7 @@
     "blueimp-load-image": "^2.17.1",
     "buffer": "^5.0.8",
     "c3": "^0.4.18",
+    "clean-webpack-plugin": "^0.1.17",
     "css-loader": "^0.28.7",
     "cssnano": "^3.10.0",
     "dotenv": "^4.0.0",
@@ -119,6 +120,7 @@
     "url-loader": "^0.6.2",
     "uuid": "^3.1.0",
     "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.1",
     "webpack-dev-middleware": "^1.12.2",
     "webpack-dev-server": "^2.9.7",
     "webpack-hot-middleware": "^2.21.0",

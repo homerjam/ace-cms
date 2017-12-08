@@ -1,35 +1,48 @@
 const path = require('path');
 const webpack = require('webpack');
 const cssNano = require('cssnano');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   devtool: 'source-map',
 
-  entry: './client/app/app.js',
+  entry: {
+    vendor: ['bluebird', 'moment', 'lodash', 'angular', 'd3', 'c3'],
+    app: path.resolve(__dirname, 'client/app/app.js'),
+  },
 
   output: {
     path: path.resolve(__dirname, 'public/build'),
-    filename: 'js/bundle.js',
+    filename: 'js/bundle.[chunkhash].js',
   },
 
   plugins: [
+    // new BundleAnalyzerPlugin(),
+    new CleanWebpackPlugin([path.resolve(__dirname, 'public/build')]),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false,
     }),
-    new ExtractTextPlugin({
-      filename: 'css/bundle.css',
-      disable: false,
-      allChunks: true,
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'js/vendor.[chunkhash].js',
     }),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
       cssProcessor: cssNano,
       cssProcessorOptions: { discardComments: { removeAll: true } },
       canPrint: true,
+    }),
+    new ExtractTextPlugin({
+      filename: 'css/bundle.[chunkhash].css',
+      disable: false,
+      allChunks: true,
     }),
     new UglifyJsPlugin({
       sourceMap: true,
@@ -43,7 +56,6 @@ module.exports = {
         comments: false,
       },
     }),
-    new webpack.NoEmitOnErrorsPlugin(),
   ],
 
   module: {
