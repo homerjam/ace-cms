@@ -19,7 +19,7 @@
 
   div(flex="grow", layout="row", layout-margin)
 
-    div.dropzone(flex, layout="row", layout-align="center center", ng-show="!vm.fieldModel.value", ace-flow-drop, ace-flow-browse)
+    div.dropzone(flex, layout="row", layout-align="center center", ng-show="!vm.uploading && !vm.fieldModel.value", ace-flow-drop, ace-flow-browse)
       span Drop file(s) here
 
     div(flex, layout="row", layout-align="center center", ng-show="vm.uploading")

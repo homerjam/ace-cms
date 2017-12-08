@@ -84,7 +84,7 @@ class FieldVideoController {
     }
 
     vm.download = () => {
-      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}&filename=${vm.fieldModel.value.original.fileName}`);
+      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}&filename=${vm.fieldModel.value.original.fileName}&apiToken=${$rootScope.apiToken}`);
     };
   }
 }
