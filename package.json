@@ -20,7 +20,7 @@
     "node": "8.x"
   },
   "dependencies": {
-    "ace-api": "^0.5.20",
+    "ace-api": "^0.5.22",
     "angular-i18n": "^1.6.7",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
@@ -62,7 +62,7 @@
     "angular-ui-grid": "^4.0.11",
     "angular-ui-tree": "^2.22.6",
     "array-buffer-concat": "^1.0.1",
-    "autoprefixer": "^7.2.1",
+    "autoprefixer": "^7.2.2",
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.25.0",
     "babel-eslint": "^8.0.3",
