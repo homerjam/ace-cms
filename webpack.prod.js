@@ -72,10 +72,10 @@ module.exports = {
         loader: 'raw-loader',
       },
       {
-        test: /\.jade$/,
+        test: /\.(jade|pug)$/,
         use: [
           'raw-loader',
-          'jade-html-loader',
+          'pug-html-loader',
         ],
       },
       {
