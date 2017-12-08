@@ -1,10 +1,7 @@
-*.env
+.env
 .couch
 .cloudant
 .vscode
 node_modules
 client
 generator
-report
-typings
-utils
