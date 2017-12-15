@@ -52,7 +52,7 @@ md-toolbar
 
 div(flex="nogrow", ng-show="vm.showSearch")
   div.search(layout="row", layout-padding)
-    md-input-container(flex, md-no-float)
+    md-input-container(flex md-no-float="true")
       input(type="text", placeholder="Search", ng-model="vm.searchTerm", ng-keypress="vm.search($event, vm.searchTerm)")
     md-button.md-icon-button(aria-label="Search", ng-click="vm.search($event, vm.searchTerm)")
       md-icon(md-font-set="material-icons") search

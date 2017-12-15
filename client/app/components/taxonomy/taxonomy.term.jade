@@ -6,7 +6,7 @@
       md-icon(ng-show="collapsed", md-font-set="material-icons") keyboard_arrow_right
       md-icon(ng-show="!collapsed", md-font-set="material-icons") keyboard_arrow_down
 
-    md-input-container(flex, md-no-float, ui-tree-handle)
+    md-input-container(flex md-no-float="true" ui-tree-handle)
       input.tree-node-title(
         ng-class="{edit: $handleScope.$editTitle}",
         ng-model="node.title",

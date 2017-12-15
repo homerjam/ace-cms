@@ -24,11 +24,11 @@ span(ace-flow options="vm.flowOptions")
       div(flex)
         table
           tr
-            td Type
-            td {{vm.fieldModel.value.mimeType}}
-          tr
             td Filename
             td(title='{{vm.fieldModel.value.original.fileName}}') {{vm.fieldModel.value.original.fileName}}
           tr
+            td Type
+            td {{vm.fieldModel.value.original.mimeType}}
+          tr
             td Filesize
-            td {{vm.fieldModel.value.fileSize | fileSize}}
+            td {{vm.fieldModel.value.original.fileSize | fileSize}}
