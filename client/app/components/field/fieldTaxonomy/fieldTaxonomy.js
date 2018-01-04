@@ -33,7 +33,7 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
       toDb(value, settings) {
         return {
           taxonomy: settings.taxonomy,
-          terms: value.terms || [],
+          terms: value.terms[0] ? value.terms : [],
         };
       },
     });
