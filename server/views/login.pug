@@ -100,7 +100,7 @@ html
 
       #login-form.mdl-shadow--2dp
 
-    script(src="https://cdn.auth0.com/js/lock/10.6/lock.min.js")
+    script(src="https://cdn.auth0.com/js/lock/11.0.1/lock.min.js")
 
     script.
       var lock = new Auth0Lock('!{auth0.clientId}', '!{auth0.domain}', {
@@ -115,7 +115,6 @@ html
           redirectUrl: window.location.protocol + '//' + window.location.host + '!{clientBasePath}_authorise',
           params: {
             state: '!{slug}',
-            scope: 'openid email',
           },
         },
         allowSignUp: !{client ? 'true' : 'false'},
