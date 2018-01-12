@@ -36,7 +36,9 @@ div(flex, layout="row", layout-padding, layout-wrap)
       .md-card-image(ng-show="$root.$entity.getEntityThumbnailUrl(item, 'w:500;q:60')", ng-style="{backgroundImage: 'url(' + $root.$entity.getEntityThumbnailUrl(item, 'w:500;q:60') + ')'}")
 
       md-card-content(flex)
-        .md-caption(ng-repeat="fieldSlug in vm.getGridColumnFieldSlugs(item.schema)", ng-bind-html="item.fields[fieldSlug] | field2String : 20")
+        .md-caption(ng-repeat="fieldOptions in vm.getGridColumnFieldSlugs(item.schema)")
+          span {{ fieldOptions.name }}:&nbsp;
+          span(ng-bind-html="item.fields[fieldOptions.slug] | field2String : fieldOptions : 20")
 
       md-card-actions(layout="row")
         md-card-icon-actions

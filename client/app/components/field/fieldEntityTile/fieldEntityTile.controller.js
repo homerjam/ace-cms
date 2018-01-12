@@ -85,8 +85,7 @@ class FieldEntityTileController {
 
     vm.getGridColumnFieldSlugs = schemaSlug =>
       ConfigFactory.getSchema(schemaSlug)
-        .fields.filter(field => field.settings.gridColumn)
-        .map(field => field.slug);
+        .fields.filter(field => field.settings.gridColumn);
 
     vm.hasPreview = (i) => {
       if (!vm.fieldModel.value[i]) {

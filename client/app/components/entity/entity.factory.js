@@ -65,10 +65,13 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
     let title;
     let slug;
 
-    // Convert fields to a readable format
-    const fields = _.mapValues(entity.fields, field => $filter('field2String')(field, 10));
-
     const schema = ConfigFactory.getSchema(entity.schema);
+
+    // Convert fields to a readable format
+    const fields = _.mapValues(entity.fields, (field, fieldSlug) => {
+      const fieldOptions = schema.fields.filter(field => field.slug === fieldSlug)[0];
+      return $filter('field2String')(field, fieldOptions, 10);
+    });
 
     // Grab title template, fallback to first field
     const titleTemplate = schema.titleTemplate && schema.titleTemplate !== '' ? schema.titleTemplate : schema.settings.singular ? schema.name : `{{${schema.fields[0].slug}}}`;

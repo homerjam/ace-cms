@@ -53,17 +53,13 @@ const fieldModule = angular.module('field', [
   .filter('field2String', ($window, $filter, FieldFactory) => {
     'ngInject';
 
-    return (field, wordLimit = Infinity) => {
+    return (field, fieldOptions, wordLimit = Infinity) => {
       let output = '';
 
-      if (field === null || field === undefined || field.value === null || field.value === undefined) {
-        return output;
-      }
-
-      output = FieldFactory.field(field.type).toString(field.value);
+      output = FieldFactory.field(fieldOptions.type).toString(field ? field.value : null);
 
       if (typeof output !== 'string') {
-        throw Error(`Cannot convert ${field.type} field to string`);
+        throw Error(`Cannot convert ${fieldOptions.type} field to string`);
       }
 
       output = $filter('simplifyText')(output);

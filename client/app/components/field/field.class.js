@@ -5,7 +5,6 @@ class Field {
     this.thumbnailField = false;
     this.gridOptions = {
       style: 'string', // string|thumbnail
-      cellFilter: 'field2String',
       enableSorting: true,
     };
     this.modeDisabled = {

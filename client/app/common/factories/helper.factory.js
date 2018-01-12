@@ -43,37 +43,46 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
     return service.getThumbnailUrl(thumbnail, transformSettings);
   };
 
-  service.getColumnOptions = (field) => {
-    if (!field) {
+  service.getColumnOptions = (fieldOptions) => {
+    if (!fieldOptions) {
       return null;
     }
 
-    const columnOptions = {
-      name: `fields.${field.slug}`,
-      displayName: field.name,
+    const colDef = {
+      fieldOptions,
+      name: `fields.${fieldOptions.slug}`,
+      displayName: fieldOptions.name,
       allowCellFocus: false,
     };
 
-    _.extend(columnOptions, FieldFactory.field(field.type).gridOptions);
+    _.extend(colDef, FieldFactory.field(fieldOptions.type).gridOptions);
 
-    if (columnOptions.style === 'thumbnail') {
-      columnOptions.enableSorting = false;
-      columnOptions.cellTemplate = `
+    if (colDef.style === 'string') {
+      colDef.cellTemplate = `
+        <div class="ui-grid-cell-contents">
+          <span>{{ grid.getCellValue(row, col) | field2String : col.colDef.fieldOptions }}</span>
+        </div>
+      `;
+    }
+
+    if (colDef.style === 'thumbnail') {
+      colDef.enableSorting = false;
+      colDef.cellTemplate = `
         <div class="ui-grid-cell-contents ui-grid-cell--image">
           <img ng-if="$root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col))" ng-src="{{ $root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col)) }}">
         </div>
       `;
     }
 
-    if (columnOptions.style === 'boolean') {
-      columnOptions.cellTemplate = `
+    if (colDef.style === 'boolean') {
+      colDef.cellTemplate = `
         <div class="ui-grid-cell-contents">
           <span class="{{grid.getCellValue(row, col).value | crossCheck}}"></span>
         </div>
       `;
     }
 
-    return columnOptions;
+    return colDef;
   };
 
   service.postPayload = (url, data) => {

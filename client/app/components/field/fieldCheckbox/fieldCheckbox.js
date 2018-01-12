@@ -16,7 +16,7 @@ const fieldCheckboxModule = angular.module('fieldCheckbox', [])
         style: 'boolean',
       },
       toString(value) {
-        return value ? 'true' : 'false';
+        return value ? '✓' : '✗';
       },
     });
 

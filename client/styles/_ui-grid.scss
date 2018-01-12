@@ -51,7 +51,13 @@
     font-size: 13px;
     display: flex;
     align-items: center;
-		padding: 5px 10px;
+    padding: 5px 10px;
+
+    span {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 	}
 }
 
