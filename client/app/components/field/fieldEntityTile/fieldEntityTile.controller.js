@@ -32,21 +32,28 @@ class FieldEntityTileController {
       return insertPoint;
     }
 
-    vm.newEntity = (schemaSlug) => {
-      EntityFactory.newEntity(schemaSlug)
-        .then((entity) => {
-          const insertPoint = getInsertPoint();
+    vm.newEntity = async (schemaSlug) => {
+      const entity = await EntityFactory.newEntity(schemaSlug);
 
-          if (insertPoint > -1) {
-            vm.fieldModel.value.splice(insertPoint, 0, entity);
-          } else {
-            vm.fieldModel.value.push(entity);
-          }
-        });
+      if (!entity) {
+        return;
+      }
+
+      const insertPoint = getInsertPoint();
+
+      if (insertPoint > -1) {
+        vm.fieldModel.value.splice(insertPoint, 0, entity);
+      } else {
+        vm.fieldModel.value.push(entity);
+      }
     };
 
     vm.insertEntity = async (schemaSlug) => {
       let selected = await EntityFactory.selectEntity(schemaSlug);
+
+      if (!selected) {
+        return;
+      }
 
       const insertPoint = getInsertPoint();
 
