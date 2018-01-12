@@ -15,6 +15,9 @@ const fieldRichTextModule = angular.module('fieldRichText', [])
       name: 'Rich Text',
       editSettings: FieldRichTextSettingsFactory.edit,
       toString(value) {
+        if (!value) {
+          return '';
+        }
         return $filter('cleanHTML')(value.html);
       },
       toDb(value, settings) {

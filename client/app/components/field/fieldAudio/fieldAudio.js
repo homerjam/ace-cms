@@ -19,6 +19,9 @@ const fieldAudioModule = angular.module('fieldAudio', [])
         batchUpload: true,
       },
       toString(value) {
+        if (!value) {
+          return '';
+        }
         return value.original ? value.original.fileName : '';
       },
     });

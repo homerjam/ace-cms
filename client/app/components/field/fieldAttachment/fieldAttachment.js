@@ -17,6 +17,9 @@ const fieldAttachmentModule = angular.module('fieldAttachment', [])
         batchUpload: true,
       },
       toString(value) {
+        if (!value) {
+          return '';
+        }
         return value.original ? value.original.fileName : '';
       },
     });

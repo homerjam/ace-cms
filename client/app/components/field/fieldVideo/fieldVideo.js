@@ -23,6 +23,9 @@ const fieldVideoModule = angular.module('fieldVideo', [])
         batchUpload: true,
       },
       toString(value) {
+        if (!value) {
+          return '';
+        }
         return value.original ? value.original.fileName : '';
       },
       thumbnail(value) {

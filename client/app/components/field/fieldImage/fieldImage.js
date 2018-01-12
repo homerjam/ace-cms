@@ -25,6 +25,9 @@ const fieldImageModule = angular.module('fieldImage', [
         batchEdit: true,
       },
       toString(value) {
+        if (!value) {
+          return '';
+        }
         return value.original ? value.original.fileName : '';
       },
       thumbnail(value) {
