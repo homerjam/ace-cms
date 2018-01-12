@@ -269,7 +269,7 @@ class AceCms {
       req.session.errorMessage = null;
       req.session.successMessage = null;
 
-      Api.Db.connect(apiConfig, slug).getAsync('config')
+      Api.Db.connect(apiConfig, slug).get('config')
         .then(
           (config) => {
             data.client = config.client;
