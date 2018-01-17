@@ -201,31 +201,42 @@ const SchemaFactory = function SchemaFactory ($rootScope, $http, $filter, $mdDia
       },
     };
 
+    let _schema;
+
     try {
-      schema = await $mdDialog.show(schemaDialog);
+      _schema = await $mdDialog.show(schemaDialog);
     } catch (error) {
       return false;
     }
 
-    const thumbnailFields = schema.fields.filter(field => FieldFactory.field(field.type).thumbnailField);
+    if (!_schema) {
+      await service.deleteSchemas([schema]);
 
-    schema.thumbnailFields = thumbnailFields.map(field => field.slug);
+      return false;
+    }
+
+    const thumbnailFields = _schema.fields.filter(field => FieldFactory.field(field.type).thumbnailField);
+
+    _schema.thumbnailFields = thumbnailFields.map(field => field.slug);
 
     if (createNew) {
-      config = (await $http.post(`${appConfig.apiUrl}/schema`, { schema })).data;
+      config = (await $http.post(`${appConfig.apiUrl}/schema`, { schema: _schema })).data;
     } else {
-      config = (await $http.put(`${appConfig.apiUrl}/schema`, { schema })).data;
+      config = (await $http.put(`${appConfig.apiUrl}/schema`, { schema: _schema })).data;
     }
 
     ConfigFactory.setConfig(config);
 
-    return schema;
+    return _schema;
   };
 
-  service.deleteSchemas = async (schemaSlugs, event) => {
+  service.deleteSchemas = async (schemas, event) => {
+    const schemaNames = schemas.map(schema => schema.name);
+    const schemaSlugs = schemas.map(schema => schema.slug);
+
     const confirmDialog = $mdDialog.confirm({
-      title: 'Delete Schema?',
-      textContent: 'Are you sure you want to delete the selected schemas?',
+      title: 'Delete Schema(s)?',
+      textContent: `Are you sure you want to delete ${schemaNames.join(',')}?`,
       targetEvent: event,
       ok: 'Confirm',
       cancel: 'Cancel',

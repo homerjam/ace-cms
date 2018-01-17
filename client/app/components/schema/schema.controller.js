@@ -50,9 +50,7 @@ class SchemaController {
     };
 
     vm.delete = async (event, selected) => {
-      const schemaSlugs = selected.map(schema => schema.slug);
-
-      const deleted = await SchemaFactory.deleteSchemas(schemaSlugs, event);
+      const deleted = await SchemaFactory.deleteSchemas(selected, event);
 
       if (deleted) {
         vm.schemas = ConfigFactory.getConfig().schemas;
