@@ -69,7 +69,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       colDef.enableSorting = false;
       colDef.cellTemplate = `
         <div class="ui-grid-cell-contents ui-grid-cell--image">
-          <img ng-if="$root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col))" ng-src="{{ $root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col)) }}">
+          <img ace-src-change ng-if="$root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col))" ng-src="{{ $root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col)) }}">
         </div>
       `;
     }

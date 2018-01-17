@@ -9,18 +9,20 @@ export default angular.module('ace.srcChange', []).directive('aceSrcChange', ['$
     let timeout;
     const BLANK = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
 
+    $element.on('load', () => {
+      $element.css('opacity', 1);
+    });
+
+    $element.on('error', () => {
+      $element.css('opacity', 1);
+    });
+
     $attrs.$observe('src', (newSrc) => {
-      $timeout.cancel(timeout);
+      console.dir($element[0]);
 
-      timeout = $timeout(() => {
-        if (newSrc !== oldSrc && newSrc !== BLANK) {
-          $attrs.$set('src', BLANK);
-
-          $timeout(() => {
-            $attrs.$set('src', newSrc);
-          });
-        }
-      }, 50);
+      if (oldSrc && newSrc !== oldSrc && !$element[0].complete) {
+        $element.css('opacity', 0);
+      }
 
       oldSrc = newSrc;
     });
