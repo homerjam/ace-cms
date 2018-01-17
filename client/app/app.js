@@ -176,7 +176,7 @@ angular.module('app', [
               .title('Not Authorised')
               .htmlContent(`
                 <p>${message}</p>
-                <!--<p>Please <a href="${$window.location.origin + appConfig.clientBasePath + appConfig.slug}/logout" target="_blank">login</a></p>-->
+                <p>Please <a href="${$window.location.origin + appConfig.clientBasePath + appConfig.slug}/logout" target="_blank">login</a> again.</p>
               `)
               .ok('Close')
           );
