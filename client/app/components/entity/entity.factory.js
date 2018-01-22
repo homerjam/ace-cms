@@ -70,6 +70,9 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
     // Convert fields to a readable format
     const fields = _.mapValues(entity.fields, (field, fieldSlug) => {
       const fieldOptions = schema.fields.filter(field => field.slug === fieldSlug)[0];
+      if (!fieldOptions) {
+        return null;
+      }
       return $filter('field2String')(field, fieldOptions, 10);
     });
 
