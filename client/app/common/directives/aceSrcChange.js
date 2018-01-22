@@ -6,8 +6,6 @@ export default angular.module('ace.srcChange', []).directive('aceSrcChange', ['$
 
   link($scope, $element, $attrs) {
     let oldSrc;
-    let timeout;
-    const BLANK = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
 
     $element.on('load', () => {
       $element.css('opacity', 1);
@@ -18,8 +16,6 @@ export default angular.module('ace.srcChange', []).directive('aceSrcChange', ['$
     });
 
     $attrs.$observe('src', (newSrc) => {
-      console.dir($element[0]);
-
       if (oldSrc && newSrc !== oldSrc && !$element[0].complete) {
         $element.css('opacity', 0);
       }
