@@ -65,6 +65,8 @@ class TaxonomyController {
 
       scope.$modelValue.terms.unshift(term);
 
+      scope.expand();
+
       $timeout(() => {
         editChild(scope);
       });
