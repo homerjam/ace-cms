@@ -90,9 +90,15 @@ class FieldEntityTileController {
       vm.selected = [];
     };
 
-    vm.getGridColumnFieldSlugs = schemaSlug =>
-      ConfigFactory.getSchema(schemaSlug)
-        .fields.filter(field => field.settings.gridColumn);
+    vm.getGridColumnFieldSlugs = (schemaSlug) => {
+      const schema = ConfigFactory.getSchema(schemaSlug);
+
+      if (!schema) {
+        return [];
+      }
+
+      return schema.fields.filter(field => field.settings.gridColumn);
+    };
 
     vm.hasPreview = (i) => {
       if (!vm.fieldModel.value[i]) {
