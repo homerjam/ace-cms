@@ -13,7 +13,7 @@ const FieldImageSettingsFactory = function FieldImageSettingsFactory($rootScope,
     maxWidth: 3000,
     maxHeight: 2000,
     dzi: false,
-    crop: [],
+    crops: [],
   };
 
   const defaultCrop = {
