@@ -13,7 +13,7 @@ const fieldNumberModule = angular.module('fieldNumber', [])
     FieldFactory.registerField('number', {
       name: 'Number',
       toString(value) {
-        if (!value) {
+        if (value === undefined || value === null) {
           return '';
         }
         return value.toString();

@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 const server = http.createServer(aceCms);
 
 server.on('listening', () => {
-  console.log(`Express server listening on port ${PORT}`);
+  console.log(`Running: http://localhost:${PORT + CLIENT_BASE_PATH}`);
 });
 
 server.listen(PORT);
