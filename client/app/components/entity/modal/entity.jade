@@ -9,13 +9,13 @@ md-dialog(aria-label="Entity")
     //- .md-dialog-content
 
     entity(
+      is-modal
       mode="{{vm.mode}}"
       entity="vm.entity"
       entities="vm.entities"
       schema="vm.schema"
       options="vm.options"
       entity-form="vm.entityForm"
-      modal="$modal"
     )
 
   md-dialog-actions(layout="row")

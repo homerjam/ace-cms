@@ -165,7 +165,10 @@ class EntityController {
         .then((entity) => {
           vm.entityForm.$setPristine();
 
-          if (!vm.schema.settings.singular) {
+          vm.entity._id = entity._id;
+          vm.entity._rev = entity._rev;
+
+          if ($state.$current.name === 'newEntity') {
             $state.go('entity', {
               id: entity._id,
             });
@@ -179,8 +182,11 @@ class EntityController {
       }
 
       EntityFactory.updateEntities(vm.entities, vm.entity, vm.schema, vm.options)
-        .then((entities) => {
+        .then((results) => {
           vm.entityForm.$setPristine();
+
+          vm.entity._id = results[0].id;
+          vm.entity._rev = results[0].rev;
         }, $log.error);
     };
 
