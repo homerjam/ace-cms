@@ -13,4 +13,12 @@ field-audio {
       text-overflow: ellipsis;
     }
   }
+
+  .dropzone {
+    flex: 1 1 100%;
+    cursor: copy;
+    padding: 8px;
+    border: 1px dotted lightgrey;
+    color: grey;
+  }
 }
