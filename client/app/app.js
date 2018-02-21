@@ -152,7 +152,7 @@ angular.module('app', [
 
     /* Locale */
 
-    tmhDynamicLocaleProvider.localeLocationPattern('angular-i18n/angular-locale_{{locale}}.js');
+    tmhDynamicLocaleProvider.localeLocationPattern('js/angular-i18n/angular-locale_{{locale}}.js');
     tmhDynamicLocaleProvider.defaultLocale('en-gb');
 
     /* Auth */

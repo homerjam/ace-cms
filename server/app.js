@@ -192,12 +192,6 @@ class AceCms {
 
     router.use(express.static(path.resolve(__dirname, '../public')));
 
-    if (fs.existsSync(path.resolve(__dirname, '../node_modules'))) {
-      router.use('/angular-i18n', express.static(path.resolve(__dirname, '../node_modules/angular-i18n')));
-    } else {
-      router.use('/angular-i18n', express.static(path.resolve(__dirname, '../../angular-i18n')));
-    }
-
     /* Force https */
 
     const forceHttps = (req, res, next) => {
