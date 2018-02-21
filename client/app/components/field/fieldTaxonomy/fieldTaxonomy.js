@@ -16,7 +16,7 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
       name: 'Taxonomy',
       editSettings: FieldTaxonomySettingsFactory.edit,
       toString(value) {
-        if (!value.terms) {
+        if (!value || !value.terms) {
           return '';
         }
 

@@ -185,8 +185,8 @@ class EntityController {
         .then((results) => {
           vm.entityForm.$setPristine();
 
-          vm.entity._id = results[0].id;
-          vm.entity._rev = results[0].rev;
+          vm.entity._id = results[0].id || results[0]._id;
+          vm.entity._rev = results[0].rev || results[0]._rev;
         }, $log.error);
     };
 
