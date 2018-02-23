@@ -5,98 +5,101 @@ class DashboardController {
   constructor($rootScope, $window, $http, ConfigFactory) {
     const vm = this;
 
-    const config = ConfigFactory.getConfig();
+    let config = ConfigFactory.getConfig();
 
-    vm.gaAuthorised = !!config.provider.google.access_token;
+    vm.gaAuthorised = !!config.provider.google.access_token && !!config.provider.google.refresh_token;
     vm.gaView = config.client.gaView;
 
     if (!vm.gaAuthorised || !vm.gaView) {
       return;
     }
 
-    const siteUrl = new $window.URL(config.client.baseUrl || '');
-    let siteHostname = siteUrl.hostname.split('.');
-    siteHostname = siteHostname.length >= 3 ? siteHostname.splice(1).join('.') : siteHostname.join('.');
+    ConfigFactory.refreshProvider('google')
+      .then((_config) => {
+        config = _config;
 
-    let currentHostname = $window.location.hostname.split('.');
-    currentHostname = currentHostname.length >= 3 ? currentHostname.splice(1).join('.') : currentHostname.join('.');
+        const siteUrl = new $window.URL(config.client.baseUrl || '');
+        let siteHostname = siteUrl.hostname.split('.');
+        siteHostname = siteHostname.length >= 3 ? siteHostname.splice(1).join('.') : siteHostname.join('.');
 
-    const excludedSources = [
-      currentHostname,
-      'localhost',
-    ];
+        let currentHostname = $window.location.hostname.split('.');
+        currentHostname = currentHostname.length >= 3 ? currentHostname.splice(1).join('.') : currentHostname.join('.');
 
-    const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
+        const excludedSources = [
+          currentHostname,
+          'localhost',
+        ];
 
-    $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
-      params: {
-        ids: `ga:${config.client.gaView}`,
-        'start-date': '7daysAgo',
-        'end-date': 'today',
-        dimensions: 'ga:date,ga:nthDay',
-        metrics: 'ga:sessions',
-        // filters: `ga:hostname=~${siteHostname};${sourcesFilter}`,
-        filters: sourcesFilter,
-      },
-    })
-      .then(({ data }) => {
-        if (data.totalResults === 0) {
-          return;
-        }
+        const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
 
-        const results = data.rows.map(row => ({
-          sessions: row[2],
-          date: moment(row[0], 'YYYYMMDD').format('DD/MM'),
-        }));
-
-        vm.sessionsChart = {
-          data: {
-            x: 'x ',
-            json: results,
-            keys: {
-              x: 'date',
-              value: ['sessions'],
-            },
-            names: {
-              sessions: 'Sessions',
-            },
+        $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
+          params: {
+            ids: `ga:${config.client.gaView}`,
+            'start-date': '7daysAgo',
+            'end-date': 'today',
+            dimensions: 'ga:date,ga:nthDay',
+            metrics: 'ga:sessions',
+            // filters: `ga:hostname=~${siteHostname};${sourcesFilter}`,
+            filters: sourcesFilter,
           },
-          axis: {
-            x: {
-              type: 'category',
-            },
+        })
+          .then(({ data }) => {
+            if (data.totalResults === 0) {
+              return;
+            }
+
+            const results = data.rows.map(row => ({
+              sessions: row[2],
+              date: moment(row[0], 'YYYYMMDD').format('DD/MM'),
+            }));
+
+            vm.sessionsChart = {
+              data: {
+                x: 'x ',
+                json: results,
+                keys: {
+                  x: 'date',
+                  value: ['sessions'],
+                },
+                names: {
+                  sessions: 'Sessions',
+                },
+              },
+              axis: {
+                x: {
+                  type: 'category',
+                },
+              },
+            };
+          });
+
+        $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
+          params: {
+            ids: `ga:${config.client.gaView}`,
+            'start-date': '7daysAgo',
+            'end-date': 'today',
+            dimensions: 'ga:source,ga:referralPath',
+            metrics: 'ga:sessions',
+            // filters: `ga:medium==referral;ga:hostname=~${siteHostname};${sourcesFilter}`,
+            filters: `ga:medium==referral;${sourcesFilter}`,
+            sort: '-ga:sessions',
           },
-        };
+        })
+          .then(({ data }) => {
+            if (data.totalResults === 0) {
+              vm.referrals = [];
+              return;
+            }
+
+            const results = data.rows.map(row => ({
+              source: row[0],
+              fullReferrer: row[0] + row[1],
+              sessions: row[2],
+            }));
+
+            vm.referrals = results.slice(0, 5);
+          });
       });
-
-    $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
-      params: {
-        ids: `ga:${config.client.gaView}`,
-        'start-date': '7daysAgo',
-        'end-date': 'today',
-        dimensions: 'ga:source,ga:referralPath',
-        metrics: 'ga:sessions',
-        // filters: `ga:medium==referral;ga:hostname=~${siteHostname};${sourcesFilter}`,
-        filters: `ga:medium==referral;${sourcesFilter}`,
-        sort: '-ga:sessions',
-      },
-    })
-      .then(({ data }) => {
-        if (data.totalResults === 0) {
-          vm.referrals = [];
-          return;
-        }
-
-        const results = data.rows.map(row => ({
-          source: row[0],
-          fullReferrer: row[0] + row[1],
-          sessions: row[2],
-        }));
-
-        vm.referrals = results.slice(0, 5);
-      });
-
-
   }
 }
 

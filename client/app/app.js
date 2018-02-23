@@ -172,7 +172,10 @@ angular.module('app', [
 
           console.error(response);
 
-          const message = response.data.message || response.data.error || response.data;
+          const message = response.data.message
+            || (response.data.error && response.data.error.message)
+            || response.data.error
+            || response.data;
 
           $mdDialog.show(
             $mdDialog.alert()
