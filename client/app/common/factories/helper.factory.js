@@ -123,18 +123,6 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
     $mdDialog.show(mediaPreviewDialog);
   };
 
-  service.analytics = params => $q((resolve, reject) => {
-    $http({
-      method: 'GET',
-      url: `${appConfig.apiUrl}/analytics`,
-      params: params || {},
-      cache: true,
-    })
-      .then((response) => {
-        resolve(response.data);
-      }, reject);
-  });
-
   service.oembed = url => $q((resolve, reject) => {
     $http({
       method: 'GET',

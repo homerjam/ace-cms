@@ -169,6 +169,9 @@ angular.module('app', [
 
           const $mdDialog = $injector.get('$mdDialog');
           const appConfig = $injector.get('appConfig');
+
+          console.error(response);
+
           const message = response.data.message || response.data.error || response.data;
 
           $mdDialog.show(
@@ -187,6 +190,16 @@ angular.module('app', [
     });
 
     /* Providers */
+
+    $authProvider.google({
+      scope: [
+        'profile',
+        'email',
+        'https://www.googleapis.com/auth/analytics.readonly',
+      ],
+      optionalUrlParams: ['access_type'],
+      accessType: 'offline',
+    });
 
     $authProvider.instagram({
       scope: ['basic', 'public_content'],

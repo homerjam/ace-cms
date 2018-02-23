@@ -2,12 +2,15 @@ import moment from 'moment';
 
 class DashboardController {
   /* @ngInject */
-  constructor($rootScope, $window, ConfigFactory, HelperFactory) {
+  constructor($rootScope, $window, $http, ConfigFactory) {
     const vm = this;
 
     const config = ConfigFactory.getConfig();
 
-    if (!config.client.baseUrl || config.client.baseUrl === '') {
+    vm.gaAuthorised = !!config.provider.google.access_token;
+    vm.gaView = config.client.gaView;
+
+    if (!vm.gaAuthorised || !vm.gaView) {
       return;
     }
 
@@ -25,24 +28,23 @@ class DashboardController {
 
     const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
 
-    if (config.client.gaView) {
-      vm.gaView = config.client.gaView;
-
-      HelperFactory.analytics({
+    $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
+      params: {
         ids: `ga:${config.client.gaView}`,
-        // 'start-date': moment(now).subtract(1, 'day').day(0).subtract(1, 'week').format('YYYY-MM-DD'),
-        // 'end-date': moment(now).format('YYYY-MM-DD'),
         'start-date': '7daysAgo',
         'end-date': 'today',
         dimensions: 'ga:date,ga:nthDay',
         metrics: 'ga:sessions',
-        filters: `ga:hostname=~${siteHostname};${sourcesFilter}`,
-      }).then((result) => {
-        if (result.totalResults === 0) {
+        // filters: `ga:hostname=~${siteHostname};${sourcesFilter}`,
+        filters: sourcesFilter,
+      },
+    })
+      .then(({ data }) => {
+        if (data.totalResults === 0) {
           return;
         }
 
-        const sessionsData = result.rows.map(row => ({
+        const results = data.rows.map(row => ({
           sessions: row[2],
           date: moment(row[0], 'YYYYMMDD').format('DD/MM'),
         }));
@@ -50,7 +52,7 @@ class DashboardController {
         vm.sessionsChart = {
           data: {
             x: 'x ',
-            json: sessionsData,
+            json: results,
             keys: {
               x: 'date',
               value: ['sessions'],
@@ -67,32 +69,34 @@ class DashboardController {
         };
       });
 
-      HelperFactory.analytics({
+    $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
+      params: {
         ids: `ga:${config.client.gaView}`,
-        // 'start-date': moment(now).subtract(1, 'day').day(0).subtract(1, 'week').format('YYYY-MM-DD'),
-        // 'end-date': moment(now).format('YYYY-MM-DD'),
         'start-date': '7daysAgo',
         'end-date': 'today',
         dimensions: 'ga:source,ga:referralPath',
         metrics: 'ga:sessions',
-        filters: `ga:medium==referral;ga:hostname=~${siteHostname};${sourcesFilter}`,
+        // filters: `ga:medium==referral;ga:hostname=~${siteHostname};${sourcesFilter}`,
+        filters: `ga:medium==referral;${sourcesFilter}`,
         sort: '-ga:sessions',
-      }).then((result) => {
-        if (result.totalResults === 0) {
+      },
+    })
+      .then(({ data }) => {
+        if (data.totalResults === 0) {
           vm.referrals = [];
           return;
         }
 
-        const data = result.rows.map(row => ({
+        const results = data.rows.map(row => ({
           source: row[0],
           fullReferrer: row[0] + row[1],
           sessions: row[2],
         }));
 
-        vm.referrals = data.slice(0, 5);
+        vm.referrals = results.slice(0, 5);
       });
 
-    }
+
   }
 }
 

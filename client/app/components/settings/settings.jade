@@ -22,6 +22,31 @@ md-content
         label Metadata Description
         textarea(ng-model="vm.config.client.metadata.description")
 
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
+        .md-toolbar-tools
+          h3 Google
+          span(flex)
+          md-button(ng-click="vm.authenticateWithProvider('google')") {{ vm.config.provider.google.access_token ? 'Reconnect' : 'Connect' }}
+          span(ng-show="vm.config.provider.google.access_token")
+            md-button(ng-click="vm.config.provider.google.access_token = null") Disconnect
+
+    div(flex, layout="row", layout-margin)
+
+      .md-subhead(ng-show="!vm.config.provider.google.access_token") Connect your Google account
+
+      md-list-item(ng-show="vm.config.provider.google.access_token")
+        img.md-avatar(ng-src="{{vm.config.provider.google.user.image.url}}")
+        .md-list-item-text
+          a(href="{{vm.config.provider.google.user.url}}", target="_blank") {{vm.config.provider.google.user.displayName}}
+
+    div(ng-show="vm.config.provider.google.access_token && vm.gaViews", flex, layout="row", layout-margin)
+
+      md-input-container.md-block
+        label Analytics View
+        md-select(ng-model="vm.config.client.gaView")
+          md-option(ng-repeat="view in vm.gaViews" value="{{view.id}}") {{view.websiteUrl}} ({{view.name}})
+
     span(ng-show="vm.config.providerEnabled.instagram")
 
       md-subheader.md-no-sticky
@@ -30,14 +55,14 @@ md-content
             h3 Instagram
             span(flex)
             md-button(ng-click="vm.authenticateWithProvider('instagram')") {{ vm.config.provider.instagram.access_token ? 'Reconnect' : 'Connect' }}
-            span(ng-show="vm.config.provider.instagram")
-              md-button(ng-click="vm.config.provider.instagram = null") Disconnect
+            span(ng-show="vm.config.provider.instagram.access_token")
+              md-button(ng-click="vm.config.provider.instagram.access_token = null") Disconnect
 
       div(flex, layout="row", layout-margin)
 
-        .md-subhead(ng-show="!vm.config.provider.instagram") Connect your Instagram account
+        .md-subhead(ng-show="!vm.config.provider.instagram.access_token") Connect your Instagram account
 
-        md-list-item(ng-show="vm.config.provider.instagram")
+        md-list-item(ng-show="vm.config.provider.instagram.access_token")
           img.md-avatar(ng-src="{{vm.config.provider.instagram.user.profile_picture}}")
           .md-list-item-text
             a(href="https://instagram.com/{{vm.config.provider.instagram.user.username}}", target="_blank") @{{vm.config.provider.instagram.user.username}}
@@ -50,14 +75,14 @@ md-content
             h3 Vimeo
             span(flex)
             md-button(ng-click="vm.authenticateWithProvider('vimeo')") {{ vm.config.provider.vimeo ? 'Reconnect' : 'Connect' }}
-            span(ng-show="vm.config.provider.vimeo")
-              md-button(ng-click="vm.config.provider.vimeo = null") Disconnect
+            span(ng-show="vm.config.provider.vimeo.access_token")
+              md-button(ng-click="vm.config.provider.vimeo.access_token = null") Disconnect
 
       div(flex, layout="row", layout-margin)
 
-        .md-subhead(ng-show="!vm.config.provider.vimeo") Connect your Vimeo account
+        .md-subhead(ng-show="!vm.config.provider.vimeo.access_token") Connect your Vimeo account
 
-        md-list-item(ng-show="vm.config.provider.vimeo")
+        md-list-item(ng-show="vm.config.provider.vimeo.access_token")
           img.md-avatar(ng-src="{{vm.config.provider.vimeo.user.pictures[3].link}}")
           .md-list-item-text
             a(href="{{vm.config.provider.vimeo.user.link}}", target="_blank") {{vm.config.provider.vimeo.user.name}}

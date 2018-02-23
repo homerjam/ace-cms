@@ -20,7 +20,8 @@ md-content
           md-card-title-text
             h4.md-title Sessions
         md-card-content
-          p(ng-if="!vm.gaView") Sessions info will appear here pending setup
+          p(ng-if="!vm.gaAuthorised || !vm.gaView")
+            a(ui-sref="settings") Setup Google Analytics
 
           .chart.chart--sessions(ng-if="vm.sessionsChart && vm.gaView")
             .chart__wrapper
@@ -32,7 +33,8 @@ md-content
           md-card-title-text
             h4.md-title Top Referrals
         md-card-content
-          p(ng-if="!vm.gaView") Referrals info will appear here pending setup
+          p(ng-if="!vm.gaAuthorised || !vm.gaView")
+            a(ui-sref="settings") Setup Google Analytics
 
           md-table-container(ng-if="vm.referrals && vm.gaView")
             table(md-table)
