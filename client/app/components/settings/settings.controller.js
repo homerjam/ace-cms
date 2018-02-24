@@ -5,6 +5,8 @@ class SettingsController {
 
     vm.config = ConfigFactory.getConfig();
 
+    vm.gaViews = [];
+
     const gaGetViews = async () => {
       vm.gaViews = (await $http.get(`https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties/~all/profiles?access_token=${vm.config.provider.google.access_token}`)).data.items;
       return vm.gaViews;
@@ -19,6 +21,9 @@ class SettingsController {
         .then((config) => {
           if (provider === 'google') {
             const providerConfig = config.provider[provider];
+
+            config.provider[provider].expires = providerConfig.expires_in + Math.floor(+new Date() / 1000);
+
             $http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${providerConfig.access_token}`)
               .then(async (result) => {
                 config.provider[provider].user = result.data;
@@ -32,6 +37,7 @@ class SettingsController {
                 vm.config = config;
                 ConfigFactory.saveConfig(config);
               });
+
             return;
           }
 

@@ -59,13 +59,21 @@ class AceCms {
       }));
 
     } else {
+      const redisOptions = {
+        ttl: config.session.ttl,
+      };
+
+      if (config.redis.url) {
+        redisOptions.url = config.redis.url;
+      } else {
+        redisOptions.host = config.redis.host;
+        redisOptions.port = config.redis.port;
+        redisOptions.password = config.redis.password;
+        redisOptions.db = config.redis.db;
+      }
+
       app.use(session({
-        store: new RedisStore({
-          host: config.redis.host,
-          port: config.redis.port,
-          pass: config.redis.password,
-          ttl: config.session.ttl ? parseInt(config.session.ttl, 10) : 7200,
-        }),
+        store: new RedisStore(redisOptions),
         secret: config.session.secret,
         resave: true,
         saveUninitialized: true,
@@ -85,7 +93,7 @@ class AceCms {
 
       req.session.referer = req.originalUrl;
 
-      const jwt = new Api.Jwt(apiConfig);
+      const jwt = Api.Jwt(apiConfig);
 
       if (config.environment === 'development') {
         if (!req.query.apiToken && !req.headers['x-api-token']) {
@@ -141,11 +149,11 @@ class AceCms {
 
         const userId = req.user.emails[0].value; // TODO: Replace email as userId?
 
-        const auth = new Api.Auth(apiConfig);
+        const auth = Api.Auth(apiConfig);
 
         auth.authoriseUser(slug, userId)
           .then((user) => {
-            const jwt = new Api.Jwt(apiConfig);
+            const jwt = Api.Jwt(apiConfig);
 
             const payload = {
               userId,
@@ -172,7 +180,7 @@ class AceCms {
     /* Register API Server */
 
     // const apiRouter = express.Router();
-    // app.use(config.apiRouterPath, apiRouter);
+    // app.use(config.api.routerPath, apiRouter);
     // ApiServer(apiRouter, apiConfig, authMiddleware);
 
     /* Auth Redirect */
@@ -263,7 +271,7 @@ class AceCms {
       req.session.errorMessage = null;
       req.session.successMessage = null;
 
-      Api.Db.connect(apiConfig, slug).get('config')
+      Api.Db(apiConfig, slug).get('config')
         .then(
           (config) => {
             data.client = config.client;
@@ -314,7 +322,7 @@ class AceCms {
         pageTitle: config.pageTitle,
         slug,
         session: req.session,
-        apiUrl: config.apiUrl,
+        apiUrl: config.api.url,
         apiToken,
         assistUrl: config.assist.url,
         assistCredentials,

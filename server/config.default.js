@@ -9,12 +9,14 @@ module.exports = {
   routerBasePath: process.env.ROUTER_BASE_PATH || '/',
   clientBasePath: process.env.CLIENT_BASE_PATH || '/',
 
-  apiRouterPath: process.env.API_ROUTER_PATH || '/api',
-  apiUrl: process.env.API_URL || '/api',
+  api: {
+    routerPath: process.env.API_ROUTER_PATH || '/api',
+    url: process.env.API_URL || '/api',
+  },
 
   session: {
-    secret: process.env.SESSION_SECRET,
-    ttl: process.env.SESSION_TTL,
+    secret: process.env.SESSION_SECRET || 'change_me',
+    ttl: parseInt(process.env.SESSION_TTL || 7200, 10),
   },
 
   auth0: {
@@ -25,9 +27,11 @@ module.exports = {
   },
 
   redis: {
+    url: process.env.REDIS_URL,
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
     password: process.env.REDIS_PASSWORD,
+    db: parseInt(process.env.REDIS_DB || 0, 10),
   },
 
   assist: {

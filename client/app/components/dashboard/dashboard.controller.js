@@ -14,92 +14,97 @@ class DashboardController {
       return;
     }
 
-    ConfigFactory.refreshProvider('google')
-      .then((_config) => {
-        config = _config;
+    const init = async () => {
+      if (config.provider.google.expires < Math.floor(+new Date() / 1000)) {
+        config = await ConfigFactory.refreshProvider('google');
+      }
 
-        const siteUrl = new $window.URL(config.client.baseUrl || '');
-        let siteHostname = siteUrl.hostname.split('.');
-        siteHostname = siteHostname.length >= 3 ? siteHostname.splice(1).join('.') : siteHostname.join('.');
+      const siteUrl = new $window.URL(config.client.baseUrl || '');
+      let siteHostname = siteUrl.hostname.split('.');
+      siteHostname = siteHostname.length >= 3 ? siteHostname.splice(1).join('.') : siteHostname.join('.');
 
-        let currentHostname = $window.location.hostname.split('.');
-        currentHostname = currentHostname.length >= 3 ? currentHostname.splice(1).join('.') : currentHostname.join('.');
+      let currentHostname = $window.location.hostname.split('.');
+      currentHostname = currentHostname.length >= 3 ? currentHostname.splice(1).join('.') : currentHostname.join('.');
 
-        const excludedSources = [
-          currentHostname,
-          'localhost',
-        ];
+      const excludedSources = [
+        currentHostname,
+        'localhost',
+      ];
 
-        const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
+      const sourcesFilter = excludedSources.map(str => `ga:source!~${str}`).join(';');
 
-        $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
-          params: {
-            ids: `ga:${config.client.gaView}`,
-            'start-date': '7daysAgo',
-            'end-date': 'today',
-            dimensions: 'ga:date,ga:nthDay',
-            metrics: 'ga:sessions',
-            // filters: `ga:hostname=~${siteHostname};${sourcesFilter}`,
-            filters: sourcesFilter,
-          },
-        })
-          .then(({ data }) => {
-            if (data.totalResults === 0) {
-              return;
-            }
+      $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
+        cache: true,
+        params: {
+          ids: `ga:${config.client.gaView}`,
+          'start-date': '7daysAgo',
+          'end-date': 'today',
+          dimensions: 'ga:date,ga:nthDay',
+          metrics: 'ga:sessions',
+          // filters: `ga:hostname=~${siteHostname};${sourcesFilter}`,
+          filters: sourcesFilter,
+        },
+      })
+        .then(({ data }) => {
+          if (data.totalResults === 0) {
+            return;
+          }
 
-            const results = data.rows.map(row => ({
-              sessions: row[2],
-              date: moment(row[0], 'YYYYMMDD').format('DD/MM'),
-            }));
+          const results = data.rows.map(row => ({
+            sessions: row[2],
+            date: moment(row[0], 'YYYYMMDD').format('DD/MM'),
+          }));
 
-            vm.sessionsChart = {
-              data: {
-                x: 'x ',
-                json: results,
-                keys: {
-                  x: 'date',
-                  value: ['sessions'],
-                },
-                names: {
-                  sessions: 'Sessions',
-                },
+          vm.sessionsChart = {
+            data: {
+              x: 'x ',
+              json: results,
+              keys: {
+                x: 'date',
+                value: ['sessions'],
               },
-              axis: {
-                x: {
-                  type: 'category',
-                },
+              names: {
+                sessions: 'Sessions',
               },
-            };
-          });
+            },
+            axis: {
+              x: {
+                type: 'category',
+              },
+            },
+          };
+        });
 
-        $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
-          params: {
-            ids: `ga:${config.client.gaView}`,
-            'start-date': '7daysAgo',
-            'end-date': 'today',
-            dimensions: 'ga:source,ga:referralPath',
-            metrics: 'ga:sessions',
-            // filters: `ga:medium==referral;ga:hostname=~${siteHostname};${sourcesFilter}`,
-            filters: `ga:medium==referral;${sourcesFilter}`,
-            sort: '-ga:sessions',
-          },
-        })
-          .then(({ data }) => {
-            if (data.totalResults === 0) {
-              vm.referrals = [];
-              return;
-            }
+      $http.get(`https://www.googleapis.com/analytics/v3/data/ga?access_token=${config.provider.google.access_token}`, {
+        cache: true,
+        params: {
+          ids: `ga:${config.client.gaView}`,
+          'start-date': '7daysAgo',
+          'end-date': 'today',
+          dimensions: 'ga:source,ga:referralPath',
+          metrics: 'ga:sessions',
+          // filters: `ga:medium==referral;ga:hostname=~${siteHostname};${sourcesFilter}`,
+          filters: `ga:medium==referral;${sourcesFilter}`,
+          sort: '-ga:sessions',
+        },
+      })
+        .then(({ data }) => {
+          if (data.totalResults === 0) {
+            vm.referrals = [];
+            return;
+          }
 
-            const results = data.rows.map(row => ({
-              source: row[0],
-              fullReferrer: row[0] + row[1],
-              sessions: row[2],
-            }));
+          const results = data.rows.map(row => ({
+            source: row[0],
+            fullReferrer: row[0] + row[1],
+            sessions: row[2],
+          }));
 
-            vm.referrals = results.slice(0, 5);
-          });
-      });
+          vm.referrals = results.slice(0, 5);
+        });
+    };
+
+    init();
   }
 }
 

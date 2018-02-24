@@ -40,7 +40,7 @@ md-content
         .md-list-item-text
           a(href="{{vm.config.provider.google.user.url}}", target="_blank") {{vm.config.provider.google.user.displayName}}
 
-    div(ng-show="vm.config.provider.google.access_token && vm.gaViews", flex, layout="row", layout-margin)
+    div(ng-show="vm.config.provider.google.access_token", flex, layout="row", layout-margin)
 
       md-input-container.md-block
         label Analytics View
