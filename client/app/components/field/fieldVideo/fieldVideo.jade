@@ -25,8 +25,10 @@
 
     div(flex, layout="row", layout-margin, ng-show="!vm.uploading && vm.fieldModel.value")
       div(flex)
-        div(ng-if="!vm.fieldModel.value.metadata.zencoder.thumbnail.url") Encoding. Please wait or save and come back later.
-        img(ng-if="vm.fieldModel.value.metadata.zencoder.thumbnail.url", ng-src="{{vm.fieldModel.value.metadata.zencoder.thumbnail.url}}")
+        video(
+          controls
+          ng-src="{{ $root.$helper.fileTransformSrc(vm.fieldModel.value.file, 'h:360;bv:1000') }}"
+        )
 
       div(flex)
         table

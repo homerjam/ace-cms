@@ -16,8 +16,8 @@ class FieldImageController {
     }
 
     vm.download = () => {
-      const fileName = vm.fieldModel.value.original.fileName.replace(/^(#|\?)/, '_');
-      $window.open(`${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.fileName}/${fileName}`);
+      const originalFileName = vm.fieldModel.value.original.fileName.replace(/^(#|\?)/, '_');
+      $window.open(`${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name + vm.fieldModel.value.file.ext}/${originalFileName}`);
     };
 
     vm.dzi = async () => {
@@ -33,7 +33,7 @@ class FieldImageController {
           image: [
             $rootScope.assistUrl,
             $rootScope.assetSlug,
-            vm.fieldModel.value.dzi.dir,
+            vm.fieldModel.value.file.name,
             vm.fieldModel.value.dzi.fileName].join('/'),
         },
       };
@@ -76,11 +76,11 @@ class FieldImageController {
     vm.preview = () => {
       HelperFactory.mediaPreview([{
         type: 'image',
-        src: [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', 'h:1000;q:80', vm.fieldModel.value.fileName].join('/'),
+        src: [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', 'h:1000;q:80', vm.fieldModel.value.file.name + vm.fieldModel.value.file.ext].join('/'),
       }], 0);
     };
 
-    vm.getThumbnail = settings => (vm.fieldModel.value ? [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', settings, vm.fieldModel.value.fileName].join('/') : null);
+    vm.getThumbnail = settings => (vm.fieldModel.value ? [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', settings, vm.fieldModel.value.file.name + vm.fieldModel.value.file.ext].join('/') : null);
 
     const settings = vm.fieldOptions.settings || {};
 
@@ -214,16 +214,20 @@ class FieldImageController {
           return valid;
         },
         fileSuccess: (flow, file, message) => {
-          const info = JSON.parse(message);
+          const result = JSON.parse(message);
 
-          if (vm.fieldModel.value) {
-            vm.fieldModel.value = null;
-          }
+          const metadata = {
+            width: result.metadata.width,
+            height: result.metadata.height,
+            format: result.metadata.format,
+          };
 
-          FileFactory.createFile(info)
-            .then((newFile) => {
-              vm.fieldModel.value = newFile;
-            });
+          vm.fieldModel.value = {
+            file: result.file,
+            original: result.original,
+            dzi: result.metadata.dzi,
+            metadata,
+          };
         },
         filesSubmitted: (flow, files) => {
           // Trigger a batch upload event, send files

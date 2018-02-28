@@ -8,7 +8,7 @@ const fieldVideoModule = angular.module('fieldVideo', [])
     'ngInject';
   })
 
-  .run((FieldFactory, FieldVideoSettingsFactory) => {
+  .run(($rootScope, FieldFactory, FieldVideoSettingsFactory) => {
     'ngInject';
 
     FieldFactory.registerField('video', {
@@ -29,22 +29,20 @@ const fieldVideoModule = angular.module('fieldVideo', [])
         return value.original ? value.original.fileName : '';
       },
       thumbnail(value) {
-        let thumbnailUrl;
-        let width;
-        let height;
-        try {
-          thumbnailUrl = value.metadata.zencoder.thumbnail.url;
-          width = value.metadata.zencoder.thumbnail.width;
-          height = value.metadata.zencoder.thumbnail.height;
-        } catch (error) {
-          //
+        if (!value) {
+          return null;
         }
-        return {
+
+        const thumbnail = {
           thumbnailType: 'video',
-          thumbnailUrl,
-          width,
-          height,
+          thumbnailUrl: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/${value.file.name}/thumb.jpg`,
+          mimeType: value.original.mimeType,
+          fileName: value.file.name + value.file.ext,
+          width: value.metadata ? value.metadata.width || 0 : value.width || 0,
+          height: value.metadata ? value.metadata.height || 0 : value.height || 0,
         };
+
+        return thumbnail;
       },
     });
 

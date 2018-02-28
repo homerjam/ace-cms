@@ -25,6 +25,14 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
     return array;
   };
 
+  service.fileTransformSrc = (file, transformSettings = 'h:200;q:60') => {
+    if (!file) {
+      return null;
+    }
+
+    return [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', transformSettings, file.name + file.ext].join('/');
+  };
+
   service.getThumbnailUrl = (thumbnail, transformSettings = 'h:200;q:60') => {
     if (!thumbnail || !thumbnail.thumbnailUrl) {
       return null;
