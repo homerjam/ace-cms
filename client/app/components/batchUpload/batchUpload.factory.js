@@ -57,14 +57,18 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
       headers: {
         Authorization: `Basic ${$rootScope.assistCredentials}`,
       },
-      initFileFn: (file) => {
-        const fileName = file.file.name;
-
-        if (file._prepared) {
+      initFileFn: (flowFile) => {
+        if (field.type !== 'image') {
           return;
         }
 
-        file.pause();
+        if (flowFile._prepared) {
+          return;
+        }
+
+        const fileName = flowFile.file.name;
+
+        flowFile.pause();
 
         const imagePrep = new ImagePrep({
           maxWidth: uploadOptions.resize.maxWidth,
@@ -72,24 +76,24 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
           quality: uploadOptions.resize.quality,
         });
 
-        imagePrep.loadImage(file.file)
+        imagePrep.loadImage(flowFile.file)
           .then((result) => {
-            file._prepared = true;
+            flowFile._prepared = true;
 
-            file.file = result.blob;
-            file.file.name = fileName;
-            file.size = file.file.size;
+            flowFile.file = result.blob;
+            flowFile.file.name = fileName;
+            flowFile.size = flowFile.file.size;
 
-            file.bootstrap();
+            flowFile.bootstrap();
 
             function upload() {
-              file._status = 'uploading';
-              file.resume();
+              flowFile._status = 'uploading';
+              flowFile.resume();
             }
 
             function cancel() {
-              file._status = 'canceled';
-              // file.cancel();
+              flowFile._status = 'canceled';
+              // flowFile.cancel();
             }
 
             if (
@@ -97,9 +101,9 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
               || (result.profile && result.profile.colorSpace !== 'RGB')
               || (result.profile && result.profile.colorSpace === 'RGB' && !/sRGB/i.test(result.profile.description))
             ) {
-              file._validProfile = false;
+              flowFile._validProfile = false;
             } else {
-              file._validProfile = true;
+              flowFile._validProfile = true;
             }
 
             // if (!result.profile) {
@@ -164,24 +168,34 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
     });
 
     flow.on('fileSuccess', (file, message) => {
-      const info = JSON.parse(message);
+      const result = JSON.parse(message);
 
-      FileFactory.createFile(info)
-        .then((newFile) => {
-          const _entity = angular.copy(entity);
+      const _entity = angular.copy(entity);
 
-          if (!_entity.fields[field.slug]) {
-            _entity.fields[field.slug] = {};
-          }
+      if (!_entity.fields[field.slug]) {
+        _entity.fields[field.slug] = {};
+      }
 
-          _entity.fields[field.slug].value = newFile;
+      if (field.type === 'image') {
+        const metadata = {
+          width: result.metadata.width,
+          height: result.metadata.height,
+          format: result.metadata.format,
+        };
 
-          EntityFactory.createEntity(schema.slug, _entity)
-            .then(() => {
-              file._status = 'complete';
+        _entity.fields[field.slug].value = {
+          file: result.file,
+          original: result.original,
+          dzi: result.metadata.dzi,
+          metadata,
+        };
+      }
 
-              onComplete(flow, file, _entity);
-            });
+      EntityFactory.createEntity(schema.slug, _entity)
+        .then(() => {
+          file._status = 'complete';
+
+          onComplete(flow, file, _entity);
         });
     });
 

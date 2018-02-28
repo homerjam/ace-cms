@@ -5,13 +5,15 @@ class FieldAttachmentController {
 
     const attachmentExtensions = 'pdf,doc,docx,csv,xls,txt';
 
+    const uploadOptions = vm.fieldOptions;
+
     vm.flowOptions = {
-      target: `${appConfig.apiUrl}/upload`,
-      headers: {
-        'X-Api-Token': $rootScope.apiToken,
-      },
+      target: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/upload`,
       query: {
-        options: JSON.stringify(vm.fieldOptions),
+        options: JSON.stringify(uploadOptions),
+      },
+      headers: {
+        Authorization: `Basic ${$rootScope.assistCredentials}`,
       },
       singleFile: true,
       events: {
@@ -34,9 +36,17 @@ class FieldAttachmentController {
           return valid;
         },
         fileSuccess: (flow, file, message) => {
-          const _file = JSON.parse(message);
+          const result = JSON.parse(message);
 
-          vm.fieldModel.value = _file;
+          const metadata = {
+            format: result.file.ext.replace('.', ''),
+          };
+
+          vm.fieldModel.value = {
+            file: result.file,
+            original: result.original,
+            metadata,
+          };
         },
         filesSubmitted: (flow, files) => {
           if (files.filter(file => file.valid).length) {
@@ -64,17 +74,11 @@ class FieldAttachmentController {
     };
 
     vm.download = () => {
-      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}&filename=${vm.fieldModel.value.original.fileName}&apiToken=${$rootScope.apiToken}`);
+      $window.open(`${appConfig.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`);
     };
 
     vm.fileUrl = async () => {
-      const apiToken = (await $http.get(`${appConfig.apiUrl}/token`, { params: { slug: appConfig.slug, role: 'guest' } })).data.token;
-
-      const apiFileUrl = `${appConfig.apiUrl}/file/s3/${vm.fieldModel.value.metadata.s3.bucket}/${vm.fieldModel.value.metadata.s3.src}/${vm.fieldModel.value.original.fileName}?apiToken=${apiToken}`;
-
-      const locationUrl = `${$location.protocol()}://${$location.host()}${[80, 443].indexOf($location.port()) === -1 ? `:${$location.port()}` : ''}`;
-
-      const fileUrl = /https?:\/\//.test(apiFileUrl) ? apiFileUrl : locationUrl + apiFileUrl;
+      const fileUrl = `${appConfig.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`;
 
       $mdDialog.show(
         $mdDialog.prompt()

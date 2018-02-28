@@ -1,4 +1,5 @@
-span(ace-flow options="vm.flowOptions")
+.field-wrapper(ace-flow, options="vm.flowOptions")
+
   md-subheader.md-no-sticky
     md-toolbar.md-menu-toolbar.md-secondary
       .md-toolbar-tools
@@ -33,4 +34,4 @@ span(ace-flow options="vm.flowOptions")
             td {{vm.fieldModel.value.original.mimeType}}
           tr
             td Filesize
-            td {{vm.fieldModel.value.original.fileSize | fileSize}}
+            td {{vm.fieldModel.value.file.size | fileSize}}

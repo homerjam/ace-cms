@@ -5,13 +5,15 @@ class FieldAudioController {
 
     const audioExtensions = 'mp3,aac,wav,flac,ogg,wma';
 
+    const uploadOptions = vm.fieldOptions;
+
     vm.flowOptions = {
-      target: `${appConfig.apiUrl}/upload`,
-      headers: {
-        'X-Api-Token': $rootScope.apiToken,
-      },
+      target: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/upload`,
       query: {
-        options: JSON.stringify(vm.fieldOptions),
+        options: JSON.stringify(uploadOptions),
+      },
+      headers: {
+        Authorization: `Basic ${$rootScope.assistCredentials}`,
       },
       singleFile: true,
       events: {
@@ -34,11 +36,20 @@ class FieldAudioController {
           return valid;
         },
         fileSuccess: (flow, file, message) => {
-          const _file = JSON.parse(message);
+          const result = JSON.parse(message);
 
-          vm.fieldModel.value = _file;
+          const audioStream = result.metadata.streams.filter(stream => stream.codec_type === 'audio')[0];
 
-          checkZencoderJob();
+          const metadata = {
+            duration: result.metadata.format.duration,
+            format: result.file.ext.replace('.', ''),
+          };
+
+          vm.fieldModel.value = {
+            file: result.file,
+            original: result.original,
+            metadata,
+          };
         },
         filesSubmitted: (flow, files) => {
           if (files.filter(file => file.valid).length) {
@@ -65,26 +76,8 @@ class FieldAudioController {
       },
     };
 
-    function checkZencoderJob () {
-      $http.get(`${appConfig.apiUrl}/zencode/job`, {
-        params: {
-          id: vm.fieldModel.value.metadata.zencoder.job.id,
-        },
-      })
-        .then((response) => {
-          const job = response.data;
-
-          if (/pending|waiting|processing/.test(job.jobState)) {
-            $timeout(checkZencoderJob, 10000);
-            return;
-          }
-
-          vm.fieldModel.value.metadata.zencoder = job;
-        });
-    }
-
     vm.download = () => {
-      $window.open(`${appConfig.apiUrl}/file/download/s3?bucket=${vm.fieldModel.value.metadata.s3.bucket}&key=${vm.fieldModel.value.metadata.s3.src}&filename=${vm.fieldModel.value.original.fileName}&apiToken=${$rootScope.apiToken}`);
+      $window.open(`${appConfig.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`);
     };
   }
 }

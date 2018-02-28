@@ -112,19 +112,19 @@ class FieldImageController {
         Authorization: `Basic ${$rootScope.assistCredentials}`,
       },
       singleFile: mode !== 'batchUpload',
-      initFileFn: (file) => {
+      initFileFn: (flowFile) => {
         // Don't process files, just send to batch uploader
         if (mode === 'batchUpload') {
           return;
         }
 
-        const fileName = file.file.name;
-
-        if (file._prepared) {
+        if (flowFile._prepared) {
           return;
         }
 
-        file.pause();
+        const fileName = flowFile.file.name;
+
+        flowFile.pause();
 
         const imagePrep = new ImagePrep({
           maxWidth: uploadOptions.resize.maxWidth,
@@ -132,24 +132,24 @@ class FieldImageController {
           quality: uploadOptions.resize.quality,
         });
 
-        imagePrep.loadImage(file.file)
+        imagePrep.loadImage(flowFile.file)
           .then((result) => {
-            file._prepared = true;
+            flowFile._prepared = true;
 
-            file.file = result.blob;
-            file.file.name = fileName;
-            file.size = file.file.size;
+            flowFile.file = result.blob;
+            flowFile.file.name = fileName;
+            flowFile.size = flowFile.file.size;
 
-            file.bootstrap();
+            flowFile.bootstrap();
 
             function upload() {
-              file._status = 'uploading';
-              file.resume();
+              flowFile._status = 'uploading';
+              flowFile.resume();
             }
 
             function cancel() {
-              file._status = 'canceled';
-              file.cancel();
+              flowFile._status = 'canceled';
+              flowFile.cancel();
             }
 
             if (!result.profile) {
