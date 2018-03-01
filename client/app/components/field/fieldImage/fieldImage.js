@@ -35,11 +35,14 @@ const fieldImageModule = angular.module('fieldImage', [
           return null;
         }
 
+        const fileName = value.fileName || (value.name || value.file.name) + (value.ext || value.file.ext);
+
         const thumbnail = {
           thumbnailType: 'image',
-          thumbnailUrl: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/${value.file.name + value.file.ext}`,
-          mimeType: value.original.mimeType,
-          fileName: value.file.name + value.file.ext,
+          thumbnailUrl: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/${fileName}`,
+          fileName,
+          name: value.name || value.file.name,
+          ext: value.ext || value.file.ext,
           width: value.metadata ? value.metadata.width || 0 : value.width || 0,
           height: value.metadata ? value.metadata.height || 0 : value.height || 0,
         };

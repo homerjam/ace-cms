@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment from 'moment';
 
 class DashboardController {
@@ -7,7 +8,7 @@ class DashboardController {
 
     let config = ConfigFactory.getConfig();
 
-    vm.gaAuthorised = !!config.provider.google.access_token && !!config.provider.google.refresh_token;
+    vm.gaAuthorised = !!_.get(config, 'provider.google.access_token') && !!_.get(config, 'provider.google.refresh_token');
     vm.gaView = config.client.gaView;
 
     if (!vm.gaAuthorised || !vm.gaView) {

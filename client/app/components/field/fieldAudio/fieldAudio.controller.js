@@ -41,7 +41,7 @@ class FieldAudioController {
           const audioStream = result.metadata.streams.filter(stream => stream.codec_type === 'audio')[0];
 
           const metadata = {
-            duration: result.metadata.format.duration,
+            duration: Number(result.metadata.format.duration) * 1000,
             format: result.file.ext.replace('.', ''),
           };
 

@@ -16,34 +16,20 @@ class SettingsController {
       SettingsFactory.save(vm.config.client);
     };
 
-    vm.authenticateWithProvider = (provider) => {
-      ConfigFactory.authenticateWithProvider(provider)
-        .then((config) => {
-          if (provider === 'google') {
-            const providerConfig = config.provider[provider];
+    vm.authenticateWithProvider = async (provider) => {
+      const config = await ConfigFactory.authenticateWithProvider(provider);
 
-            config.provider[provider].expires = providerConfig.expires_in + Math.floor(+new Date() / 1000);
+      vm.config = config;
 
-            $http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${providerConfig.access_token}`)
-              .then(async (result) => {
-                config.provider[provider].user = result.data;
+      if (provider === 'google') {
+        const views = await gaGetViews();
 
-                const views = await gaGetViews();
+        if (views.length) {
+          vm.config.client.gaView = views[0].id;
+        }
+      }
 
-                if (views.length) {
-                  config.client.gaView = views[0].id;
-                }
-
-                vm.config = config;
-                ConfigFactory.saveConfig(config);
-              });
-
-            return;
-          }
-
-          vm.config = config;
-          ConfigFactory.setConfig(config);
-        });
+      ConfigFactory.setConfig(vm.config);
     };
 
     if (vm.config.provider.google) {

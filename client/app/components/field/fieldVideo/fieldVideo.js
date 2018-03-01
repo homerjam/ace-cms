@@ -33,13 +33,17 @@ const fieldVideoModule = angular.module('fieldVideo', [])
           return null;
         }
 
+        const fileName = value.fileName || value.file.name + value.file.ext;
+
         const thumbnail = {
           thumbnailType: 'video',
-          thumbnailUrl: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/${value.file.name}/thumb.jpg`,
-          mimeType: value.original.mimeType,
-          fileName: value.file.name + value.file.ext,
+          thumbnailUrl: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/${value.name || value.file.name}/thumb.jpg`,
+          fileName,
+          name: value.name || value.file.name,
+          ext: value.ext || value.file.ext,
           width: value.metadata ? value.metadata.width || 0 : value.width || 0,
           height: value.metadata ? value.metadata.height || 0 : value.height || 0,
+          duration: value.metadata ? value.metadata.duration || 0 : value.duration || 0,
         };
 
         return thumbnail;
