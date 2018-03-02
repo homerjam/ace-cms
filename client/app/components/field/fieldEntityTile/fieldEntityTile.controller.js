@@ -73,15 +73,20 @@ class FieldEntityTileController {
     vm.entityEdit = (event, entity) => {
       event.stopPropagation();
 
-      EntityFactory.editEntities([entity]).then((updatedEntities) => {
-        vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1, updatedEntities[0]);
-      });
+      EntityFactory.editEntities([entity])
+        .then((updatedEntities) => {
+          if (updatedEntities) {
+            const index = _.findIndex(vm.fieldModel.value, { id: entity.id });
+            vm.fieldModel.value.splice(index, 1, updatedEntities[0]);
+          }
+        });
     };
 
     vm.entityRemove = (event, entity) => {
       event.stopPropagation();
 
-      vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1);
+      const index = _.findIndex(vm.fieldModel.value, { id: entity.id });
+      vm.fieldModel.value.splice(index, 1);
     };
 
     vm.removeSelected = () => {
