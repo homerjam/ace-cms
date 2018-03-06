@@ -103,17 +103,13 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
   });
 
   service.refreshProvider = async (provider) => {
-    try {
-      const config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}`, {
-        refresh_token: Config.provider[provider].refresh_token,
-      })).data;
+    const config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}`, {
+      refresh_token: Config.provider[provider].refresh_token,
+    })).data;
 
-      service.setConfig(config);
+    service.setConfig(config);
 
-      return config;
-    } catch (error) {
-      console.error(error);
-    }
+    return config;
   };
 
   return service;
