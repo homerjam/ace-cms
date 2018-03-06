@@ -14,6 +14,7 @@ module.exports = {
   api: {
     routerPath: process.env.API_ROUTER_PATH || '/api',
     url: process.env.API_URL || '/api',
+    tokenExpiresIn: parseInt(process.env.API_TOKEN_EXPIRES_IN || 86400, 10),
   },
 
   session: {

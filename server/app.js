@@ -23,7 +23,6 @@ const packageJson = require('../package.json');
 const defaultConfig = require('./config.default');
 
 const VERSION = packageJson.version;
-const API_TOKEN_EXPIRES_IN = 86400;
 
 /* App */
 
@@ -160,7 +159,7 @@ class AceCms {
 
         const userId = req.user.emails[0].value; // TODO: Replace email as userId?
 
-        const auth = Api.Auth(apiConfig);
+        const auth = Api.Auth(apiConfig); // TODO: Authorise via API_URL
 
         auth.authoriseUser(slug, userId)
           .then((user) => {
@@ -173,7 +172,7 @@ class AceCms {
             };
 
             const apiToken = jwt.signToken(payload, {
-              expiresIn: API_TOKEN_EXPIRES_IN,
+              expiresIn: config.api.tokenExpiresIn,
             });
 
             res.redirect(`${config.clientBasePath + slug}?apiToken=${apiToken}`);
