@@ -27,6 +27,7 @@ md-content
         .md-toolbar-tools
           h3 Google
           span(flex)
+          md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
           md-button(ng-click="vm.authenticateWithProvider('google')") {{ vm.config.provider.google.access_token ? 'Reconnect' : 'Connect' }}
           //- span(ng-show="vm.config.provider.google.access_token")
           //-   md-button(ng-click="vm.config.provider.google.access_token = null") Disconnect
