@@ -49,6 +49,17 @@ class AceCms {
     app.use(useragent.express());
     app.use(compression());
 
+    /* Maintenance */
+
+    if (config.maintenance) {
+      app.use((req, res) => {
+        res.render('maintenance', {
+          pageTitle: config.pageTitle,
+        });
+      });
+      return app;
+    }
+
     /* Session */
 
     if (config.environment === 'development') {

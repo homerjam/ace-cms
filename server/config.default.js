@@ -3,6 +3,8 @@ module.exports = {
 
   pageTitle: process.env.PAGE_TITLE || 'ACE CMS',
 
+  maintenance: process.env.MAINTENANCE ? JSON.parse(process.env.MAINTENANCE) : false,
+
   forceHttps: process.env.FORCE_HTTPS ? JSON.parse(process.env.FORCE_HTTPS) : false,
   forceWww: process.env.FORCE_WWW ? JSON.parse(process.env.FORCE_WWW) : false,
 
