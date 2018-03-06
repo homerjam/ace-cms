@@ -132,7 +132,7 @@ class FieldEntityTileController {
 
         media.push({
           type: 'image',
-          src: EntityFactory.getEntityThumbnailUrl(item, 'h:1000;q:80'),
+          src: EntityFactory.getEntityThumbnailSrc(item, 'h:1000;q:80'),
         });
       });
 

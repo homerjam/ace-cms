@@ -104,7 +104,7 @@ class FieldRichTextController {
     function appendBookmarkPreviewEntity(bookmarkPreview, entity) {
       if (entity.thumbnail) {
         bookmarkPreview.append(`
-          <img src="${HelperFactory.getThumbnailUrl(entity.thumbnail, 'h:200;q:60')}">
+          <img src="${HelperFactory.thumbnailSrc(entity.thumbnail, 'h:200;q:60')}">
         `);
       }
       // bookmarkPreview.append(`

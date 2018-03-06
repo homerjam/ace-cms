@@ -25,30 +25,113 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
     return array;
   };
 
-  service.fileTransformSrc = (file, transformSettings = 'h:200;q:60') => {
-    if (!file) {
-      return null;
+  service.thumbnailSrc = (thumbnail, settings, cropSlug, cropDefault) => {
+    if (!thumbnail) {
+      return '';
     }
 
-    return [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', transformSettings, file.name + file.ext].join('/');
-  };
+    let settingsArray;
 
-  service.getThumbnailUrl = (thumbnail, transformSettings = 'h:200;q:60') => {
-    if (!thumbnail || !thumbnail.thumbnailUrl) {
-      return null;
+    if (typeof settings === 'string') {
+      settingsArray = settings.split(/,|;/);
+
+      settings = {};
+
+      settingsArray.forEach((setting) => {
+        setting = setting.split(/_|:/);
+
+        settings[setting[0]] = setting[1];
+      });
     }
 
-    return [$rootScope.assistUrl, $rootScope.assetSlug, 'proxy', 'transform', transformSettings, thumbnail.thumbnailUrl.replace(/https?:\/\//, '')].join('/');
+    const crop = thumbnail.crops ? thumbnail.crops[cropSlug] : false;
+
+    if (crop) {
+      settings.x = crop[0];
+      settings.y = crop[1];
+      settings.x2 = crop[2];
+      settings.y2 = crop[3];
+
+    } else if (cropDefault) {
+      settings.g = cropDefault;
+    }
+
+    settingsArray = [];
+
+    angular.forEach(settings, (value, key) => {
+      settingsArray.push([key, value].join(':'));
+    });
+
+    const settingsString = settingsArray.join(';');
+
+    if (/(image)/.test(thumbnail.thumbnailType)) {
+      if (thumbnail.ext === 'svg') {
+        return [$rootScope.assistUrl, $rootScope.assetSlug, thumbnail.name + thumbnail.ext].join('/');
+      }
+
+      return [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', settingsString, thumbnail.name + thumbnail.ext].join('/');
+    }
+
+    if (/(video)/.test(thumbnail.thumbnailType)) {
+      return [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', settingsString, thumbnail.name, 'thumb.jpg'].join('/');
+    }
+
+    if (/(oembed|proxy)/.test(thumbnail.thumbnailType)) {
+      const thumbnailUrl = thumbnail.thumbnailUrl.replace(/https?:\/\//, '');
+
+      return [$rootScope.assistUrl, $rootScope.assetSlug, 'proxy', 'transform', settingsString, thumbnailUrl].join('/');
+    }
+
+    return '';
   };
 
-  service.getFieldThumbnailUrl = (field, transformSettings = 'h:200;q:60') => {
+  service.videoSrc = (video, settings) => {
+    let settingsArray;
+
+    if (typeof settings === 'string') {
+      settingsArray = settings.split(/,|;/);
+
+      settings = {};
+
+      settingsArray.forEach((setting) => {
+        setting = setting.split(/_|:/);
+
+        settings[setting[0]] = setting[1];
+      });
+    }
+
+    settingsArray = [];
+
+    angular.forEach(settings, (value, key) => {
+      settingsArray.push([key, value].join(':'));
+    });
+
+    const settingsString = settingsArray.join(';');
+
+    return [$rootScope.assistUrl, $rootScope.assetSlug, 'transform', settingsString, video.name + video.ext].join('/');
+  };
+
+  service.oembedThumbnailUrl = (oembedField, settings) => {
+    if (!oembedField) {
+      return '';
+    }
+
+    return service.proxyThumbnailUrl(oembedField.oembed.thumbnail_url, settings);
+  };
+
+  service.proxyThumbnailUrl = (url, settings) => service.thumbnailSrc({
+    thumbnailType: 'proxy',
+    thumbnailUrl: url,
+  }, settings);
+
+  service.fieldThumbnailSrc = (field, settings = 'h:200;q:60') => {
     if (!field || !field.value) {
       return null;
     }
 
     const thumbnail = FieldFactory.field(field.type).thumbnail(field.value);
 
-    return service.getThumbnailUrl(thumbnail, transformSettings);
+    return service.thumbnailSrc(thumbnail, settings);
   };
 
   service.getColumnOptions = (fieldOptions) => {
@@ -77,7 +160,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
       colDef.enableSorting = false;
       colDef.cellTemplate = `
         <div class="ui-grid-cell-contents ui-grid-cell--image">
-          <img ace-src-change ng-if="$root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col))" ng-src="{{ $root.$helper.getFieldThumbnailUrl(grid.getCellValue(row, col)) }}">
+          <img ace-src-change ng-if="$root.$helper.fieldThumbnailSrc(grid.getCellValue(row, col))" ng-src="{{ $root.$helper.fieldThumbnailSrc(grid.getCellValue(row, col)) }}">
         </div>
       `;
     }

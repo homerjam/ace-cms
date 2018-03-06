@@ -33,7 +33,7 @@ div(flex, layout="row", layout-padding, layout-wrap)
 
     md-card(flex, ng-click="vm.clickItem($event, item)", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch)
 
-      .md-card-image(ng-show="$root.$entity.getEntityThumbnailUrl(item, 'w:500;q:60')", ng-style="{backgroundImage: 'url(' + $root.$entity.getEntityThumbnailUrl(item, 'w:500;q:60') + ')'}")
+      .md-card-image(ng-show="$root.$entity.getEntityThumbnailSrc(item, 'w:500;q:60')", ng-style="{backgroundImage: 'url(' + $root.$entity.getEntityThumbnailSrc(item, 'w:500;q:60') + ')'}")
 
       md-card-content(flex)
         .md-caption(ng-repeat="fieldOptions in vm.getGridColumnFieldSlugs(item.schema)")
