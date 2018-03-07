@@ -43,7 +43,7 @@ const entityModule = angular.module('entity', [
         entities($stateParams, EntityFactory) {
           return EntityFactory.getById({
             id: $stateParams.id,
-            children: 1,
+            children: 2,
           });
         },
       },
@@ -69,7 +69,7 @@ const entityModule = angular.module('entity', [
         entities($stateParams, EntityFactory) {
           return EntityFactory.getById({
             id: `entity.${$stateParams.id}`,
-            children: 1,
+            children: 2,
           });
         },
       },

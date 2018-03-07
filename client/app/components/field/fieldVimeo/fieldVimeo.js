@@ -28,7 +28,7 @@ const fieldVimeoModule = angular.module('fieldVimeo', [])
         }
 
         return {
-          thumbnailType: 'video',
+          thumbnailType: 'oembed',
           thumbnailUrl: value.video.thumbnail.url,
           width: value.video.thumbnail.width,
           height: value.video.thumbnail.height,

@@ -48,13 +48,15 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
 
       $http(opts)
         .then((response) => {
-          if (!response.data.length) {
+          const results = response.data.map(row => row.doc);
+
+          if (!results.length) {
             if (!singularSchema) {
               return reject(new Error('Entity(s) not found'));
             }
           }
 
-          const entities = prepEntitiesFromDb(response.data);
+          const entities = prepEntitiesFromDb(results);
 
           resolve(entities);
         }, reject);
@@ -371,7 +373,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
     try {
       entities = await service.getById({
         id,
-        children: 1,
+        children: 2,
       });
 
       const entityDialog = {
