@@ -55,6 +55,7 @@ class ImagePrep {
 
         if (data.iccProfile) {
           // Convert the profile ArrayBuffer into a normal buffer for the `icc` parser module
+          // eslint-disable-next-line
           const buffer = new Buffer(data.iccProfile.byteLength);
           const view = new Uint8Array(data.iccProfile);
           for (let i = 0; i < buffer.length; i++) {

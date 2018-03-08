@@ -3,7 +3,7 @@ import Flow from '@flowjs/flow.js';
 
 import ImagePrep from '../../lib/imagePrep';
 
-const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFactory, EntityFactory) => {
+const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, EntityFactory) => {
   'ngInject';
 
   const service = {};
@@ -12,18 +12,35 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
     image: 'jpg,jpeg,png,svg',
   };
 
-  let isUploading = false;
   let flow;
+  let isUploading = false;
+  let observers = {
+    start: [],
+    progress: [],
+    complete: [],
+  };
 
-  let onStart = () => {};
-  let onProgress = () => {};
-  let onComplete = () => {};
+  const onStart = (...args) => {
+    observers.start.forEach(fn => fn(...args));
+  };
+  const onProgress = (...args) => {
+    observers.progress.forEach(fn => fn(...args));
+  };
+  const onComplete = (...args) => {
+    observers.complete.forEach(fn => fn(...args));
+  };
 
-  service.onStart = fn => onStart = fn;
-  service.onProgress = fn => onProgress = fn;
-  service.onComplete = fn => onComplete = fn;
+  service.onStart = fn => observers.start.push(fn);
+  service.onProgress = fn => observers.progress.push(fn);
+  service.onComplete = fn => observers.complete.push(fn);
 
   service.init = (entity, files, schema, field) => {
+    observers = {
+      start: [],
+      progress: [],
+      complete: [],
+    };
+
     service.cancel();
 
     isUploading = true;
@@ -91,10 +108,10 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, FileFact
               flowFile.resume();
             }
 
-            function cancel() {
-              flowFile._status = 'canceled';
-              // flowFile.cancel();
-            }
+            // function cancel() {
+            //   flowFile._status = 'canceled';
+            //   // flowFile.cancel();
+            // }
 
             if (
               !result.profile

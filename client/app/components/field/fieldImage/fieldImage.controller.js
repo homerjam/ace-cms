@@ -6,7 +6,7 @@ import ImagePrep from '../../../lib/imagePrep';
 
 class FieldImageController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $window, $mdDialog, BatchUploadFactory, FileFactory, HelperFactory) {
+  constructor ($rootScope, $scope, $state, $window, $mdDialog, BatchUploadFactory, HelperFactory) {
     const vm = this;
 
     let mode = 'normal';

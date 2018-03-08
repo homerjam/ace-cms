@@ -69,8 +69,12 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
 
     const schema = ConfigFactory.getSchema(entity.schema);
 
+    // Grab templates, fallback to first field
+    const titleTemplate = schema.titleTemplate ? schema.titleTemplate : schema.settings.singular ? schema.name : `{{${schema.fields[0].slug}}}`;
+    const slugTemplate = schema.slugTemplate ? schema.slugTemplate : schema.settings.singular ? schema.name : `{{${schema.fields[0].slug}}}`;
+
     // Convert fields to a readable format
-    const fields = _.mapValues(entity.fields, (field, fieldSlug) => {
+    const titleFields = _.mapValues(entity.fields, (field, fieldSlug) => {
       const fieldOptions = schema.fields.filter(field => field.slug === fieldSlug)[0];
       if (!fieldOptions) {
         return null;
@@ -78,22 +82,19 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
       return $filter('field2String')(field, fieldOptions, 10);
     });
 
-    // Grab title template, fallback to first field
-    const titleTemplate = schema.titleTemplate && schema.titleTemplate !== '' ? schema.titleTemplate : schema.settings.singular ? schema.name : `{{${schema.fields[0].slug}}}`;
+    const slugFields = _.mapValues(titleFields, (field, fieldSlug) => {
+      return field.replace(/'|"|&|<|>|`/g, '');
+    });
 
-    // Compile template
-    title = Handlebars.compile(titleTemplate)(fields);
+    // Compile templates
+    title = Handlebars.compile(titleTemplate)(titleFields);
+    slug = Handlebars.compile(slugTemplate)(slugFields);
+
+    slug = _.kebabCase(slug);
 
     // Trim dashes
     title = $filter('trimify')(title);
-
-    if (schema.slugTemplate && schema.slugTemplate !== '') {
-      slug = _.kebabCase(Handlebars.compile(schema.slugTemplate)(fields));
-      slug = $filter('trimify')(slug);
-
-    } else {
-      slug = _.kebabCase(title);
-    }
+    slug = $filter('trimify')(slug);
 
     // Decode entities
     title = he.decode(title);
@@ -168,10 +169,10 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
 
     entity.schema = schema.slug;
 
-    const titleSlug = service.getTitleSlug(entity);
+    const { title, slug } = service.getTitleSlug(entity);
 
-    entity.title = titleSlug.title;
-    entity.slug = titleSlug.slug;
+    entity.title = title;
+    entity.slug = slug;
 
     entity.fields = _.mapValues(entity.fields, (field, fieldSlug) => {
       const fieldOpts = ConfigFactory.getField(schema.slug, fieldSlug);

@@ -9,16 +9,8 @@ class BatchUploadController {
 
     vm.files = BatchUploadFactory.uploader() ? BatchUploadFactory.uploader().files : [];
 
-    BatchUploadFactory.onComplete((uploader, file, entity) => {
-      let complete = true;
-
-      uploader.files.forEach((file) => {
-        if (file._status !== 'complete') {
-          complete = false;
-        }
-      });
-
-      if (complete) {
+    BatchUploadFactory.onComplete((uploader) => {
+      if (!uploader.files.filter(file => file._status !== 'complete').length) {
         vm.uploadComplete = true;
       }
     });

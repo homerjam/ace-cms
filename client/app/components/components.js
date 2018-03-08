@@ -12,7 +12,6 @@ import EntityGrid from './entityGrid/entityGrid';
 import Field from './field/field';
 import Action from './action/action';
 import BatchUpload from './batchUpload/batchUpload';
-import File from './file/file';
 import Tools from './tools/tools';
 
 const componentModule = angular.module('app.components', [
@@ -29,7 +28,6 @@ const componentModule = angular.module('app.components', [
   Field.name,
   Action.name,
   BatchUpload.name,
-  File.name,
   Tools.name,
 ]);
 

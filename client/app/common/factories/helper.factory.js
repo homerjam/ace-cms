@@ -13,7 +13,7 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
 
   service.testExp = (exp, str) => new RegExp(exp).test(str);
 
-  service.move = function (from, to) {
+  service.move = function move (from, to) {
     this.splice(to, 0, this.splice(from, 1)[0]);
   };
 
@@ -86,6 +86,10 @@ const HelperFactory = ($rootScope, $window, $document, $http, $q, $timeout, $mdD
   };
 
   service.videoSrc = (video, settings) => {
+    if (!video) {
+      return '';
+    }
+
     let settingsArray;
 
     if (typeof settings === 'string') {

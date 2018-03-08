@@ -23,11 +23,11 @@
     "no-undef": 2,
     "prefer-rest-params": 1,
     "no-confusing-arrow": 1,
-    "no-plusplus": 1,
+    "no-plusplus": 0,
     "no-return-assign": 1,
     "global-require": 1,
     "no-multi-assign": 2,
     "function-paren-newline": 0,
-    "prefer-destructuring": 1
+    "prefer-destructuring": 0
   }
 }
