@@ -123,6 +123,11 @@ class FieldImageController {
         }
 
         const fileName = flowFile.file.name;
+        const ext = flowFile.getExtension();
+
+        if (/^(svg)$/i.test(ext)) {
+          return;
+        }
 
         flowFile.pause();
 
@@ -239,7 +244,10 @@ class FieldImageController {
 
               $scope.$emit('fieldCtrl:batchUpload', vm.fieldOptions, _files);
             }
+            return;
           }
+
+          flow.upload();
         },
         uploadStart: () => {
           vm.uploading = true;
@@ -250,7 +258,7 @@ class FieldImageController {
         progress: (flow) => {
           vm.progress = Math.round(flow.progress() * 100);
         },
-        error: (flow, message, file) => {
+        error: (flow, message) => {
           flow.cancel();
 
           $mdDialog.show(
