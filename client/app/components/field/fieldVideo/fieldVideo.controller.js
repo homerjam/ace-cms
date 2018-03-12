@@ -69,6 +69,8 @@ class FieldVideoController {
           vm.progress = Math.round(flow.progress() * 100);
         },
         error: (flow, error) => {
+          flow.cancel();
+
           $mdDialog.show(
             $mdDialog.alert()
               .title('Upload Error')

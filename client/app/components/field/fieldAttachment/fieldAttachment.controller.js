@@ -63,6 +63,8 @@ class FieldAttachmentController {
           vm.progress = Math.round(flow.progress() * 100);
         },
         error: (flow, error) => {
+          flow.cancel();
+
           $mdDialog.show(
             $mdDialog.alert()
               .title('Upload Error')
@@ -78,7 +80,7 @@ class FieldAttachmentController {
     };
 
     vm.fileUrl = async () => {
-      const fileUrl = `${appConfig.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`;
+      const fileUrl = `${appConfig.assistUrl}/${$rootScope.assetSlug}/file/view/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`;
 
       $mdDialog.show(
         $mdDialog.prompt()

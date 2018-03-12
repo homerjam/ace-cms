@@ -251,7 +251,7 @@ class FieldImageController {
           vm.progress = Math.round(flow.progress() * 100);
         },
         error: (flow, message, file) => {
-          file.cancel();
+          flow.cancel();
 
           $mdDialog.show(
             $mdDialog.alert()

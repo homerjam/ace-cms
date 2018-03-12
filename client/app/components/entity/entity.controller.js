@@ -131,7 +131,13 @@ class EntityController {
       if (action.type === 'url') {
         const urlTemplate = Handlebars.compile(action.settings.url);
 
-        let compiledUrlTemplate = urlTemplate(vm.entity);
+        const templateData = _.merge({}, {
+          slug: $rootScope.slug,
+          assistUrl: $rootScope.assistUrl,
+          apiUrl: $rootScope.apiUrl,
+        }, vm.entity);
+
+        let compiledUrlTemplate = urlTemplate(templateData);
 
         const settingsUrl = ConfigFactory.getConfig().client.baseUrl || '';
 
