@@ -84,6 +84,11 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, EntityFa
         }
 
         const fileName = flowFile.file.name;
+        const ext = flowFile.getExtension();
+
+        if (/^(svg)$/i.test(ext)) {
+          return;
+        }
 
         flowFile.pause();
 
@@ -242,6 +247,8 @@ const BatchUploadFactory = ($rootScope, $document, $timeout, $mdDialog, EntityFa
     files.forEach((file) => {
       flow.addFile(file);
     });
+
+    flow.upload();
   };
 
   service.cancel = () => {
