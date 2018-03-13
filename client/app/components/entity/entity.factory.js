@@ -83,7 +83,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
     });
 
     const slugFields = _.mapValues(titleFields, (field, fieldSlug) => {
-      return field.replace(/'|"|&|<|>|`/g, '');
+      return field ? field.replace(/'|"|&|<|>|`/g, '') : field;
     });
 
     // Compile templates
