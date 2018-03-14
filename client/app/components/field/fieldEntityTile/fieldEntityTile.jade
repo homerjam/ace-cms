@@ -49,7 +49,7 @@ div(flex, layout="row", layout-padding, layout-wrap)
             md-icon(md-font-set="material-icons", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch) create
           md-button.md-icon-button(ng-click="vm.preview($event, item)", aria-label="Preview")
             md-icon(md-font-set="material-icons", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch) zoom_in
-          md-button.md-icon-button(ng-click="vm.entityRemove($event, item)", aria-label="Remove")
+          md-button.md-icon-button(ng-click="vm.entityRemove($event, item, $index)", aria-label="Remove")
             md-icon(md-font-set="material-icons", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch) close
 
       .group.group--left(ng-show='vm.fieldOptions.settings.groupEnabled && !$first', ng-class="{active: item.groupBefore}")

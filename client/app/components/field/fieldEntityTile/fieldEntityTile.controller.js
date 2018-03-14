@@ -82,10 +82,9 @@ class FieldEntityTileController {
         });
     };
 
-    vm.entityRemove = (event, entity) => {
+    vm.entityRemove = (event, entity, index) => {
       event.stopPropagation();
 
-      const index = _.findIndex(vm.fieldModel.value, { id: entity.id });
       vm.fieldModel.value.splice(index, 1);
     };
 
