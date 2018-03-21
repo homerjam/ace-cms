@@ -38,9 +38,17 @@ class FieldEntityGridController {
     };
 
     vm.entityEdit = (event, entity) => {
-      EntityFactory.editEntities([entity]).then((updatedEntities) => {
-        vm.fieldModel.value.splice(vm.fieldModel.value.indexOf(entity), 1, updatedEntities[0]);
-      });
+      EntityFactory.editEntities([entity])
+        .then((updatedEntities) => {
+          updatedEntities = updatedEntities.map((entity) => {
+            entity.id = entity._id;
+            delete entity._id;
+            delete entity._rev;
+            return entity;
+          });
+          const index = _.findIndex(vm.fieldModel.value, { id: entity.id });
+          vm.fieldModel.value.splice(index, 1, updatedEntities[0]);
+        });
     };
 
     vm.entityRemove = (event, entity) => {

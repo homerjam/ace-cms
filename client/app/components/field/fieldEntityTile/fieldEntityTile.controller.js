@@ -76,6 +76,12 @@ class FieldEntityTileController {
       EntityFactory.editEntities([entity])
         .then((updatedEntities) => {
           if (updatedEntities) {
+            updatedEntities = updatedEntities.map((entity) => {
+              entity.id = entity._id;
+              delete entity._id;
+              delete entity._rev;
+              return entity;
+            });
             const index = _.findIndex(vm.fieldModel.value, { id: entity.id });
             vm.fieldModel.value.splice(index, 1, updatedEntities[0]);
           }
