@@ -70,7 +70,7 @@ class FieldEntityTileController {
       });
     };
 
-    vm.entityEdit = (event, entity) => {
+    vm.entityEdit = (event, entity, index) => {
       event.stopPropagation();
 
       EntityFactory.editEntities([entity])
@@ -82,7 +82,6 @@ class FieldEntityTileController {
               delete entity._rev;
               return entity;
             });
-            const index = _.findIndex(vm.fieldModel.value, { id: entity.id });
             vm.fieldModel.value.splice(index, 1, updatedEntities[0]);
           }
         });
@@ -118,11 +117,10 @@ class FieldEntityTileController {
       return ConfigFactory.getSchema(vm.fieldModel.value[i].schema).thumbnailFields[0];
     };
 
-    vm.preview = (event, item) => {
+    vm.preview = (event, item, index) => {
       event.stopPropagation();
 
       const media = [];
-      const index = vm.fieldModel.value.indexOf(item);
 
       vm.fieldModel.value.forEach((item) => {
         const thumbnail = EntityFactory.getEntityThumbnail(item);

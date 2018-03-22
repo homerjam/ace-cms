@@ -45,9 +45,9 @@ div(flex, layout="row", layout-padding, layout-wrap)
           div(ace-sortable-handle)
             md-button.md-icon-button(md-no-ink, aria-label="Move")
               md-icon(md-font-set="mdi", md-font-icon="mdi-cursor-move", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch)
-          md-button.md-icon-button(ng-click="vm.entityEdit($event, item)", aria-label="Edit")
+          md-button.md-icon-button(ng-click="vm.entityEdit($event, item, $index)", aria-label="Edit")
             md-icon(md-font-set="material-icons", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch) create
-          md-button.md-icon-button(ng-click="vm.preview($event, item)", aria-label="Preview")
+          md-button.md-icon-button(ng-click="vm.preview($event, item, $index)", aria-label="Preview")
             md-icon(md-font-set="material-icons", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch) zoom_in
           md-button.md-icon-button(ng-click="vm.entityRemove($event, item, $index)", aria-label="Remove")
             md-icon(md-font-set="material-icons", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch) close
