@@ -127,7 +127,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
     let thumbnailField = null;
 
     thumbnailFields.forEach((fieldSlug) => {
-      const field = entity.fields[fieldSlug];
+      const field = entity.fields && entity.fields[fieldSlug];
       if (!thumbnailField && field && field.value) {
         const value = _.isArray(field.value) ? field.value[0] : field.value;
         if (!value) {

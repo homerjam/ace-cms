@@ -31,9 +31,20 @@ const fieldTaxonomyModule = angular.module('fieldTaxonomy', [])
         return value || '';
       },
       toDb(value, settings) {
+        let terms = value.terms[0] ? value.terms : [];
+
+        terms = terms.map((term) => {
+          term.slug = _.kebabCase(term.title);
+          term.parents = (term.parents || []).map((term) => {
+            term.slug = _.kebabCase(term.title);
+            return _.pick(term, ['id', 'title', 'slug']);
+          });
+          return _.pick(term, ['id', 'title', 'slug', 'parents']);
+        });
+
         return {
           taxonomy: settings.taxonomy,
-          terms: value.terms[0] ? value.terms : [],
+          terms,
         };
       },
     });
