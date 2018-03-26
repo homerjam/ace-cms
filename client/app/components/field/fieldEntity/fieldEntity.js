@@ -78,6 +78,11 @@ const fieldEntityModule = angular.module('fieldEntity', [])
         }
 
         const thumbnailFieldSlug = ConfigFactory.getSchema(value[0].schema).thumbnailFields[0];
+
+        if (!thumbnailFieldSlug) {
+          return null;
+        }
+
         const thumbnailFieldType = ConfigFactory.getField(value[0].schema, thumbnailFieldSlug).type;
 
         const thumbnail = FieldFactory.field(thumbnailFieldType).thumbnail(value[0].thumbnail);
