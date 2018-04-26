@@ -17,7 +17,7 @@ const useragent = require('express-useragent');
 const passport = require('passport');
 
 const Api = require('ace-api');
-// const ApiServer = require('ace-api-server');
+// const ApiServer = require('ace-api/server');
 
 const packageJson = require('../package.json');
 const defaultConfig = require('./config.default');
@@ -244,6 +244,53 @@ class AceCms {
     }
 
     /* Routes */
+
+    router.get('/signup', (req, res) => {
+      const slug = req.params.slug;
+
+      const messages = {};
+
+      let errorMessage = req.session.errorMessage || false;
+      let successMessage = req.session.successMessage || false;
+
+      if (req.query.error) {
+        errorMessage = messages[req.query.error] ? messages[req.query.error] : false;
+      }
+
+      if (req.query.success) {
+        successMessage = messages[req.query.success] ? messages[req.query.success] : false;
+      }
+
+      const data = {
+        slug,
+        clientBasePath: config.clientBasePath,
+        environment: config.environment,
+        version: VERSION,
+        forceHttps: config.forceHttps,
+        errorMessage,
+        successMessage,
+        auth0: {
+          clientId: config.auth0.clientId,
+          domain: config.auth0.domain,
+        },
+        pageTitle: config.pageTitle,
+      };
+
+      req.session.errorMessage = null;
+      req.session.successMessage = null;
+
+      Api.Db(apiConfig, slug).get('config')
+        .then(
+          (config) => {
+            data.client = config.client;
+            res.render('signup', data);
+          },
+          (error) => {
+            data.errorMessage = `Account ID not found: ${slug}`;
+            res.render('signup', data);
+          }
+        );
+    });
 
     router.get('/login', (req, res) => {
       const slug = req.params.slug;
