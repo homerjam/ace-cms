@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import userModalTemplate from './user.modal.jade';
 
-const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, HelperFactory, appConfig) {
+const UserFactory = function UserFactory ($http, $mdDialog, $mdToast, ConfigFactory, HelperFactory, appConfig) {
   'ngInject';
 
   const defaultUser = {
@@ -13,6 +13,36 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
   };
 
   const service = {};
+
+  service.inviteUser = async (user, event) => {
+    const currentUser = ConfigFactory.getUser();
+
+    try {
+      await $http.post(`${appConfig.apiUrl}/email/send`, {
+        slug: appConfig.slug,
+        templateSlug: '_internal/user-invite',
+        subject: 'Signup Invitation',
+        toName: user.firstName,
+        toEmail: user.email,
+        fromName: `${currentUser.firstName} ${currentUser.lastName}`,
+        fromEmail: currentUser.email,
+      });
+
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('Invitation sent')
+          .position('bottom right')
+          .hideDelay(2000)
+      );
+    } catch (error) {
+      $mdDialog.show($mdDialog.alert({
+        title: 'Error!',
+        textContent: error,
+        targetEvent: event,
+        ok: 'Ok',
+      }));
+    }
+  };
 
   service.editUser = async (userId, event) => {
     const createNew = !userId;
@@ -30,6 +60,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, ConfigFactory, Helpe
       clickOutsideToClose: true,
       locals: {
         user: _.merge({}, defaultUser, user),
+        inviteUser: service.inviteUser,
       },
     };
 

@@ -4,6 +4,7 @@ md-toolbar
       md-icon(md-icon-set="material-icons") menu
     h2 Users
     span(flex)
+    md-button(ng-click="vm.invite($event, vm.selected)" ng-disabled="vm.selected.length !== 1", aria-label="Invite") Invite via Email
     md-button.md-icon-button(ng-click="vm.delete($event, vm.selected)", ng-disabled="vm.selected.length < 1", aria-label="Delete")
       md-icon(md-font-set="material-icons") delete
     //- md-button.md-icon-button(ng-click="vm.edit($event, vm.selected)", ng-disabled="vm.selected.length !== 1", aria-label="Edit")
@@ -14,10 +15,11 @@ md-toolbar
 md-content
 
   md-table-container
-    table.md-table-expanded(md-table md-row-select multiple ng-model="vm.selected")
+    table.md-table-expanded(md-table md-row-select="true" multiple="true" ng-model="vm.selected")
 
       thead(md-head md-order="vm.order" md-on-reorder="vm.changeOrder")
         tr(md-row)
+
           th(md-column md-order-by="firstName") First Name
           th(md-column md-order-by="lastName") Last Name
           th(md-column md-order-by="email" flex="20") Email
@@ -26,6 +28,7 @@ md-content
 
       tbody(md-body)
         tr(md-row md-select="user" md-select-id="id" ng-click="vm.edit($event, user)" ng-repeat="user in vm.users")
+
           td(md-cell) {{user.firstName}}
           td(md-cell) {{user.lastName}}
           td(md-cell flex="20") {{user.email}}

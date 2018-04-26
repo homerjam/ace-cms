@@ -58,6 +58,10 @@ class UserController {
         vm.users = _.remove(vm.users, user => userIds.indexOf(user.id) === -1);
       }
     };
+
+    vm.invite = async (event, selected) => {
+      UserFactory.inviteUser(selected[0], event);
+    };
   }
 }
 

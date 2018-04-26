@@ -52,6 +52,7 @@ md-dialog(aria-label="User")
           //-         td(md-cell) {{role.permissions.entityDelete ? "&check;" : "&times;"}}
 
     md-dialog-actions(layout="row")
+      //- md-button.md-primary(ng-click="vm.inviteUser(vm.user, $event)") Invite via Email
       span(flex)
       md-button(ng-click="vm.cancel()") Close
       md-button.md-accent(ng-click="vm.ok(vm.user)" ng-disabled="vm.form.$invalid") Save

@@ -17,7 +17,20 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'public/build'),
-    filename: 'js/bundle.[chunkhash].js',
+    filename: 'js/[name].[chunkhash].js',
+  },
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          test: 'vendor',
+          name: 'vendor',
+          enforce: true,
+        },
+      },
+    },
   },
 
   plugins: [
@@ -29,10 +42,6 @@ module.exports = {
       debug: false,
     }),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'js/vendor.[chunkhash].js',
-    }),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
       cssProcessor: cssNano,
@@ -40,7 +49,7 @@ module.exports = {
       canPrint: true,
     }),
     new ExtractTextPlugin({
-      filename: 'css/bundle.[chunkhash].css',
+      filename: 'css/[name].[chunkhash].css',
       disable: false,
       allChunks: true,
     }),
@@ -150,7 +159,7 @@ module.exports = {
         test: /\.(woff(2)?|ttf|eot|svg)([?]?.*)?$/,
         loader: 'url-loader',
         options: {
-          name: 'assets/[name]-[hash].[ext]',
+          name: 'assets/[name].[hash].[ext]',
           limit: 100000,
         },
       },
