@@ -13,7 +13,7 @@ md-content
     md-subheader.md-no-sticky
       md-toolbar.md-menu-toolbar.md-secondary
         .md-toolbar-tools
-          h3 General
+          h3 Client
 
     div(flex, layout="column", layout-margin)
       br
@@ -25,10 +25,6 @@ md-content
       md-input-container
         label Website URL
         input(ng-model="vm.config.client.baseUrl", aria-label="Website URL")
-
-      md-input-container
-        label Google Analytics View ID
-        input(ng-model="vm.config.client.gaView", aria-label="Google Analytics View ID")
 
     md-subheader.md-no-sticky
       md-toolbar.md-menu-toolbar.md-secondary
@@ -45,34 +41,9 @@ md-content
     md-subheader.md-no-sticky
       md-toolbar.md-menu-toolbar.md-secondary
         .md-toolbar-tools
-          h3 Modules / Providers
+          h3 Modules
 
     div(flex, layout="column", layout-margin)
 
       md-input-container
         md-checkbox(ng-model="vm.config.moduleEnabled.ecommerce", aria-label="E-commerce module") E-commerce module
-
-      md-input-container
-        md-checkbox(ng-model="vm.config.providerEnabled.instagram", aria-label="Instagram") Instagram provider
-
-      md-input-container
-        md-checkbox(ng-model="vm.config.providerEnabled.vimeo", aria-label="Vimeo") Vimeo provider
-
-      md-input-container
-        md-checkbox(ng-model="vm.config.providerEnabled.createsend", aria-label="CreateSend") CreateSend provider
-
-    md-subheader.md-no-sticky
-      md-toolbar.md-menu-toolbar.md-secondary
-        .md-toolbar-tools
-          h3 CreateSend
-
-    div(flex, layout="column", layout-margin)
-      br
-
-      md-input-container
-        label Client ID
-        input(ng-model="vm.config.provider.createsend.clientId", aria-label="CreateSend Client ID")
-
-      md-input-container
-        label Client API Key
-        input(ng-model="vm.config.provider.createsend.clientApiKey", aria-label="CreateSend Client API Key")

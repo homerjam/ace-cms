@@ -34,6 +34,17 @@ md-chip [ace-sortable] * {
 md-toolbar.md-secondary {
   background-color: lightgrey;
   color: black;
+
+  margin: 0 -16px;
+  width: calc(100% + 32px);
+}
+
+.md-subheader:not(:first-child) {
+  margin-top: 16px !important;
+}
+
+.md-subheader-inner {
+  padding-top: 0 !important;
 }
 
 md-dialog {
