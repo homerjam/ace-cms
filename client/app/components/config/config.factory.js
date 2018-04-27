@@ -103,9 +103,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
   });
 
   service.refreshProvider = async (provider, userId = undefined) => {
-    const config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}${userId ? `/${userId}` : ''}`, {
-      refresh_token: Config.provider[provider].refresh_token,
-    })).data;
+    const config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}${userId ? `/${userId}` : ''}/refresh`)).data;
 
     service.setConfig(config);
 

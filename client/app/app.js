@@ -299,14 +299,14 @@ angular.module('app', [
       let authorised = false;
 
       if (toState.data && toState.data.permissions) {
-        let required;
+        let required = toState.data.permissions;
 
-        if (angular.isString(toState.data.permissions)) {
-          required = toState.data.permissions.split(',');
+        if (angular.isString(required)) {
+          required = required.split(',');
         }
 
-        if (angular.isFunction(toState.data.permissions)) {
-          required = toState.data.permissions(toParams);
+        if (angular.isFunction(required)) {
+          required = required(toParams);
         }
 
         required.forEach((permission) => {
@@ -324,7 +324,7 @@ angular.module('app', [
     let configLoaded = false;
 
     $transitions.onStart({ to: '*' }, (trans) => {
-      const toStateName = trans.to().name;
+      const toState = trans.to();
       const toParams = trans.params('to');
 
       if (!configLoaded) {
@@ -341,7 +341,7 @@ angular.module('app', [
 
             $timeout(renewToken, tokenRefreshDelay);
 
-            $state.go(toStateName, toParams);
+            $state.go(toState.name, toParams);
           }, () => {
             // $window.location.href = `${appConfig.clientBasePath + appConfig.slug}/logout`;
           });
@@ -349,7 +349,7 @@ angular.module('app', [
         return false;
       }
 
-      if (!hasPermission(toStateName, toParams)) {
+      if (!hasPermission(toState, toParams)) {
         $state.go('dashboard');
       }
 

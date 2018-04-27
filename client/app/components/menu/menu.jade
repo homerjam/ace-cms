@@ -74,7 +74,7 @@ md-content
       md-icon(md-font-set="material-icons") people
       p Users
 
-    md-list-item(ui-sref="settings", ui-sref-active="active", ng-show="$root.$permissions.settings || $root.$isSuperUser")
+    md-list-item(ui-sref="settings", ui-sref-active="active", ng-show="$root.$permissions.settings || $root.$permissions.userSettings || $root.$isSuperUser")
       md-icon(md-font-set="material-icons") settings
       p Settings
 
