@@ -72,7 +72,11 @@ const UserFactory = function UserFactory ($http, $mdDialog, $mdToast, ConfigFact
 
     if (createNew) {
       user.id = user.email; // TODO: replace with uuid?
+
+      service.inviteUser(user);
+
       config = (await $http.post(`${appConfig.apiUrl}/user`, { user })).data;
+
     } else {
       config = (await $http.put(`${appConfig.apiUrl}/user`, { user })).data;
     }
