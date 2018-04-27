@@ -19,7 +19,7 @@ const settingsModule = angular.module('settings', [
           },
         },
         data: {
-          permissions: 'settings',
+          permissions: ['settings', 'userSettings'],
         },
       });
   })

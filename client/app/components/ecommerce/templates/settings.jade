@@ -44,7 +44,7 @@ md-content
         .md-toolbar-tools
           h3 Stripe
           span(flex)
-          md-button(ng-click="vm.authenticateWithProvider('stripe')") {{ vm.config.provider.stripe ? 'Reconnect' : 'Connect' }}
+          md-button(ng-click="vm.authProvider('stripe')") {{ vm.config.provider.stripe ? 'Reconnect' : 'Connect' }}
           span(ng-show="vm.config.provider.stripe")
             md-button(ng-click="vm.config.provider.stripe = null") Disconnect
 

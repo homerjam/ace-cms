@@ -16,8 +16,8 @@ class EcommerceController {
       ConfigFactory.saveConfig(vm.config);
     };
 
-    vm.authenticateWithProvider = (provider) => {
-      ConfigFactory.authenticateWithProvider(provider)
+    vm.authProvider = (provider) => {
+      ConfigFactory.authProvider(provider)
         .then((config) => {
 
           if (provider === 'stripe') {

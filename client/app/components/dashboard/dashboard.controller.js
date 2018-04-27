@@ -17,7 +17,7 @@ class DashboardController {
 
     const init = async () => {
       try {
-        if (config.provider.google.expires < Math.floor(+new Date() / 1000)) {
+        if (Math.floor(new Date().getTime() / 1000) - (config.provider.google.begins || 0) > config.provider.google.expires_in) {
           config = await ConfigFactory.refreshProvider('google');
         }
       } catch (error) {

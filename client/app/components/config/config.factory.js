@@ -81,7 +81,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
 
   service.getRole = roleSlug => Config.roles.filter(role => role.slug === roleSlug)[0];
 
-  service.authenticateWithProvider = provider => $q((resolve, reject) => {
+  service.authProvider = (provider, userId = undefined) => $q((resolve, reject) => {
     $http({
       method: 'GET',
       url: `${appConfig.apiUrl}/auth/${provider}/config`,
@@ -90,7 +90,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
       .then((response) => {
         SatellizerConfig.providers[provider].clientId = response.data.clientId;
         SatellizerConfig.providers[provider].redirectUri = `${$window.location.origin + appConfig.clientBasePath}_auth/${provider}`;
-        SatellizerConfig.providers[provider].url = `${appConfig.apiUrl}/auth/${provider}`;
+        SatellizerConfig.providers[provider].url = `${appConfig.apiUrl}/auth/${provider}${userId ? `/${userId}` : ''}`;
         SatellizerConfig.providers[provider].popupOptions = {};
 
         $auth.authenticate(provider, {
@@ -102,8 +102,8 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
       }, reject);
   });
 
-  service.refreshProvider = async (provider) => {
-    const config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}`, {
+  service.refreshProvider = async (provider, userId = undefined) => {
+    const config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}${userId ? `/${userId}` : ''}`, {
       refresh_token: Config.provider[provider].refresh_token,
     })).data;
 

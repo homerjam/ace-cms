@@ -296,20 +296,22 @@ angular.module('app', [
         return true;
       }
 
-      let authorised = true;
+      let authorised = false;
 
       if (toState.data && toState.data.permissions) {
         let required;
 
         if (angular.isString(toState.data.permissions)) {
           required = toState.data.permissions.split(',');
-        } else {
+        }
+
+        if (angular.isFunction(toState.data.permissions)) {
           required = toState.data.permissions(toParams);
         }
 
         required.forEach((permission) => {
-          if (!$rootScope.$permissions[permission]) {
-            authorised = false;
+          if ($rootScope.$permissions[permission]) {
+            authorised = true;
           }
         });
       }
@@ -349,7 +351,6 @@ angular.module('app', [
 
       if (!hasPermission(toStateName, toParams)) {
         $state.go('dashboard');
-        return false;
       }
 
       return true;

@@ -5,6 +5,8 @@ class SettingsController {
 
     vm.config = ConfigFactory.getConfig();
 
+    vm.user = ConfigFactory.getUser();
+
     vm.gaViews = [];
 
     const gaGetViews = async () => {
@@ -16,8 +18,8 @@ class SettingsController {
       SettingsFactory.save(vm.config.client);
     };
 
-    vm.authenticateWithProvider = async (provider) => {
-      const config = await ConfigFactory.authenticateWithProvider(provider);
+    vm.authProvider = async (provider, userSettings = false) => {
+      const config = await ConfigFactory.authProvider(provider, userSettings ? vm.user.id : undefined);
 
       vm.config = config;
 
