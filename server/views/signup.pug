@@ -110,6 +110,11 @@ html
       script(src="https://cdn.auth0.com/js/lock/11.0.1/lock.min.js")
 
       script.
+        function getParameterByName(name) {
+          var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+          return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
+
         var lock = new Auth0Lock('!{auth0.clientId}', '!{auth0.domain}', {
           theme: {
             logo: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
@@ -125,5 +130,8 @@ html
             },
           },
           allowLogin: false,
+          prefill: {
+            email: getParameterByName('email'),
+          },
         });
         lock.show();
