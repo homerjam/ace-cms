@@ -16,14 +16,7 @@ class DashboardController {
     }
 
     const init = async () => {
-      try {
-        if (Math.floor(new Date().getTime() / 1000) - (config.provider.google.begins || 0) > config.provider.google.expires_in) {
-          config = await ConfigFactory.refreshProvider('google');
-        }
-      } catch (error) {
-        console.error(error.data.message);
-        return;
-      }
+      config = await ConfigFactory.refreshProvider('google');
 
       const siteUrl = new $window.URL(config.client.baseUrl || '');
       let siteHostname = siteUrl.hostname.split('.');
