@@ -21,6 +21,7 @@ import fieldSelect from './fieldSelect/fieldSelect';
 import fieldTaxonomy from './fieldTaxonomy/fieldTaxonomy';
 import fieldText from './fieldText/fieldText';
 import fieldTextArea from './fieldTextArea/fieldTextArea';
+import fieldUser from './fieldUser/fieldUser';
 import fieldVideo from './fieldVideo/fieldVideo';
 import fieldVimeo from './fieldVimeo/fieldVimeo';
 
@@ -42,6 +43,7 @@ const fieldModule = angular.module('field', [
   fieldTaxonomy.name,
   fieldText.name,
   fieldTextArea.name,
+  fieldUser.name,
   fieldVideo.name,
   fieldVimeo.name,
 ])

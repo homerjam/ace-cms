@@ -1,0 +1,42 @@
+md-subheader.md-no-sticky
+  md-toolbar.md-menu-toolbar.md-secondary
+    .md-toolbar-tools
+      md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
+      h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
+      span(flex)
+      md-button(ng-if="!vm.fieldOptions.settings.multiple && vm.fieldModel.value[0]", ng-click='vm.clear()', aria-label="Clear") Clear
+
+div(flex, layout="row", layout-margin)
+
+  div(flex, layout="row")
+
+    div(flex, ng-if="::!vm.fieldOptions.settings.multiple")
+      md-autocomplete(
+        flex,
+        md-autoselect
+        md-no-cache="true"
+        md-selected-item="vm.fieldModel.value[0]"
+        md-search-text="vm.searchText"
+        md-items="item in vm.search(vm.searchText)"
+        md-item-text="item.title"
+        md-floating-label="{{vm.fieldOptions.name}}"
+        md-min-length="0"
+        )
+        md-item-template
+          span(md-highlight-text="vm.searchText", md-highlight-flags="^i") {{item.title}}
+        md-not-found No matches found.
+
+    div(flex, ng-if="::vm.fieldOptions.settings.multiple")
+      md-chips(ng-model="vm.fieldModel.value", md-autocomplete-snap, md-require-match="true")
+        md-autocomplete(
+          md-no-cache="true"
+          md-selected-item="vm.selectedItem"
+          md-search-text="vm.searchText"
+          md-items="item in vm.search(vm.searchText)"
+          md-item-text="item.title"
+          placeholder="{{vm.fieldOptions.name}}"
+          md-min-length="0"
+          )
+          span(md-highlight-text="vm.searchText", md-highlight-flags="^i") {{item.title}}
+        md-chip-template
+          span(ace-sortable, item="$chip", collection="$mdChipsCtrl.items", draggable-selector="'md-chip'") {{$chip.title}}
