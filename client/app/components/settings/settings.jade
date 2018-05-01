@@ -12,7 +12,7 @@ md-content
 
     // Settings
 
-    span(ng-if="$root.$permissions.settings")
+    span(ng-if="$root.$permissions.settings || $root.$isSuperUser")
 
       div(flex, layout="column", layout-margin)
         br
@@ -75,13 +75,13 @@ md-content
 
     md-subheader.md-no-sticky Connected Accounts
 
-    md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.google.access_token")
-      a(href="{{vm.config.userSettings[vm.user.id].provider.google.user.url}}", target="_blank")
-        img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.google.user.image.url}}")
-      .md-list-item-text
-        h3 Google
-        p {{vm.config.userSettings[vm.user.id].provider.google.user.displayName}}
-      md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
+    //- md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.google.access_token")
+    //-   a(href="{{vm.config.userSettings[vm.user.id].provider.google.user.url}}", target="_blank")
+    //-     img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.google.user.image.url}}")
+    //-   .md-list-item-text
+    //-     h3 Google
+    //-     p {{vm.config.userSettings[vm.user.id].provider.google.user.displayName}}
+    //-   md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
 
     md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.instagram.access_token")
       a(href="https://instagram.com/{{vm.config.userSettings[vm.user.id].provider.instagram.user.username}}", target="_blank")
@@ -90,12 +90,19 @@ md-content
         h3 Instagram
         p @{{vm.config.userSettings[vm.user.id].provider.instagram.user.username}}
 
-    md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.vimeo.access_token")
-      a(href="{{vm.config.userSettings[vm.user.id].provider.vimeo.user.link}}", target="_blank")
-        img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.vimeo.user.pictures[3].link}}")
+    //- md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.vimeo.access_token")
+    //-   a(href="{{vm.config.userSettings[vm.user.id].provider.vimeo.user.link}}", target="_blank")
+    //-     img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.vimeo.user.pictures[3].link}}")
+    //-   .md-list-item-text
+    //-     h3 Vimeo
+    //-     p {{vm.config.userSettings[vm.user.id].provider.vimeo.user.name}}
+
+    md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.spotify.access_token")
+      a(href="{{vm.config.userSettings[vm.user.id].provider.spotify.user.external_urls.spotify}}", target="_blank")
+        img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.spotify.user.images[0].url}}")
       .md-list-item-text
-        h3 Vimeo
-        p {{vm.config.userSettings[vm.user.id].provider.vimeo.user.name}}
+        h3 Spotify
+        p {{vm.config.userSettings[vm.user.id].provider.spotify.user.display_name}}
 
     div(flex layout="row" layout-margin)
       span(flex)
@@ -104,9 +111,11 @@ md-content
           md-button.md-fab.md-primary.md-mini(aria-label="Add Provider")
             md-icon(md-font-set="material-icons") add
         md-fab-actions
-          md-button.md-fab.md-raised.md-mini(aria-label="Vimeo" ng-click="vm.authProvider('vimeo', true)")
-            md-icon(md-font-set="mdi" md-font-icon="mdi-vimeo")
+          //- md-button.md-fab.md-raised.md-mini(aria-label="Vimeo" ng-click="vm.authProvider('vimeo', true)")
+          //-   md-icon(md-font-set="mdi" md-font-icon="mdi-vimeo")
           md-button.md-fab.md-raised.md-mini(aria-label="Instagram" ng-click="vm.authProvider('instagram', true)")
             md-icon(md-font-set="mdi" md-font-icon="mdi-instagram")
-          md-button.md-fab.md-raised.md-mini(aria-label="Google" ng-click="vm.authProvider('google', true)")
-            md-icon(md-font-set="mdi" md-font-icon="mdi-google")
+          //- md-button.md-fab.md-raised.md-mini(aria-label="Google" ng-click="vm.authProvider('google', true)")
+          //-   md-icon(md-font-set="mdi" md-font-icon="mdi-google")
+          md-button.md-fab.md-raised.md-mini(aria-label="Spotify" ng-click="vm.authProvider('spotify', true)")
+            md-icon(md-font-set="mdi" md-font-icon="mdi-spotify")
