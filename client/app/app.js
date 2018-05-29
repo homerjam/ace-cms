@@ -85,6 +85,7 @@ angular.module('app', [
       'http://localhost:*/**',
       'https://*.s3.amazonaws.com/**',
       `${appConfig.assistUrl}/**`,
+      `${appConfig.apiUrl}/**`,
     ]);
 
     // Make sure request body is sent for delete

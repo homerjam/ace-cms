@@ -118,6 +118,10 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
   service.refreshProvider = async (provider, userId = undefined) => {
     let config = service.getConfig();
 
+    if (!config.provider[provider]) {
+      return config;
+    }
+
     if (Math.floor(new Date().getTime() / 1000) - (config.provider[provider].begins || 0) > config.provider[provider].expires_in) {
       config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}${userId ? `/${userId}` : ''}/refresh`)).data;
       service.setConfig(config);

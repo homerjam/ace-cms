@@ -11,7 +11,9 @@ class SettingsController {
 
     const gaGetViews = async () => {
       const config = await ConfigFactory.refreshProvider('google');
-      vm.gaViews = (await $http.get(`https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties/~all/profiles?access_token=${config.provider.google.access_token}`)).data.items;
+      if (config.provider.google) {
+        vm.gaViews = (await $http.get(`https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties/~all/profiles?access_token=${config.provider.google.access_token}`)).data.items;
+      }
       return vm.gaViews;
     };
 
@@ -33,9 +35,7 @@ class SettingsController {
       ConfigFactory.setConfig(vm.config);
     };
 
-    if (vm.config.provider.google) {
-      gaGetViews();
-    }
+    gaGetViews();
   }
 }
 
