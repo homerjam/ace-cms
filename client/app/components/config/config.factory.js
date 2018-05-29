@@ -25,22 +25,27 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
     $rootScope.$config = Config;
 
     if (headers) {
-      const userId = headers('x-user-id');
-      User = _.find(Config.users, { id: userId });
-      if (!User) {
-        User = {
-          id: userId,
-        };
-      }
-      $rootScope.$user = User;
-
       const role = headers('x-role');
 
       $rootScope.$isSuperUser = role === 'super';
 
-      if (role !== 'super') {
+      if (!$rootScope.$isSuperUser) {
         $rootScope.$permissions = _.find(Config.roles, { slug: role }).permissions;
       }
+
+      const userId = headers('x-user-id');
+
+      User = _.find(Config.users, { id: userId });
+
+      if (!User) {
+        User = _.merge({}, service.defaultUser(), {
+          id: userId,
+          email: userId,
+          role,
+        });
+      }
+
+      $rootScope.$user = User;
     }
 
     notifyObservers();
@@ -63,6 +68,14 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
   service.setConfig = (config) => {
     updateConfig(config);
   };
+
+  service.defaultUser = () => ({
+    email: '',
+    firstName: '',
+    lastName: '',
+    active: true,
+    role: 'admin',
+  });
 
   service.getUser = (userId = null) => {
     if (userId) {

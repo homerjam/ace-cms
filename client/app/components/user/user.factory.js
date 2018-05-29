@@ -4,14 +4,6 @@ import userModalTemplate from './user.modal.jade';
 const UserFactory = function UserFactory ($http, $mdDialog, $mdToast, ConfigFactory, HelperFactory, appConfig) {
   'ngInject';
 
-  const defaultUser = {
-    email: '',
-    firstName: '',
-    lastName: '',
-    active: true,
-    role: 'admin',
-  };
-
   const service = {};
 
   service.inviteUser = async (user, event) => {
@@ -24,7 +16,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, $mdToast, ConfigFact
         subject: 'Signup Invitation',
         toName: user.firstName,
         toEmail: user.email,
-        fromName: `${currentUser.firstName} ${currentUser.lastName}`,
+        fromName: `${currentUser.firstName} ${currentUser.lastName}`.trim(),
         fromEmail: currentUser.email,
       });
 
@@ -59,7 +51,7 @@ const UserFactory = function UserFactory ($http, $mdDialog, $mdToast, ConfigFact
       targetEvent: event,
       clickOutsideToClose: true,
       locals: {
-        user: _.merge({}, defaultUser, user),
+        user: _.merge({}, ConfigFactory.defaultUser(), user),
         inviteUser: service.inviteUser,
       },
     };
