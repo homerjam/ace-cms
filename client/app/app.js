@@ -209,6 +209,10 @@ angular.module('app', [
       scope: ['basic', 'public_content'],
     });
 
+    $authProvider.spotify({
+      scope: ['user-read-email', 'user-top-read', 'user-read-recently-played'],
+    });
+
     $authProvider.oauth2({
       name: 'vimeo',
       authorizationEndpoint: 'https://api.vimeo.com/oauth/authorize',
