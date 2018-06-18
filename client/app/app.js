@@ -11,7 +11,7 @@ import moment from 'moment';
 import angularMoment from 'angular-moment';
 import 'angular-material-data-table/dist/md-data-table.css';
 import angularMaterialDataTable from 'angular-material-data-table';
-import 'mdi/css/materialdesignicons.css';
+import '@mdi/font/css/materialdesignicons.css';
 import 'angular-material/angular-material.css';
 import 'material-design-icons/iconfont/material-icons.css';
 import angularMaterial from 'angular-material';

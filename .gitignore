@@ -4,3 +4,4 @@
 .couch
 .cloudant
 node_modules
+package-lock.json
