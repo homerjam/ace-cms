@@ -47,3 +47,15 @@ md-content
 
       md-input-container
         md-checkbox(ng-model="vm.config.moduleEnabled.ecommerce", aria-label="E-commerce module") E-commerce module
+
+    md-subheader.md-no-sticky
+      md-toolbar.md-menu-toolbar.md-secondary
+        .md-toolbar-tools
+          h3 Shopify
+
+    div(flex, layout="column", layout-margin)
+      br
+
+      md-input-container
+        label Storefront Access Token
+        input(ng-model="vm.config.provider.shopify.storefrontAccessToken", aria-label="Storefront Access Token")
