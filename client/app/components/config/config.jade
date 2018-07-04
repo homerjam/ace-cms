@@ -57,5 +57,9 @@ md-content
       br
 
       md-input-container
+        label Domain
+        input(ng-model="vm.config.provider.shopify.domain", aria-label="Domain")
+
+      md-input-container
         label Storefront Access Token
         input(ng-model="vm.config.provider.shopify.storefrontAccessToken", aria-label="Storefront Access Token")
