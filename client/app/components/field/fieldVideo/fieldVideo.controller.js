@@ -3,6 +3,8 @@ class FieldVideoController {
   constructor ($rootScope, $scope, $window, $http, $timeout, $mdDialog, appConfig) {
     const vm = this;
 
+    vm.originalValue = vm.fieldModel.value;
+
     const videoExtensions = 'gif,mp4,avi,mov,webm,mkv,flv,ogg,ogv,qt,wmv,mpg,m4v';
 
     const uploadOptions = vm.fieldOptions;
@@ -83,6 +85,25 @@ class FieldVideoController {
 
     vm.download = () => {
       $window.open(`${appConfig.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`);
+    };
+
+    vm.delete = async () => {
+      const confirm = await $mdDialog.show(
+        $mdDialog.confirm()
+          .multiple(true)
+          .title('Delete forever')
+          .textContent('Are you sure? Be warned, this can\'t be undone.')
+          .cancel('Cancel')
+          .ok('Delete')
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      $timeout(() => {
+        vm.fieldModel.value = null;
+      });
     };
   }
 }

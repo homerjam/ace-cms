@@ -1,7 +1,9 @@
 class FieldAttachmentController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $window, $http, $timeout, $location, $mdDialog, appConfig) {
+  constructor ($rootScope, $window, $timeout, $mdDialog, appConfig) {
     const vm = this;
+
+    vm.originalValue = vm.fieldModel.value;
 
     const attachmentExtensions = 'pdf,doc,docx,csv,xls,txt';
 
@@ -79,11 +81,31 @@ class FieldAttachmentController {
       $window.open(`${appConfig.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`);
     };
 
+    vm.delete = async () => {
+      const confirm = await $mdDialog.show(
+        $mdDialog.confirm()
+          .multiple(true)
+          .title('Delete forever')
+          .textContent('Are you sure? Be warned, this can\'t be undone.')
+          .cancel('Cancel')
+          .ok('Delete')
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      $timeout(() => {
+        vm.fieldModel.value = null;
+      });
+    };
+
     vm.fileUrl = async () => {
       const fileUrl = `${appConfig.assistUrl}/${$rootScope.assetSlug}/file/view/${vm.fieldModel.value.file.name}${vm.fieldModel.value.file.ext}/${vm.fieldModel.value.original.fileName}`;
 
       $mdDialog.show(
         $mdDialog.prompt()
+          .multiple(true)
           .title('File URL')
           .placeholder('File URL')
           .ariaLabel('File URL')

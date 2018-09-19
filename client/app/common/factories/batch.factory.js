@@ -13,12 +13,17 @@ const BatchFactory = () => {
 
   service.consolidate = (entities) => {
     const entity = {
+      published: true,
       fields: {},
     };
 
     const fields = {};
 
     entities.forEach((_entity) => {
+      if (!_entity.published) {
+        entity.published = false;
+      }
+
       angular.forEach(_entity.fields, (field, key) => {
         if (!fields[key]) {
           fields[key] = [];

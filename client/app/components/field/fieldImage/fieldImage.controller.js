@@ -6,8 +6,10 @@ import ImagePrep from '../../../lib/imagePrep';
 
 class FieldImageController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $window, $mdDialog, BatchUploadFactory, HelperFactory) {
+  constructor ($rootScope, $scope, $state, $timeout, $window, $mdDialog, HelperFactory) {
     const vm = this;
+
+    vm.originalValue = vm.fieldModel.value;
 
     let mode = 'normal';
 
@@ -18,6 +20,25 @@ class FieldImageController {
     vm.download = () => {
       const originalFileName = vm.fieldModel.value.original.fileName.replace(/^(#|\?)/, '_');
       $window.open(`${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/download/${vm.fieldModel.value.file.name + vm.fieldModel.value.file.ext}/${originalFileName}`);
+    };
+
+    vm.delete = async () => {
+      const confirm = await $mdDialog.show(
+        $mdDialog.confirm()
+          .multiple(true)
+          .title('Delete forever')
+          .textContent('Are you sure? Be warned, this can\'t be undone.')
+          .cancel('Cancel')
+          .ok('Delete')
+      );
+
+      if (!confirm) {
+        return;
+      }
+
+      $timeout(() => {
+        vm.fieldModel.value = null;
+      });
     };
 
     vm.dzi = async () => {

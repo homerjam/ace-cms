@@ -7,7 +7,7 @@ entity {
     overflow-x: hidden;
   }
 
-  &[is-modal] {
+  &[modal] {
     .menu-toggle {
       display: none;
     }

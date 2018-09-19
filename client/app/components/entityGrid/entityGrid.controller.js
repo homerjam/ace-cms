@@ -346,10 +346,11 @@ class EntityGridController {
       vm.selected = vm.gridApi.selection.getSelectedRows();
     };
 
-    vm.newEntity = () => {
-      $state.go('newEntity', {
-        schemaSlug: schemaSlugs[0],
-      });
+    vm.newEntity = async () => {
+      const result = await EntityFactory.newEntity(schemaSlugs[0]);
+      if (result) {
+        getResults(true);
+      }
     };
 
     $scope.$on('EntityFactory:updateEntities', (event, entities) => {

@@ -3,7 +3,7 @@ class DefaultModalController {
   constructor ($mdDialog) {
     const vm = this;
 
-    vm.cancel = () => $mdDialog.cancel();
+    vm.cancel = item => $mdDialog.cancel(item);
     vm.ok = item => $mdDialog.hide(item);
   }
 }

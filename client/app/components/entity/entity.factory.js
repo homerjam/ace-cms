@@ -82,9 +82,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
       return $filter('field2String')(field, fieldOptions, 10);
     });
 
-    const slugFields = _.mapValues(titleFields, (field, fieldSlug) => {
-      return field ? field.replace(/'|"|&|<|>|`/g, '') : field;
-    });
+    const slugFields = _.mapValues(titleFields, (field, fieldSlug) => (field ? field.replace(/'|"|&|<|>|`/g, '') : field));
 
     // Compile templates
     title = Handlebars.compile(titleTemplate)(titleFields);
@@ -367,9 +365,30 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
       }, reject);
   });
 
+  const deleteFiles = async (fileNames) => {
+    try {
+      const result = await $http({
+        url: `${$rootScope.assistUrl}/${$rootScope.assetSlug}/file/delete`,
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${$rootScope.assistCredentials}`,
+        },
+        data: {
+          fileNames,
+        },
+      });
+      return result;
+    } catch (error) {
+      $log.error(error);
+      return false;
+    }
+  };
+
   service.editEntities = async (entities) => {
     const mode = entities.length > 1 ? 'batchEdit' : entities[0].trashed ? 'trash' : 'normal';
     const id = entities.map(entity => entity.id || entity._id);
+
+    const originalEntity = entities[0];
 
     try {
       entities = await service.getById({
@@ -395,7 +414,18 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
 
       entities = await service.updateEntities(entities, vm.entity, vm.schema, vm.options);
 
-    } catch (error) {
+    } catch (vm) {
+      const fileNames = [];
+      _.forEach(vm.entity.fields, (field, fieldSlug) => {
+        if (/attachment|image|audio|video/.test(field.type) && field.value) {
+          if (field.value.file.name !== _.get(originalEntity.fields, [fieldSlug, 'value.file.name'])) {
+            fileNames.push(field.value.file.name);
+          }
+        }
+      });
+      if (fileNames.length) {
+        await deleteFiles(fileNames);
+      }
       return false;
     }
 
@@ -424,7 +454,16 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
       const entity = await service.createEntity(schemaSlug, vm.entity);
 
       return entity;
-    } catch (error) {
+    } catch (vm) {
+      const fileNames = [];
+      _.forEach(vm.entity.fields, (field, fieldSlug) => {
+        if (/attachment|image|audio|video/.test(field.type) && field.value) {
+          fileNames.push(field.value.file.name);
+        }
+      });
+      if (fileNames.length) {
+        await deleteFiles(fileNames);
+      }
       return false;
     }
   };

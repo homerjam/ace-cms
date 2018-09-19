@@ -175,9 +175,12 @@ class EntityController {
           vm.entity._rev = entity._rev;
 
           if ($state.$current.name === 'newEntity') {
-            $state.go('entity', {
+            if (vm.modal) {
+              $mdDialog.hide();
+            }
+            EntityFactory.editEntities([{
               id: entity._id,
-            });
+            }]);
           }
         }, $log.error);
     };
@@ -210,12 +213,11 @@ class EntityController {
       EntityFactory.createEntity(vm.schema.slug, entity)
         .then((entity) => {
           if (vm.modal) {
-            vm.modal.close();
+            $mdDialog.hide();
           }
-
-          $state.go('entity', {
+          EntityFactory.editEntities([{
             id: entity._id,
-          });
+          }]);
         }, $log.error);
     };
 
@@ -243,9 +245,15 @@ class EntityController {
     };
 
     vm.restoreEntity = () => {
-      EntityFactory.restoreEntities(vm.entity).then(() => {
-        $state.go('entity', { id: vm.entity._id }, { reload: true });
-      });
+      EntityFactory.restoreEntities(vm.entity)
+        .then(() => {
+          if (vm.modal) {
+            $mdDialog.hide();
+          }
+          EntityFactory.editEntities([{
+            id: vm.entity._id,
+          }]);
+        });
     };
 
     vm.back = () => {
@@ -281,7 +289,7 @@ class EntityController {
 
     vm.nextEntity = () => {
       if (vm.modal) {
-        vm.modal.close();
+        $mdDialog.hide();
       }
 
       EntityFactory.editEntities([{
@@ -291,7 +299,7 @@ class EntityController {
 
     vm.prevEntity = () => {
       if (vm.modal) {
-        vm.modal.close();
+        $mdDialog.hide();
       }
 
       EntityFactory.editEntities([{

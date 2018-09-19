@@ -10,58 +10,58 @@ const entityModule = angular.module('entity', [
   .config(($stateProvider) => {
     'ngInject';
 
-    $stateProvider.state('newEntity', {
-      url: '/entity/new/{schemaSlug:[a-zA-Z0-9_-]{2,50}}',
-      resolve: {
-        entities($stateParams) {
-          'ngInject';
+    // $stateProvider.state('newEntity', {
+    //   url: '/entity/new/{schemaSlug:[a-zA-Z0-9_-]{2,50}}',
+    //   resolve: {
+    //     entities($stateParams) {
+    //       'ngInject';
 
-          return [{
-            schema: $stateParams.schemaSlug,
-          }];
-        },
-      },
-      views: {
-        'content@': {
-          template: '<entity mode="new" entities="vm.entities"></entity>',
-          controller(entities) {
-            'ngInject';
+    //       return [{
+    //         schema: $stateParams.schemaSlug,
+    //       }];
+    //     },
+    //   },
+    //   views: {
+    //     'content@': {
+    //       template: '<entity mode="new" entities="vm.entities"></entity>',
+    //       controller(entities) {
+    //         'ngInject';
 
-            this.entities = entities;
-          },
-          controllerAs: 'vm',
-        },
-      },
-      data: {
-        permissions: 'entityCreate',
-      },
-    });
+    //         this.entities = entities;
+    //       },
+    //       controllerAs: 'vm',
+    //     },
+    //   },
+    //   data: {
+    //     permissions: 'entityCreate',
+    //   },
+    // });
 
-    $stateProvider.state('entity', {
-      url: '/entity/{id:[a-zA-Z0-9_-]{2,50}}',
-      resolve: {
-        entities($stateParams, EntityFactory) {
-          return EntityFactory.getById({
-            id: $stateParams.id,
-            children: 2,
-          });
-        },
-      },
-      views: {
-        content: {
-          template: '<entity mode="normal" entities="vm.entities"></entity>',
-          controller(entities) {
-            'ngInject';
+    // $stateProvider.state('entity', {
+    //   url: '/entity/{id:[a-zA-Z0-9_-]{2,50}}',
+    //   resolve: {
+    //     entities($stateParams, EntityFactory) {
+    //       return EntityFactory.getById({
+    //         id: $stateParams.id,
+    //         children: 2,
+    //       });
+    //     },
+    //   },
+    //   views: {
+    //     content: {
+    //       template: '<entity mode="normal" entities="vm.entities"></entity>',
+    //       controller(entities) {
+    //         'ngInject';
 
-            this.entities = entities;
-          },
-          controllerAs: 'vm',
-        },
-      },
-      data: {
-        permissions: 'entityRead',
-      },
-    });
+    //         this.entities = entities;
+    //       },
+    //       controllerAs: 'vm',
+    //     },
+    //   },
+    //   data: {
+    //     permissions: 'entityRead',
+    //   },
+    // });
 
     $stateProvider.state('singularEntity', {
       url: '/entity/singular/{id:[a-zA-Z0-9_-]{2,50}}',

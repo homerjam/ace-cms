@@ -6,12 +6,14 @@
         md-checkbox.md-primary.field-apply(ng-show="::vm.fieldApply !== undefined", ng-model="vm.fieldApply", aria-label="Apply to all?")
         h3(ng-class="{required: vm.fieldOptions.settings.required}") {{vm.fieldOptions.name}}
         span(flex)
-        md-button.md-icon-button(aria-label="Upload", ace-flow-browse)
+        md-button.md-icon-button(aria-label="Upload", ace-flow-browse, ng-show="!vm.fieldModel.value")
           md-icon(md-font-set="material-icons") file_upload
-        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-disabled="!vm.fieldModel.value")
+        md-button.md-icon-button(aria-label="Download", ng-click="vm.download($event)", ng-show="vm.fieldModel.value")
           md-icon(md-font-set="material-icons") file_download
-        md-button.md-icon-button(aria-label="File URL", ng-click="vm.fileUrl($event)", ng-disabled="!vm.fieldModel.value")
+        md-button.md-icon-button(aria-label="File URL", ng-click="vm.fileUrl($event)", ng-show="vm.fieldModel.value")
           md-icon(md-font-set="mdi", md-font-icon="mdi-link-variant")
+        md-button.md-icon-button(aria-label="Delete", ng-click="vm.delete($event)", ng-show="vm.fieldModel.value && vm.fieldModel.value.file.name === vm.originalValue.file.name")
+          md-icon(md-font-set="material-icons") delete
 
   div(flex="grow", layout="row", layout-margin)
 

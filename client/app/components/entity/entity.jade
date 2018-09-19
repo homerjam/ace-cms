@@ -10,7 +10,7 @@ md-toolbar(ng-if="::!vm.entity.trashed")
         span(ng-if=":: vm.schema.settings.singular || vm.mode === 'new'") {{::vm.schema.name}}
         span(ng-if="vm.title", ng-bind-html="vm.title")
 
-    md-button(ng-if="vm.mode !== 'batchUpload'" ng-click="vm.saveEntity()", ng-disabled="vm.entityForm.$invalid") Save
+    md-button(ng-if="!(vm.mode === 'batchUpload' || (vm.modal && vm.mode === 'new'))" ng-click="vm.saveEntity()", ng-disabled="vm.entityForm.$invalid") Save
 
     //- md-button.md-icon-button(ng-show="::vm.mode === 'normal' && !vm.modal", ng-click="vm.deleteEntity()", aria-label="Delete")
     //-   md-icon(md-font-set="material-icons") delete
