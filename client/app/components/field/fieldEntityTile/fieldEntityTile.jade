@@ -36,9 +36,13 @@ div(flex, layout="row", layout-padding, layout-wrap)
       .md-card-image(ng-show="$root.$entity.getEntityThumbnailSrc(item, 'w:500;q:60')", ng-style="{backgroundImage: 'url(' + $root.$entity.getEntityThumbnailSrc(item, 'w:500;q:60') + ')'}")
 
       md-card-content(flex)
-        .md-caption(ng-repeat="fieldOptions in vm.getGridColumnFieldSlugs(item.schema)")
-          span {{ fieldOptions.name }}:&nbsp;
-          span(ng-bind-html="item.fields[fieldOptions.slug] | field2String : fieldOptions : 20")
+        .md-body-2 {{ $root.$getSchema(item.schema).name }}
+        table.md-caption
+          tr(
+            ng-repeat="fieldOptions in vm.getGridColumnFieldSlugs(item.schema)"
+          )
+            td(style="vertical-align: top;") {{ fieldOptions.name }}
+            td(ng-bind-html="item.fields[fieldOptions.slug] | field2String : fieldOptions : 20")
 
       md-card-actions(layout="row")
         md-card-icon-actions

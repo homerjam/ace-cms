@@ -85,14 +85,19 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
   };
 
   service.getSchema = schemaSlug => Config.schemas.filter(schema => schema.slug === schemaSlug)[0];
+  $rootScope.$getSchema = service.getSchema;
 
   service.getField = (schemaSlug, fieldSlug) => (service.getSchema(schemaSlug) || { fields: [] }).fields.filter(field => field.slug === fieldSlug)[0];
+  $rootScope.$getField = service.getField;
 
   service.getAction = (schemaSlug, actionSlug) => (service.getSchema(schemaSlug) || { actions: [] }).actions.filter(action => action.slug === actionSlug)[0];
+  $rootScope.$getAction = service.getAction;
 
   service.getTaxonomy = taxonomySlug => Config.taxonomies.filter(taxonomy => taxonomy.slug === taxonomySlug)[0];
+  $rootScope.$getTaxonomy = service.getTaxonomy;
 
   service.getRole = roleSlug => Config.roles.filter(role => role.slug === roleSlug)[0];
+  $rootScope.$getRole = service.getRole;
 
   service.authProvider = (provider, userId = undefined) => $q((resolve, reject) => {
     $http({

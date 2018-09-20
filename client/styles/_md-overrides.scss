@@ -27,8 +27,27 @@ md-input-container > md-select {
   padding: 0 !important;
 }
 
-md-chip [ace-sortable] * {
-  pointer-events: none;
+md-chip {
+  height: auto !important;
+  line-height: 100% !important;
+  padding: 6px 32px 6px 12px !important;
+
+  .md-caption {
+    font-style: italic;
+  }
+
+  [ace-sortable] * {
+    pointer-events: none;
+  }
+}
+
+.md-chip-remove-container {
+  top: 0 !important;
+  height: 100% !important;
+
+  button {
+    height: 100% !important;
+  }
 }
 
 md-toolbar.md-secondary {

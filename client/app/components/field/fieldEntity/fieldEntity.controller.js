@@ -71,6 +71,11 @@ class FieldEntityController {
       });
     });
 
+    vm.clear = () => {
+      vm.searchText = '';
+      vm.fieldModel.value = null;
+    };
+
   }
 }
 

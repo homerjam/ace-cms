@@ -28,9 +28,9 @@ div(flex, layout="row", layout-margin)
     div(flex, ng-if="::vm.fieldOptions.settings.multiple")
       md-chips(ng-model="vm.fieldModel.value.terms", md-autocomplete-snap, md-transform-chip="vm.transformChip($chip)", md-require-match="vm.fieldOptions.settings.existingOnly")
         md-autocomplete(md-no-cache="true", md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-items="item in vm.search(vm.searchText)", md-item-text="item.title", placeholder="{{vm.fieldOptions.name}}", md-min-length="0")
-          .md-caption(md-highlight-text="vm.searchText") {{vm.getParents(item)}}
-          .md-body-1(md-highlight-text="vm.searchText") {{item.title}}
+          .md-caption(md-highlight-text="vm.searchText") {{ vm.getParents(item) }}
+          .md-body-1(md-highlight-text="vm.searchText") {{ item.title }}
         md-chip-template
           div(ace-sortable, item="$chip", collection="$mdChipsCtrl.items", draggable-selector="'md-chip'")
-            .md-caption {{vm.getParents($chip)}}
-            .md-body-1 {{$chip.title}}
+            .md-caption {{ vm.getParents($chip) }}
+            .md-body-1 {{ $chip.title }}

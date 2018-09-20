@@ -1,9 +1,17 @@
 field-entity {
+
   md-input-container {
     padding-bottom: 0 !important;
     margin: 0;
   }
-  label {
-    display: none;
+
+  .md-input-has-value {
+    label {
+      display: none;
+    }
+    input {
+      pointer-events: none;
+    }
   }
+
 }

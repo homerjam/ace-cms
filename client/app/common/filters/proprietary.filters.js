@@ -33,4 +33,10 @@ proprietaryFilters.filter('datePublished', ($filter) => {
   };
 });
 
+proprietaryFilters.filter('schemaSlug2Name', (ConfigFactory) => {
+  'ngInject';
+
+  return input => ConfigFactory.getSchema(input).name;
+});
+
 export default proprietaryFilters;

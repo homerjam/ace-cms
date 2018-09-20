@@ -38,12 +38,6 @@ const entityGridModule = angular.module('entityGrid', [
 
   .filter('filterFields', () => input => (input || []).filter(field => /text|select|number|date|entity/.test(field.type)))
 
-  .filter('schemaSlug2Name', (ConfigFactory) => {
-    'ngInject';
-
-    return input => ConfigFactory.getSchema(input).name;
-  })
-
   .factory('EntityGridFactory', EntityGridFactory)
 
   .directive('entityGrid', entityGridComponent);
