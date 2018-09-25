@@ -280,6 +280,8 @@ class EntityGridController {
 
           vm.grid.data = vm.items;
 
+          saveState();
+
           deferred.resolve();
         })
         .finally(() => {
@@ -416,6 +418,19 @@ class EntityGridController {
     vm.filterOptions = async (filter, searchTerm) => {
       const result = await EntityFactory.fieldValues(filter.fieldSlug, searchTerm);
       return result;
+    };
+
+    /* State */
+
+    function saveState() {
+      if (schemaSlugs[0]) {
+        EntityGridFactory.states[schemaSlugs[0]] = vm.grid.data;
+      }
+    }
+
+    // Record last grid state on destroy
+    vm.$onDestroy = () => {
+      saveState();
     };
 
     $scope.$watch(() => vm.showSearch, () => {

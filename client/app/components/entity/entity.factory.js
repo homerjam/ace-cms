@@ -256,17 +256,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
       },
     })
       .then((response) => {
-        entity = response.data;
-
-        if (EntityGridFactory.states[entity.schema]) {
-          EntityGridFactory.states[entity.schema].data.unshift(entity);
-          EntityGridFactory.states[entity.schema].state.selection = [{
-            row: 0,
-            identity: false,
-          }];
-        }
-
-        resolve(entity);
+        resolve(response.data);
       }, reject);
   });
 

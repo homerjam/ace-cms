@@ -4,6 +4,7 @@ const EntityGridFactory = ($http, $q, appConfig) => {
   'ngInject';
 
   const service = {
+    states: {},
     lastResult: {
       total: 0,
       bookmark: null,
