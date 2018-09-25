@@ -4,7 +4,6 @@ const EntityGridFactory = ($http, $q, appConfig) => {
   'ngInject';
 
   const service = {
-    states: {},
     lastResult: {
       total: 0,
       bookmark: null,
@@ -16,7 +15,7 @@ const EntityGridFactory = ($http, $q, appConfig) => {
     const defaultParams = {
       query: '*:*',
       sort: '<score>',
-      limit: 100,
+      limit: 20,
       include_docs: true,
     };
 

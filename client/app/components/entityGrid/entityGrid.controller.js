@@ -1,14 +1,10 @@
-import _ from 'lodash';
 import angular from 'angular';
-import he from 'he/he';
 
-const GRID_RESTORE_DELAY = 100;
 const GRID_INITIAL_RESIZE_DELAY = 2000;
-const GRID_RESTORE_SCROLL_FOCUS_OFFSET = 5;
 
 class EntityGridController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $state, $stateParams, $transitions, $q, $filter, $log, $timeout, $window, $mdDialog, HelperFactory, EntityGridFactory, ConfigFactory, EntityFactory, BatchFactory, uiGridConstants) {
+  constructor ($scope, $state, $stateParams, $q, $filter, $log, $timeout, $mdDialog, HelperFactory, EntityGridFactory, ConfigFactory, EntityFactory, uiGridConstants) {
     const vm = this;
 
     vm.items = [];
@@ -102,42 +98,11 @@ class EntityGridController {
       allowCellFocus: false,
     });
 
-    const state = EntityGridFactory.states[schemaSlugs[0]];
-
     const onRegisterApi = (gridApi) => {
       vm.gridApi = gridApi;
 
-      gridApi.core.on.renderingComplete($scope, (grid) => {
-        if (state) {
-          bookmarks = state.bookmarks;
-          vm.grid.data = state.data;
-          vm.items = state.data;
-          vm.totalItems = state.totalItems;
-          vm.searchTerm = state.searchTerm;
-          vm.showSearch = state.showSearch;
-          vm.page = state.page;
-          vm.sortColumns = state.sortColumns;
-          vm.filters = state.filters;
-          vm.showSearch = vm.searchTerm !== '';
-
-          // applyEdits();
-
-          $timeout(() => {
-            gridApi.core.handleWindowResize();
-
-            if (state) {
-              gridApi.saveState.restore(vm, state.state);
-
-              if (state.state.scrollFocus.rowVal) {
-                $timeout(() => {
-                  gridApi.core.scrollTo(vm.grid.data[state.state.scrollFocus.rowVal.row + GRID_RESTORE_SCROLL_FOCUS_OFFSET]);
-                });
-              }
-            }
-          }, GRID_RESTORE_DELAY);
-        } else {
-          getResults(true);
-        }
+      gridApi.core.on.renderingComplete($scope, () => {
+        getResults(true);
 
         $timeout(() => {
           gridApi.core.handleWindowResize();
@@ -315,8 +280,6 @@ class EntityGridController {
 
           vm.grid.data = vm.items;
 
-          saveState();
-
           deferred.resolve();
         })
         .finally(() => {
@@ -453,29 +416,6 @@ class EntityGridController {
     vm.filterOptions = async (filter, searchTerm) => {
       const result = await EntityFactory.fieldValues(filter.fieldSlug, searchTerm);
       return result;
-    };
-
-    /* State */
-
-    function saveState() {
-      if (schemaSlugs[0]) {
-        EntityGridFactory.states[schemaSlugs[0]] = {
-          bookmarks,
-          data: vm.grid.data,
-          totalItems: vm.totalItems,
-          searchTerm: vm.searchTerm,
-          showSearch: vm.showSearch,
-          page: vm.page,
-          sortColumns: vm.sortColumns,
-          filters: vm.filters,
-          state: vm.gridApi.saveState.save(),
-        };
-      }
-    }
-
-    // Record last grid state and options per schema on destroy
-    vm.$onDestroy = () => {
-      saveState();
     };
 
     $scope.$watch(() => vm.showSearch, () => {

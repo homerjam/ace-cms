@@ -250,6 +250,9 @@ class EntityController {
           if (vm.modal) {
             $mdDialog.hide();
           }
+          $state.go('entityGrid', {
+            schemaSlug: vm.entity.schema,
+          });
           EntityFactory.editEntities([{
             id: vm.entity._id,
           }]);
