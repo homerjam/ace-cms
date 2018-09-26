@@ -40,7 +40,7 @@ div(flex, layout="row", layout-padding, layout-wrap)
         )
         video(
           ng-if="item.thumbnail.thumbnailType === 'video'"
-          ng-src="{{ $root.$helper.videoSrc(item.thumbnail, 'f:mp4;h:360;bv:1000') }}"
+          ng-src="{{ $root.$helper.videoSrc(item.thumbnail, 'f:mp4;h:360;bv:1000;d:5') }}"
           muted
           loop
           onmouseenter="this.play()"
