@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 class FieldEntityTileController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $log, ConfigFactory, EntityFactory, HelperFactory) {
+  constructor ($scope, $filter, $log, ConfigFactory, EntityFactory, HelperFactory) {
     const vm = this;
 
     if (!vm.fieldModel.value) {
@@ -99,14 +99,27 @@ class FieldEntityTileController {
       vm.selected = [];
     };
 
-    vm.getGridColumnFieldSlugs = (schemaSlug) => {
-      const schema = ConfigFactory.getSchema(schemaSlug);
+    vm.getGridColumnFields = (item) => {
+      const schema = ConfigFactory.getSchema(item.schema);
 
       if (!schema) {
         return [];
       }
 
-      return schema.fields.filter(field => field.settings.gridColumn);
+      let fields = schema.fields.filter((fieldOptions) => {
+        if (/(entityTile|entityGrid)/.test(fieldOptions.type) || fieldOptions.settings.multiple) {
+          return false;
+        }
+        return fieldOptions.settings.gridColumn;
+      });
+
+      fields = fields.map((fieldOptions) => {
+        fieldOptions.text = $filter('field2String')(item.fields[fieldOptions.slug], fieldOptions, 20);
+        console.log(fieldOptions.text);
+        return fieldOptions;
+      });
+
+      return fields;
     };
 
     vm.hasPreview = (i) => {

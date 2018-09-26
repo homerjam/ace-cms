@@ -22,11 +22,12 @@ field-entity-tile {
   .md-card-image {
     height: 150px;
     background-repeat: no-repeat;
-    background-position: 50% 10%;
-    background-size: cover;
+    background-position: 50% 50%;
+    background-size: contain;
+    background-color: lightgrey;
 
     &:hover {
-      background-size: contain;
+      // background-size: contain;
     }
   }
 

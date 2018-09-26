@@ -70,6 +70,8 @@ const fieldModule = angular.module('field', [
 
       output = he.decode(output);
 
+      output = output.trim();
+
       return output;
     };
   })
