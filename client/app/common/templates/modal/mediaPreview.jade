@@ -10,13 +10,24 @@ md-dialog(aria-label="Media Preview")
 
     div(layout="column", layout-margin)
 
-      .media-wrapper
+      .media-wrapper(
+        ng-click='vm.index = vm.index < vm.media.length - 1 ? vm.index + 1 : 0'
+      )
+
         span(ng-show="vm.media[vm.index].type === 'none'") No preview available
+
         span(ng-show="vm.media[vm.index].type === 'image'")
-          img(style="max-width: 100%; vertical-align: bottom;", ng-src='{{vm.media[vm.index].src}}', ng-click='vm.index = vm.index < vm.media.length - 1 ? vm.index + 1 : 0')
+          img(
+            style="max-width: 100%; max-height: 60vh"
+            ng-src='{{vm.media[vm.index].src}}'
+          )
+
         span(ng-show="vm.media[vm.index].type === 'video'")
-          video(style="max-width: 100%;", controls)
-            source(ng-repeat='variant in vm.media[vm.index].variants', ng-src='{{variant.src}}', type='{{variant.mimeType}}')
+          video(
+            style="max-width: 100%; max-height: 60vh"
+            ng-src='{{vm.media[vm.index].src}}'
+            controls
+          )
 
   md-dialog-actions(layout="row")
     span(flex)

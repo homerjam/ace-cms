@@ -115,7 +115,6 @@ class FieldEntityTileController {
 
       fields = fields.map((fieldOptions) => {
         fieldOptions.text = $filter('field2String')(item.fields[fieldOptions.slug], fieldOptions, 20);
-        console.log(fieldOptions.text);
         return fieldOptions;
       });
 
@@ -146,10 +145,19 @@ class FieldEntityTileController {
           return;
         }
 
-        media.push({
-          type: 'image',
-          src: EntityFactory.getEntityThumbnailSrc(item, 'h:1000;q:80'),
-        });
+        if (thumbnail.thumbnailType === 'image') {
+          media.push({
+            type: thumbnail.thumbnailType,
+            src: HelperFactory.thumbnailSrc(thumbnail, 'h:1000;q:80'),
+          });
+        }
+
+        if (thumbnail.thumbnailType === 'video') {
+          media.push({
+            type: thumbnail.thumbnailType,
+            src: HelperFactory.videoSrc(thumbnail, 'f:mp4;h:360;bv:1000'),
+          });
+        }
       });
 
       HelperFactory.mediaPreview(media, index);

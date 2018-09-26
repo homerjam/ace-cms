@@ -140,8 +140,6 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
 
   service.getEntityThumbnail = entity => service.getFieldThumbnail(getThumbnailField(entity));
 
-  service.getEntityThumbnailSrc = (entity, settings) => HelperFactory.fieldThumbnailSrc(getThumbnailField(entity), settings);
-
   function prepEntityToDb (entity, schemaSlug) {
     entity = angular.copy(entity);
 

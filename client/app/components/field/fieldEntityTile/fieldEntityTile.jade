@@ -33,7 +33,19 @@ div(flex, layout="row", layout-padding, layout-wrap)
 
     md-card(flex, ng-click="vm.clickItem($event, item)", md-theme="{{item.$selected ? 'selected' : 'default'}}", md-theme-watch)
 
-      .md-card-image(ng-style="{ backgroundImage: 'url(' + $root.$entity.getEntityThumbnailSrc(item, 'w:500;q:60') + ')' }")
+      .md-card-image
+        img(
+          ng-if="item.thumbnail.thumbnailType === 'image'"
+          ng-src="{{ $root.$helper.thumbnailSrc(item.thumbnail, 'w:500;q:60') }}"
+        )
+        video(
+          ng-if="item.thumbnail.thumbnailType === 'video'"
+          ng-src="{{ $root.$helper.videoSrc(item.thumbnail, 'f:mp4;h:360;bv:1000') }}"
+          muted
+          loop
+          onmouseenter="this.play()"
+          onmouseleave="this.pause()"
+        )
 
       md-card-content(flex)
         .md-body-2 {{ $root.$getSchema(item.schema).name }}
