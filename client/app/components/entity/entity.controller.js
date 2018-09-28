@@ -176,7 +176,7 @@ class EntityController {
 
           if ($state.$current.name === 'newEntity') {
             if (vm.modal) {
-              $mdDialog.hide();
+              $mdDialog.hide(vm);
             }
             EntityFactory.editEntities([{
               id: entity._id,
@@ -213,7 +213,7 @@ class EntityController {
       EntityFactory.createEntity(vm.schema.slug, entity)
         .then((entity) => {
           if (vm.modal) {
-            $mdDialog.hide();
+            $mdDialog.hide(vm);
           }
           EntityFactory.editEntities([{
             id: entity._id,
@@ -248,7 +248,7 @@ class EntityController {
       EntityFactory.restoreEntities(vm.entity)
         .then(() => {
           if (vm.modal) {
-            $mdDialog.hide();
+            $mdDialog.hide(vm);
           }
           $state.go('entityGrid', {
             schemaSlug: vm.entity.schema,
@@ -292,7 +292,7 @@ class EntityController {
 
     vm.nextEntity = () => {
       if (vm.modal) {
-        $mdDialog.hide();
+        $mdDialog.hide(vm);
       }
 
       EntityFactory.editEntities([{
@@ -302,7 +302,7 @@ class EntityController {
 
     vm.prevEntity = () => {
       if (vm.modal) {
-        $mdDialog.hide();
+        $mdDialog.hide(vm);
       }
 
       EntityFactory.editEntities([{
