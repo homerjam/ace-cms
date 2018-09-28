@@ -18,7 +18,11 @@ div(ng-show="!vm.fieldModel.value.video", flex, layout="row", layout-margin)
 div(ng-show="vm.fieldModel.value.video", flex, layout="row", layout-margin)
 
   div(flex)
-    img(ng-src="{{ vm.fieldModel.value.video.thumbnail.url }}")
+    //- img(ng-src="{{ vm.fieldModel.value.video.thumbnail.url }}")
+    video(
+      ng-src="{{ vm.fieldModel.value.video.files[1].url }}"
+      controls
+    )
 
   div(flex)
     table

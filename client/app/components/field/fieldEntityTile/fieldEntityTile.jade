@@ -35,7 +35,7 @@ div(flex, layout="row", layout-padding, layout-wrap)
 
       .md-card-image
         img(
-          ng-if="item.thumbnail.thumbnailType === 'image'"
+          ng-if="item.thumbnail.thumbnailType !== 'video'"
           ng-src="{{ $root.$helper.thumbnailSrc(item.thumbnail, 'w:500;q:60') }}"
         )
         video(

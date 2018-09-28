@@ -145,16 +145,16 @@ class FieldEntityTileController {
           return;
         }
 
-        if (thumbnail.thumbnailType === 'image') {
+        if (thumbnail.thumbnailType !== 'video') {
           media.push({
-            type: thumbnail.thumbnailType,
+            type: 'image',
             src: HelperFactory.thumbnailSrc(thumbnail, 'h:1000;q:80'),
           });
         }
 
         if (thumbnail.thumbnailType === 'video') {
           media.push({
-            type: thumbnail.thumbnailType,
+            type: 'video',
             src: HelperFactory.videoSrc(thumbnail, 'f:mp4;h:360;bv:1000'),
           });
         }
