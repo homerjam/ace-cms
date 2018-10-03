@@ -412,7 +412,8 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
         }
       });
       if (fileNames.length) {
-        await deleteFiles(fileNames);
+        // TODO: fix delete orphaned files
+        // await deleteFiles(fileNames);
       }
       return false;
     }
@@ -450,7 +451,8 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
         }
       });
       if (fileNames.length) {
-        await deleteFiles(fileNames);
+        // TODO: fix delete orphaned files
+        // await deleteFiles(fileNames);
       }
       return false;
     }
