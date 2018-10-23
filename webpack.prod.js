@@ -79,9 +79,9 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['es2015', 'es2017'],
+              presets: ['@babel/preset-env'],
               plugins: [
-                'transform-runtime',
+                '@babel/plugin-transform-runtime',
                 ['angularjs-annotate', { explicitOnly: false }],
               ],
             },

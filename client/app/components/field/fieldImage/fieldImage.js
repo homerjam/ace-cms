@@ -1,10 +1,11 @@
 import angular from 'angular';
-import angularCropify from 'angular-cropify';
+import 'angular-cropify/angular-cropify';
+import 'angular-cropify/angular-cropify.css';
 import fieldImageComponent from './fieldImage.component';
 import FieldImageSettingsFactory from './fieldImage.settings.factory';
 
 const fieldImageModule = angular.module('fieldImage', [
-  angularCropify,
+  'hj.cropify',
 ])
 
   .config(() => {

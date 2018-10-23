@@ -2,8 +2,8 @@
 
 import angular from 'angular';
 import angularSanitize from 'angular-sanitize';
-import angularAnimate from 'angular-animate';
-import angularTouch from 'angular-touch';
+// import angularAnimate from 'angular-animate';
+// import angularTouch from 'angular-touch';
 import angularAria from 'angular-aria';
 import angularMessages from 'angular-messages';
 import uiRouter from '@uirouter/angularjs';
@@ -17,16 +17,16 @@ import 'material-design-icons/iconfont/material-icons.css';
 import angularMaterial from 'angular-material';
 import 'angular-ui-grid/ui-grid.min.css';
 import angularUiGrid from 'angular-ui-grid';
+import 'ui-grid-draggable-rows';
 import angularLoadingBar from 'angular-loading-bar';
 import 'angular-ui-tree/dist/angular-ui-tree.css';
 import angularUiTree from 'angular-ui-tree';
-import angularUiGridDraggableRows from 'ui-grid-draggable-rows';
+import 'angular-modal-service2/angular-modal-service2';
 import 'angular-modal-service2/angular-modal-service2.css';
-import angularModalService2 from 'angular-modal-service2';
 import angularDynamicLocale from 'angular-dynamic-locale';
 import angularIso3166CountryCodes from 'iso-3166-country-codes-angular';
 import satellizer from 'satellizer';
-import angularGravatar from 'angular-gravatar';
+import 'angular-gravatar';
 import Common from './common/common';
 import Components from './components/components';
 import AppComponent from './app.component';
@@ -44,7 +44,6 @@ angular.module('app', [
   angularLoadingBar,
   angularUiTree,
   angularDynamicLocale,
-  angularModalService2,
   angularIso3166CountryCodes,
   satellizer,
   angularUiGrid,
@@ -54,6 +53,7 @@ angular.module('app', [
   'ui.grid.saveState',
   'ui.grid.draggable-rows',
   'ui.gravatar',
+  'hj.modal',
   Common.name,
   Components.name,
 ])
