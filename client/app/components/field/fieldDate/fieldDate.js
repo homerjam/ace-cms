@@ -13,6 +13,7 @@ const fieldDateModule = angular.module('fieldDate', [])
 
     FieldFactory.registerField('date', {
       name: 'Date',
+      dataType: 'number',
       editSettings: FieldDateSettingsFactory.edit,
       toString(value) {
         return $filter('date')(value, 'short');

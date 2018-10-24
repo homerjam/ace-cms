@@ -4,7 +4,7 @@ const GRID_INITIAL_RESIZE_DELAY = 2000;
 
 class EntityGridController {
   /* @ngInject */
-  constructor ($scope, $state, $stateParams, $q, $filter, $log, $timeout, $mdDialog, HelperFactory, EntityGridFactory, ConfigFactory, EntityFactory, uiGridConstants) {
+  constructor ($scope, $state, $stateParams, $q, $filter, $log, $timeout, $mdDialog, HelperFactory, EntityGridFactory, ConfigFactory, EntityFactory, FieldFactory, uiGridConstants) {
     const vm = this;
 
     vm.items = [];
@@ -259,7 +259,8 @@ class EntityGridController {
           type = '<string>';
 
         } else {
-          const fieldOptions = ConfigFactory.getField(schemas[0].slug, columnName);
+          const field = ConfigFactory.getField(schemaSlugs[0], columnName);
+          const fieldOptions = FieldFactory.field(field.type);
           columnName = `fields.${columnName}`;
           type = `<${fieldOptions.dataType || 'string'}>`;
         }
