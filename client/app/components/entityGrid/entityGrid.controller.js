@@ -26,10 +26,10 @@ class EntityGridController {
     vm.sortFields = [];
     vm.searching = false;
 
-    const schemaSlugs = vm.schema ?
-      [vm.schema] : vm.mode === 'trash' ?
-        [] : $stateParams.schemaSlug ?
-          [$stateParams.schemaSlug] : [];
+    const schemaSlugs = vm.schema
+      ? [vm.schema] : vm.mode === 'trash'
+        ? [] : $stateParams.schemaSlug
+          ? [$stateParams.schemaSlug] : [];
 
     let hasImageColumn = false;
     let bookmarks = {};
@@ -43,7 +43,9 @@ class EntityGridController {
       return;
     }
 
-    vm.heading = vm.mode === 'trash' ? 'Trash' : $filter('pluralize')(schemas[0] ? schemas[0].name : '');
+    vm.heading = vm.mode === 'trash' ? 'Trash'
+      : schemas[0].collectionName ? schemas[0].collectionName
+        : $filter('pluralize')(schemas[0] ? schemas[0].name : '');
 
     vm.sortFields = [];
 
@@ -257,8 +259,9 @@ class EntityGridController {
           type = '<string>';
 
         } else {
+          const fieldOptions = ConfigFactory.getField(schemas[0].slug, columnName);
           columnName = `fields.${columnName}`;
-          type = '<string>';
+          type = `<${fieldOptions.dataType || 'string'}>`;
         }
 
         options.sort.push(`${direction}sort.${columnName}${type}`);

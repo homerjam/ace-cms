@@ -5,9 +5,9 @@ md-toolbar
         md-icon(md-icon-set="material-icons") menu
 
     h3
-      span(hide show-gt-xs ng-show="vm.selected.length > 0") {{vm.selected.length}}/
-      span {{vm.totalItems}} &nbsp;
-      span {{vm.heading}}
+      span {{vm.heading}} &nbsp;
+      span(hide show-gt-xs ng-show="vm.selected.length > 0") ({{vm.selected.length}}/{{vm.totalItems}})
+      span(hide show-gt-xs ng-show="vm.selected.length === 0") ({{vm.totalItems}})
 
     span(flex)
 

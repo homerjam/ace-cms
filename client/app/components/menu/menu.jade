@@ -19,9 +19,10 @@ md-content
           md-button(ng-if="schema.settings.singular" ui-sref="singularEntity({id: schema.slug})")
             // md-icon(md-font-set="material-icons") dashboard
             span {{ schema.name }}
-          md-button(ng-if="!schema.settings.singular" ui-sref="entityGrid({schemaSlug: schema.slug})")
+          md-button(ng-if="!schema.settings.singular" ui-sref="entityGrid({schemaSlug: schema.slug})" aria-label="{{ schema.collectionName  || schema.name }}")
             // md-icon(md-font-set="material-icons") dashboard
-            span {{ schema.name | pluralize }}
+            span(ng-if="schema.collectionName") {{ schema.collectionName }}
+            span(ng-if="!schema.collectionName") {{ schema.name | pluralize }}
 
     md-menu(md-offset="220 0", ng-show="$root.$config.taxonomies.length || $root.$isSuperUser")
       md-list-item(ng-click="$mdMenu.open()", ng-class="{active: $root.$helper.testExp('taxonomy', $root.$state.current.name)}")

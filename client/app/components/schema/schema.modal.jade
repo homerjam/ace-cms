@@ -30,6 +30,15 @@ md-dialog(aria-label="Schema")
           )
 
         md-input-container.md-block
+          label Collection Name
+          input(
+            ng-model="vm.schema.collectionName"
+            ng-minlength="2"
+            ng-maxlength="50"
+            ng-pattern="/^[^\"]*$/"
+          )
+
+        md-input-container.md-block
           md-checkbox(ng-model="vm.schema.settings.singular", aria-label="Singular?") Singular
 
         md-input-container.md-block

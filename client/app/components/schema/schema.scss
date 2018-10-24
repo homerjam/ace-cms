@@ -10,3 +10,7 @@ schema {
     flex: 1 1 100%;
   }
 }
+
+md-dialog[aria-label="Schema"] {
+  width: 100%;
+}
