@@ -1,6 +1,6 @@
 class MenuController {
   /* @ngInject */
-  constructor($rootScope, $window, $state, $transitions, $mdSidenav, ConfigFactory, TaxonomyFactory) {
+  constructor($rootScope, $window, $state, $http, $transitions, $mdSidenav, ConfigFactory, TaxonomyFactory, appConfig) {
     const vm = this;
 
     $transitions.onSuccess({ to: '*' }, (trans) => {
@@ -22,7 +22,11 @@ class MenuController {
       }
     };
 
-    vm.preview = () => {
+    vm.preview = async () => {
+      await $http({
+        method: 'GET',
+        url: `${appConfig.apiUrl}/cache/clear`,
+      });
       $window.open(`${ConfigFactory.getConfig().client.baseUrl}?apiToken=${$rootScope.apiToken}`);
     };
   }
