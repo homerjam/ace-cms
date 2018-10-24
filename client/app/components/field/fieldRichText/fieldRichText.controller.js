@@ -117,7 +117,7 @@ class FieldRichTextController {
 
     vm.options = {
       // disableExtraSpaces: true,
-      autoLink: true,
+      autoLink: false,
       imageDragging: false,
       anchorPreview: false,
       extensions: {
@@ -156,8 +156,8 @@ class FieldRichTextController {
         buttons,
       },
       paste: {
-        forcePlainText: true,
-        cleanPastedHTML: true,
+        forcePlainText: false,
+        cleanPastedHTML: false,
         cleanAttrs: ['class', 'style'],
         cleanTags: ['meta', 'div', 'span'],
       },

@@ -28,6 +28,8 @@ const fieldRichTextModule = angular.module('fieldRichText', [])
           };
         }
 
+        value.html = $filter('cleanHTML')(value.html);
+
         const pattern = 'href=["\']urn:entity:(\\S+)["\']';
         let re = new RegExp(pattern, 'gim');
         const matchStrings = value.html.match(re);

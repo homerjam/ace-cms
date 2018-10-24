@@ -135,7 +135,7 @@ generalFilters.filter('parseDate', ($filter) => {
 generalFilters.filter('decodeEntities', () => input => he.decode(input));
 
 generalFilters.filter('cleanHTML', () => (input, pasted = false) => {
-  let clean = sanitizeHtml(input, {
+  let clean = sanitizeHtml(`<p>${input}</p>`, {
     allowedTags: [
       'p', 'a',
       'h2', 'h3', 'h4', 'h5', 'h6',
