@@ -50,6 +50,10 @@ div(flex, layout="row", layout-padding, layout-wrap)
       md-card-content(flex)
         .md-body-2 {{ $root.$getSchema(item.schema).name }}
         table.md-caption
+          tr
+            td(style="vertical-align: top;") Published
+            td(ng-if="item.published") {{ item.publishedAt | date: 'short' }}
+            td(ng-if="!item.published") &cross;
           tr(
             ng-repeat="fieldOptions in vm.getGridColumnFields(item)"
             ng-if="fieldOptions.text"
