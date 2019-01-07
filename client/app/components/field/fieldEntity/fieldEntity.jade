@@ -28,6 +28,9 @@ div(flex, layout="row", layout-margin)
         md-item-text="$root.$getSchema(item.schema).name + ': ' + item.title"
         md-floating-label="Select..."
         md-min-length="0"
+        md-require-match="true"
+        md-select-on-match="true"
+        md-match-case-insensitive="true"
       )
         md-item-template
           .md-caption {{ $root.$getSchema(item.schema).name }}

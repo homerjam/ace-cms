@@ -21,7 +21,10 @@ div(flex, layout="row", layout-margin)
         md-item-text="item.title"
         md-floating-label="{{vm.fieldOptions.name}}"
         md-min-length="0"
-        )
+        md-require-match="true"
+        md-select-on-match="true"
+        md-match-case-insensitive="true"
+      )
         md-item-template
           span(md-highlight-text="vm.searchText", md-highlight-flags="^i") {{item.title}}
         md-not-found No matches found.

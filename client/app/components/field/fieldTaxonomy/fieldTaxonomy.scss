@@ -5,7 +5,7 @@ field-taxonomy {
     margin: 0;
   }
 
-  .md-input-has-value {
+  .md-input-has-value:not(.md-input-invalid) {
     label {
       display: none;
     }

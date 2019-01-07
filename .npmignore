@@ -1,7 +1,10 @@
 .env
+.DS_Store
+.vscode
 .couch
 .cloudant
-.vscode
 node_modules
+package-lock.json
+yarn.lock
 client
 generator
