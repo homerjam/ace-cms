@@ -1,14 +1,14 @@
 {
   "name": "ace-cms",
-  "version": "0.6.32",
+  "version": "0.7.0",
   "description": "Flexible, multi-site, headless CMS",
   "author": {
-    "name": "Studio Thomas",
-    "email": "hello@studiothomas.co.uk",
-    "url": "http://studiothomas.co.uk"
+    "name": "James Homer",
+    "email": "hello@homerjam.es",
+    "url": "https://homerjam.es"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "repository": "https://github.com/studiothomas/ace-cms.git",
+  "repository": "https://github.com/homerjam/ace-cms.git",
   "main": "server/app.js",
   "scripts": {
     "start": "nodemon index --exec 'node -r dotenv/config' --inspect --watch server",
@@ -17,19 +17,20 @@
     "release": "npm run build && git add --all && git commit --all --message \"build\" && npm version patch && npm publish && git remote | xargs -L1 git push --all"
   },
   "dependencies": {
-    "ace-api": "^0.7.37",
     "angular-i18n": "^1.7.5",
+    "axios": "^0.18.0",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.2",
     "compression": "^1.7.3",
-    "connect-redis": "^3.4.0",
     "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
     "errorhandler": "^1.5.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-useragent": "^1.0.12",
     "forever": "^0.15.3",
     "helmet": "^3.15.0",
+    "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "method-override": "^3.0.0",
     "morgan": "^1.9.1",
@@ -100,6 +101,7 @@
     "iso-3166-country-codes-angular": "^1.2.1",
     "material-design-icons": "^3.0.1",
     "medium-editor": "^5.23.2",
+    "node-sass": "^4.11.0",
     "openseadragon": "^2.4.0",
     "opn": "^5.4.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",

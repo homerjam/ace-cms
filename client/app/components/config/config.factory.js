@@ -102,13 +102,13 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
   service.authProvider = (provider, userId = undefined) => $q((resolve, reject) => {
     $http({
       method: 'GET',
-      url: `${appConfig.apiUrl}/auth/${provider}/config`,
+      url: `${appConfig.apiUrl}/auth/provider/${provider}/config`,
       cache: true,
     })
       .then((response) => {
         SatellizerConfig.providers[provider].clientId = response.data.clientId;
         SatellizerConfig.providers[provider].redirectUri = `${$window.location.origin + appConfig.clientBasePath}_auth/${provider}`;
-        SatellizerConfig.providers[provider].url = `${appConfig.apiUrl}/auth/${provider}${userId ? `/${userId}` : ''}`;
+        SatellizerConfig.providers[provider].url = `${appConfig.apiUrl}/auth/provider/${provider}${userId ? `/${userId}` : ''}`;
         SatellizerConfig.providers[provider].popupOptions = {};
 
         $auth.authenticate(provider, {
@@ -128,7 +128,7 @@ const ConfigFactory = ($rootScope, $http, $q, $window, $document, $mdDialog, Hel
     }
 
     if (Math.floor(new Date().getTime() / 1000) - (config.provider[provider].begins || 0) > config.provider[provider].expires_in) {
-      config = (await $http.put(`${appConfig.apiUrl}/auth/${provider}${userId ? `/${userId}` : ''}/refresh`)).data;
+      config = (await $http.put(`${appConfig.apiUrl}/auth/provider/${provider}${userId ? `/${userId}` : ''}/refresh`)).data;
       service.setConfig(config);
     }
 

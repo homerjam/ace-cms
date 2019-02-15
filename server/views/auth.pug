@@ -98,29 +98,41 @@ html
         .message.success.mdl-shadow--2dp
           span= locals.successMessage
 
-      #login-form.mdl-shadow--2dp
+      if !locals.errorMessage
+        #login-form.mdl-shadow--2dp
 
-      p
-        br
-        a(href="https://accounts.google.com/Logout") Logout of Google
+        p
+          br
+          a(href="https://accounts.google.com/Logout") Logout of Google
 
-    script(src="https://cdn.auth0.com/js/lock/11.0.1/lock.min.js")
+    if !locals.errorMessage
 
-    script.
-      var lock = new Auth0Lock('!{auth0.clientId}', '!{auth0.domain}', {
-        theme: {
-          logo: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-          primaryColor: '#607D8B',
-        },
-        container: 'login-form',
-        socialButtonStyle: 'big',
-        auth: {
-          responseType: 'code',
-          redirectUrl: window.location.protocol + '//' + window.location.host + '!{clientBasePath}_authorise',
-          params: {
-            state: '!{slug}',
+      script(src="https://cdn.auth0.com/js/lock/11.0.1/lock.min.js")
+
+      script.
+        function getParameterByName(name) {
+          var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+          return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
+
+        var lock = new Auth0Lock('!{auth0.clientId}', '!{auth0.domain}', {
+          theme: {
+            logo: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+            primaryColor: '#607D8B',
           },
-        },
-        allowSignUp: false,
-      });
-      lock.show();
+          container: 'login-form',
+          socialButtonStyle: 'big',
+          auth: {
+            responseType: 'code',
+            redirectUrl: window.location.protocol + '//' + window.location.host + '!{clientBasePath}_authorise',
+            params: {
+              state: '!{slug}',
+            },
+          },
+          allowLogin: !{type === 'login' ? 'true' : 'false'},
+          allowSignUp: !{type === 'signup' ? 'true' : 'false'},
+          prefill: {
+            email: getParameterByName('email'),
+          },
+        });
+        lock.show();

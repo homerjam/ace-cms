@@ -12,9 +12,17 @@ module.exports = {
   clientBasePath: process.env.CLIENT_BASE_PATH || '/',
 
   api: {
-    routerPath: process.env.API_ROUTER_PATH || '/api',
     url: process.env.API_URL || '/api',
-    tokenExpiresIn: parseInt(process.env.API_TOKEN_EXPIRES_IN || 86400, 10),
+  },
+
+  auth: {
+    tokenSecret: process.env.AUTH_TOKEN_SECRET || 'change_me',
+    tokenExpiresIn: parseInt(process.env.AUTH_TOKEN_EXPIRES_IN || 86400, 10),
+  },
+
+  dev: {
+    userId: process.env.DEV_USER_ID || 'dev',
+    role: process.env.DEV_ROLE || 'super',
   },
 
   session: {
@@ -27,14 +35,6 @@ module.exports = {
     clientId: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     callbackUrl: process.env.AUTH0_CALLBACK_URL,
-  },
-
-  redis: {
-    url: process.env.REDIS_URL,
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PASSWORD,
-    db: parseInt(process.env.REDIS_DB || 0, 10),
   },
 
   assist: {
