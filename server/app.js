@@ -284,18 +284,16 @@ class AceCms {
 
     router.post('/logout', (req, res) => {
       req.logout();
-      req.session.destroy(() => {
-        res.status(200);
-        res.send('Logged out successfully');
-      });
+      req.session = null;
+      res.status(200);
+      res.send('Logged out successfully');
     });
 
     router.get('/logout', (req, res) => {
       const slug = req.params.slug;
       req.logout();
-      req.session.destroy(() => {
-        res.redirect(`${config.clientBasePath + slug}/login?success=logout`);
-      });
+      req.session = null;
+      res.redirect(`${config.clientBasePath + slug}/login?success=logout`);
     });
 
     /* Index */
