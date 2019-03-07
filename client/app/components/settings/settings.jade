@@ -36,7 +36,7 @@ md-content
         .md-list-item-text
           h3 Google
           p {{vm.config.provider.google.user.displayName}}
-        md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
+        //- md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
 
       md-list-item.md-2-line(ng-show="vm.config.provider.instagram.access_token")
         a(href="https://instagram.com/{{vm.config.provider.instagram.user.username}}", target="_blank")

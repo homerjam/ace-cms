@@ -16,7 +16,12 @@ class DashboardController {
     }
 
     const init = async () => {
-      config = await ConfigFactory.refreshProvider('google');
+      try {
+        config = await ConfigFactory.refreshProvider('google');
+      } catch (error) {
+        vm.gaAuthorised = false;
+        return;
+      }
 
       const siteUrl = new $window.URL(config.client.baseUrl || '');
       let siteHostname = siteUrl.hostname.split('.');
