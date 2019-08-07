@@ -8,7 +8,7 @@ Flexible, multi-site, headless CMS. ACE takes it's name from the key parts of th
 
 You need a running version of `homerjam/ace-api` to use the CMS, add the url to the config:
 
-	API_URL=
+    API_URL=
 
 #### Session
 
@@ -28,54 +28,53 @@ Provide a secret for session hashing:
 
 A separate app is used to store images, you'll need to deploy this following the instructions at `homerjam/ace-assist` then update the config:
 
-	ASSIST_URL=
-	ASSIST_USERNAME=
-	ASSIST_PASSWORD=
+    ASSIST_URL=
+    ASSIST_USERNAME=
+    ASSIST_PASSWORD=
 
 ## Environment variables
 
-	ENVIRONMENT=development|testing|production
+    ENVIRONMENT=development|testing|production
 
     BASE_URL=
     BASE_PATH=/
 
-	PAGE_TITLE=ACECMS
+    PAGE_TITLE=ACECMS
 
-	MAINTENANCE=false
+    MAINTENANCE=false
 
-	FORCE_HTTPS=false
-	FORCE_WWW=false
+    FORCE_HTTPS=false
+    FORCE_WWW=false
 
-	SESSION_SECRET=change_me
-	SESSION_TTL=7200
+    SESSION_SECRET=change_me
+    SESSION_TTL=7200
 
     # Used to sign JWTs
-	AUTH_TOKEN_SECRET=change_me
-	AUTH_TOKEN_EXPIRES_IN=86400
+    AUTH_TOKEN_SECRET=change_me
+    AUTH_TOKEN_EXPIRES_IN=86400
 
     AUTH0_DOMAIN=
     AUTH0_CLIENT_ID=
     AUTH0_CLIENT_SECRET=
     AUTH0_CALLBACK_URL=
 
-    API_PREFIX=api
     API_URL=/api
 
-	ASSIST_URL=
-	ASSIST_USERNAME=
-	ASSIST_PASSWORD=
+    ASSIST_URL=
+    ASSIST_USERNAME=
+    ASSIST_PASSWORD=
 
-	# Development only
+    # Development only
     DEV_USER_ID=            # development user
-	DEV_ROLE=super			# development user's role
+    DEV_ROLE=super			# development user's role
 
 ## Usage
 
-	# start server
-	$ npm start
+    # start server
+    $ npm start
 
-	# start dev
-	$ gulp
+    # start dev
+    $ gulp
 
     # backup db
     $ cloudant-backup --db dbname --folder .backup

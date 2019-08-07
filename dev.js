@@ -1,6 +1,6 @@
 const http = require('http');
 const express = require('express');
-const opn = require('opn');
+const open = require('open');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -32,7 +32,7 @@ const server = http.createServer(aceCms);
 server.on('listening', () => {
   console.log(`Running: http://localhost:${PORT + CLIENT_BASE_PATH + DEV_SLUG}`);
 
-  // opn(`http://localhost:${PORT + CLIENT_BASE_PATH + DEV_SLUG}`);
+  // open(`http://localhost:${PORT + CLIENT_BASE_PATH + DEV_SLUG}`);
 });
 
 server.listen(PORT);
