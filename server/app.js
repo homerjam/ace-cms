@@ -7,7 +7,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieSession = require('cookie-session');
-// const session = require('express-session');
 const compression = require('compression');
 const errorHandler = require('errorhandler');
 const passwordHash = require('password-hash');
@@ -61,20 +60,8 @@ class AceCms {
 
     app.use(cookieSession({
       secret: config.session.secret,
-      maxAge: config.session.ttl,
+      maxAge: parseInt(config.session.ttl, 10) * 1000,
     }));
-
-    // https://github.com/auth0/passport-auth0/issues/70
-    // app.use(session({
-    //   secret: config.session.secret,
-    //   resave: false,
-    //   saveUninitialized: true,
-    //   cookie: {
-    //     maxAge: config.session.ttl,
-    //     secure: true,
-    //     sameSite: false,
-    //   },
-    // }));
 
     /* Passport */
 

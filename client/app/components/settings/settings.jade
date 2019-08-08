@@ -31,28 +31,34 @@ md-content
       md-subheader.md-no-sticky Connected Accounts
 
       md-list-item.md-2-line(ng-show="vm.config.provider.google.access_token")
-        a(href="{{vm.config.provider.google.user.url}}", target="_blank")
-          img.md-avatar(ng-src="{{vm.config.provider.google.user.image.url}}")
+        //- a(href="{{vm.config.provider.google.user.url}}", target="_blank")
+        //- img.md-avatar(ng-src="{{vm.config.provider.google.user.image.url}}")
+        .md-avatar
+          md-icon(md-font-set="mdi" md-font-icon="mdi-google")
         .md-list-item-text
-          h3 Google
-          p {{vm.config.provider.google.user.displayName}}
+          h3 {{vm.config.provider.google.user.displayName}}
+          p Google
         //- md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
 
       md-list-item.md-2-line(ng-show="vm.config.provider.instagram.access_token")
         a(href="https://instagram.com/{{vm.config.provider.instagram.user.username}}", target="_blank")
-          img.md-avatar(ng-src="{{vm.config.provider.instagram.user.profile_picture}}")
+          //- img.md-avatar(ng-src="{{vm.config.provider.instagram.user.profile_picture}}")
+          .md-avatar
+            md-icon(md-font-set="mdi" md-font-icon="mdi-instagram")
         .md-list-item-text
-          h3 Instagram
-          p @{{vm.config.provider.instagram.user.username}}
+          h3 @{{vm.config.provider.instagram.user.username}}
+          p Instagram
 
       md-list-item.md-2-line(ng-show="vm.config.provider.vimeo.access_token")
         a(href="{{vm.config.provider.vimeo.user.link}}", target="_blank")
-          img.md-avatar(ng-src="{{vm.config.provider.vimeo.user.pictures[3].link}}")
+          //- img.md-avatar(ng-src="{{vm.config.provider.vimeo.user.pictures[3].link}}")
+          .md-avatar
+            md-icon(md-font-set="mdi" md-font-icon="mdi-vimeo")
         .md-list-item-text
-          h3 Vimeo
-          p {{vm.config.provider.vimeo.user.name}}
+          h3 {{vm.config.provider.vimeo.user.name}}
+          p Vimeo
 
-      div(flex layout="row" layout-margin)
+      div(flex layout="row" layout-margin ng-cloak)
         span(flex)
         md-fab-speed-dial.md-fling(md-direction="left" md-open="false")
           md-fab-trigger
@@ -76,35 +82,43 @@ md-content
     md-subheader.md-no-sticky Connected Accounts
 
     //- md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.google.access_token")
-    //-   a(href="{{vm.config.userSettings[vm.user.id].provider.google.user.url}}", target="_blank")
-    //-     img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.google.user.image.url}}")
+    //-   //- a(href="{{vm.config.userSettings[vm.user.id].provider.google.user.url}}", target="_blank")
+    //-     //- img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.google.user.image.url}}")
+    //-   .md-avatar
+    //-     md-icon(md-font-set="mdi" md-font-icon="mdi-google")
     //-   .md-list-item-text
-    //-     h3 Google
-    //-     p {{vm.config.userSettings[vm.user.id].provider.google.user.displayName}}
-    //-   md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
+    //-     h3 {{vm.config.userSettings[vm.user.id].provider.google.user.displayName}}
+    //-     p Google
+    //-   //- md-button(href="https://myaccount.google.com/permissions" target="_blank") Revoke Access
 
     md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.instagram.access_token")
       a(href="https://instagram.com/{{vm.config.userSettings[vm.user.id].provider.instagram.user.username}}", target="_blank")
-        img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.instagram.user.profile_picture}}")
+        //- img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.instagram.user.profile_picture}}")
+        .md-avatar
+          md-icon(md-font-set="mdi" md-font-icon="mdi-instagram")
       .md-list-item-text
-        h3 Instagram
-        p @{{vm.config.userSettings[vm.user.id].provider.instagram.user.username}}
+        h3 @{{vm.config.userSettings[vm.user.id].provider.instagram.user.username}}
+        p Instagram
 
     //- md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.vimeo.access_token")
     //-   a(href="{{vm.config.userSettings[vm.user.id].provider.vimeo.user.link}}", target="_blank")
-    //-     img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.vimeo.user.pictures[3].link}}")
+    //-     //- img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.vimeo.user.pictures[3].link}}")
+    //-     .md-avatar
+    //-       md-icon(md-font-set="mdi" md-font-icon="mdi-vimeo")
     //-   .md-list-item-text
-    //-     h3 Vimeo
-    //-     p {{vm.config.userSettings[vm.user.id].provider.vimeo.user.name}}
+    //-     h3 {{vm.config.userSettings[vm.user.id].provider.vimeo.user.name}}
+    //-     p Vimeo
 
     md-list-item.md-2-line(ng-show="vm.config.userSettings[vm.user.id].provider.spotify.access_token")
       a(href="{{vm.config.userSettings[vm.user.id].provider.spotify.user.external_urls.spotify}}", target="_blank")
-        img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.spotify.user.images[0].url}}")
+        //- img.md-avatar(ng-src="{{vm.config.userSettings[vm.user.id].provider.spotify.user.images[0].url}}")
+        .md-avatar
+          md-icon(md-font-set="mdi" md-font-icon="mdi-spotify")
       .md-list-item-text
-        h3 Spotify
-        p {{vm.config.userSettings[vm.user.id].provider.spotify.user.display_name}}
+        h3 {{vm.config.userSettings[vm.user.id].provider.spotify.user.display_name}}
+        p Spotify
 
-    div(flex layout="row" layout-margin)
+    div(flex layout="row" layout-margin ng-cloak)
       span(flex)
       md-fab-speed-dial.md-fling(md-direction="left" md-open="false")
         md-fab-trigger

@@ -123,8 +123,19 @@ angular.module('app', [
 
     /* Date picker */
 
-    $mdDateLocaleProvider.formatDate = date => moment(date).locale('en-gb').format('L LT');
-    $mdDateLocaleProvider.parseDate = dateString => new Date(dateString);
+    $mdDateLocaleProvider.formatDate = date => (date ? moment(date).format('L LT') : '');
+
+    $mdDateLocaleProvider.parseDate = (dateString) => {
+      const m = moment(dateString, 'L LT', true);
+      return m.isValid() ? m.toDate() : new Date(NaN);
+    };
+
+    $mdDateLocaleProvider.isDateComplete = (dateString) => {
+      dateString = dateString.trim();
+      // Look for two chunks of content (either numbers or text) separated by delimiters.
+      const re = /^(([a-zA-Z]{3,}|[0-9]{1,4})([ .,]+|[/-]))([a-zA-Z]{3,}|[0-9]{1,4})/;
+      return re.test(dateString);
+    };
 
     /* Theme */
 

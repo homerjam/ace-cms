@@ -15,6 +15,8 @@ html(ng-app="app" ng-strict-di)
 
     title= pageTitle
 
+    link(rel="icon" href=clientBasePath + slug + "/img/favicon.ico")
+
     link(rel="stylesheet" href= clientBasePath + slug + '/font/roboto/font.css')
 
     if environment === 'production'
