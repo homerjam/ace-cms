@@ -1,10 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const cssNano = require('cssnano');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
@@ -21,6 +21,11 @@ module.exports = {
   },
 
   optimization: {
+    minimizer: [
+      new TerserPlugin({
+        sourceMap: true,
+      }),
+    ],
     splitChunks: {
       cacheGroups: {
         vendor: {
@@ -35,7 +40,7 @@ module.exports = {
 
   plugins: [
     // new BundleAnalyzerPlugin(),
-    new CleanWebpackPlugin([path.resolve(__dirname, 'public/build')]),
+    new CleanWebpackPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
@@ -52,18 +57,6 @@ module.exports = {
       filename: 'css/[name].[chunkhash].css',
       disable: false,
       allChunks: true,
-    }),
-    new UglifyJsPlugin({
-      sourceMap: true,
-      uglifyOptions: {
-        mangle: {
-          keep_fnames: true,
-        },
-        compress: {
-          warnings: false,
-        },
-        comments: false,
-      },
     }),
   ],
 
