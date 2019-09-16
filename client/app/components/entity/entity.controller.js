@@ -279,7 +279,7 @@ class EntityController {
     vm.prevEntityId = null;
 
     if (vm.mode === 'normal') {
-      const items = EntityGridFactory.states[vm.entity.schema];
+      const items = EntityGridFactory.states[vm.entity.schema].items;
       if (items) {
         items.forEach((item, i) => {
           if (item._id === vm.entity._id) {

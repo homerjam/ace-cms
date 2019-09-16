@@ -114,7 +114,7 @@ class FieldEntityTileController {
       });
 
       fields = fields.map((fieldOptions) => {
-        fieldOptions.text = $filter('field2String')(item.fields[fieldOptions.slug], fieldOptions, 20);
+        fieldOptions.text = $filter('field2String')(_.get(item, ['fields', fieldOptions.slug]), fieldOptions, 20);
         return fieldOptions;
       });
 

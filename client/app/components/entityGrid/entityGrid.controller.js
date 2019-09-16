@@ -36,6 +36,12 @@ class EntityGridController {
 
     const schemas = ConfigFactory.getConfig().schemas.filter(schema => schemaSlugs.indexOf(schema.slug) > -1);
 
+    if (EntityGridFactory.states[schemaSlugs[0]]) {
+      vm.searchTerm = EntityGridFactory.states[schemaSlugs[0]].searchTerm;
+      vm.showSearch = !!vm.searchTerm;
+      vm.filters = EntityGridFactory.states[schemaSlugs[0]].filters;
+    }
+
     if (vm.mode !== 'trash' && !schemas[0]) {
       // throw Error(`Schema not found: ${schemaSlugs[0]}`);
       $log.error(`Schema not found: ${schemaSlugs[0]}`);
@@ -428,7 +434,11 @@ class EntityGridController {
 
     function saveState() {
       if (schemaSlugs[0]) {
-        EntityGridFactory.states[schemaSlugs[0]] = vm.grid.data;
+        EntityGridFactory.states[schemaSlugs[0]] = {
+          items: vm.grid.data,
+          searchTerm: vm.searchTerm,
+          filters: vm.filters,
+        };
       }
     }
 
