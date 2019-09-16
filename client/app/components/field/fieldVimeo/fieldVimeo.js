@@ -15,6 +15,7 @@ const fieldVimeoModule = angular.module('fieldVimeo', [])
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
+        minWidth: 132,
       },
       toString(value) {
         if (!value || !value.url) {

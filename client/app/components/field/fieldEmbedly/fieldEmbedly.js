@@ -15,6 +15,7 @@ const fieldEmbedlyModule = angular.module('fieldEmbedly', [])
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
+        minWidth: 132,
       },
       modeDisabled: {
         batchEdit: true,

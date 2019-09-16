@@ -21,6 +21,7 @@ const fieldImageModule = angular.module('fieldImage', [
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
+        minWidth: 132,
       },
       modeDisabled: {
         batchEdit: true,

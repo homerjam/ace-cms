@@ -18,6 +18,7 @@ const fieldEntityGridModule = angular.module('fieldEntityGrid', [])
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
+        minWidth: 132,
       },
       toString(value) {
         if (_.isArray(value)) {

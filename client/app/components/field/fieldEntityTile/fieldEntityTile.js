@@ -23,6 +23,7 @@ const fieldEntityTileModule = angular.module('fieldEntityTile', [])
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
+        minWidth: 132,
       },
       toString(value) {
         if (_.isArray(value)) {

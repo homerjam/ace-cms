@@ -17,6 +17,7 @@ const fieldVideoModule = angular.module('fieldVideo', [])
       thumbnailField: true,
       gridOptions: {
         style: 'thumbnail',
+        minWidth: 132,
       },
       modeDisabled: {
         batchEdit: true,
