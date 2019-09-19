@@ -340,7 +340,7 @@ class EntityGridController {
     });
 
     vm.editSelected = (items) => {
-      EntityFactory.editEntities(items);
+      EntityFactory.editEntities(items, vm.items);
     };
 
     vm.deleteSelected = (items, forever) => {

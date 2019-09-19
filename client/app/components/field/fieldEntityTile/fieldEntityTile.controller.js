@@ -73,7 +73,7 @@ class FieldEntityTileController {
     vm.entityEdit = (event, entity, index) => {
       event.stopPropagation();
 
-      EntityFactory.editEntities([entity])
+      EntityFactory.editEntities([entity], vm.fieldModel.value)
         .then((updatedEntities) => {
           if (updatedEntities) {
             updatedEntities = updatedEntities.map((entity) => {

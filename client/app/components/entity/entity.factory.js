@@ -371,7 +371,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
     }
   };
 
-  service.editEntities = async (entities) => {
+  service.editEntities = async (entities, siblingEntities = []) => {
     const mode = entities.length > 1 ? 'batchEdit' : entities[0].trashed ? 'trash' : 'normal';
     const id = entities.map(entity => entity.id || entity._id);
 
@@ -394,6 +394,7 @@ const EntityFactory = ($rootScope, $http, $q, $log, $filter, $timeout, $mdDialog
         locals: {
           mode,
           entities,
+          siblingEntities,
         },
       };
 

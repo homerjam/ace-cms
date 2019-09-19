@@ -11,6 +11,7 @@ const entityComponent = function entityComponent() {
       mode: '@',
       entity: '=?',
       entities: '=?',
+      siblingEntities: '=?',
       schema: '=?',
       options: '=?',
       entityForm: '=?',

@@ -4,7 +4,7 @@ import Handlebars from 'handlebars/dist/handlebars';
 
 class EntityController {
   /* @ngInject */
-  constructor($rootScope, $scope, $window, $log, $state, $stateParams, $transitions, $mdDialog, ConfigFactory, EntityFactory, EntityGridFactory, FieldFactory, BatchFactory, BatchUploadFactory) {
+  constructor($rootScope, $scope, $window, $log, $state, $stateParams, $transitions, $mdDialog, ConfigFactory, EntityFactory, FieldFactory, BatchFactory, BatchUploadFactory) {
     const vm = this;
 
     vm.entity = vm.entities[0] || {};
@@ -279,7 +279,7 @@ class EntityController {
     vm.prevEntityId = null;
 
     if (vm.mode === 'normal') {
-      const items = EntityGridFactory.states[vm.entity.schema].items;
+      const items = vm.siblingEntities;
       if (items) {
         items.forEach((item, i) => {
           if (item._id === vm.entity._id) {
@@ -297,7 +297,7 @@ class EntityController {
 
       EntityFactory.editEntities([{
         id: vm.nextEntityId,
-      }]);
+      }], vm.siblingEntities);
     };
 
     vm.prevEntity = () => {
@@ -307,7 +307,7 @@ class EntityController {
 
       EntityFactory.editEntities([{
         id: vm.prevEntityId,
-      }]);
+      }], vm.siblingEntities);
     };
 
     vm.dropdownMore = (vm.schema.actions || []).map(action => ({

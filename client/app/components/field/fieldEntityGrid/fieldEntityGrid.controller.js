@@ -38,7 +38,7 @@ class FieldEntityGridController {
     };
 
     vm.entityEdit = (event, entity) => {
-      EntityFactory.editEntities([entity])
+      EntityFactory.editEntities([entity], vm.fieldModel.value)
         .then((updatedEntities) => {
           updatedEntities = updatedEntities.map((entity) => {
             entity.id = entity._id;
