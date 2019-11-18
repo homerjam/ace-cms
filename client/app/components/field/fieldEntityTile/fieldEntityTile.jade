@@ -35,11 +35,11 @@ div(flex, layout="row", layout-padding, layout-wrap)
 
       .md-card-image
         img(
-          ng-if="item.thumbnail.thumbnailType !== 'video'"
+          ng-if="item.thumbnail.thumbnailType !== 'video' && item.thumbnail.thumbnailUrl"
           ng-src="{{ $root.$helper.thumbnailSrc(item.thumbnail, 'w:500;q:60') }}"
         )
         video(
-          ng-if="item.thumbnail.thumbnailType === 'video'"
+          ng-if="item.thumbnail.thumbnailType === 'video' && item.thumbnail.thumbnailUrl"
           ng-src="{{ $root.$helper.videoSrc(item.thumbnail, 'f:mp4;h:360;bv:1000;d:5') }}"
           muted
           loop
