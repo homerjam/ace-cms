@@ -248,7 +248,7 @@ angular
       });
 
       $authProvider.instagram({
-        scope: ['basic', 'public_content'],
+        scope: ['basic'],
       });
 
       $authProvider.spotify({
