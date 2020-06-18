@@ -46,7 +46,7 @@
     "@flowjs/flow.js": "^2.13.1",
     "@mdi/font": "^4.5.95",
     "@uirouter/angularjs": "^1.0.23",
-    "angular": "1.6.10",
+    "angular": "1.8.0",
     "angular-animate": "1.6.10",
     "angular-aria": "1.6.10",
     "angular-cropify": "^0.1.2",
